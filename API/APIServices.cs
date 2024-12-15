@@ -60,6 +60,7 @@ namespace BaiTapLon.API
             // string token = await GetTokenAsync();
             // _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync(apiPath + $"/{id}");
+            Console.WriteLine(apiPath + $"/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadFromJsonAsync<T>();

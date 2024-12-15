@@ -1,0 +1,51 @@
+﻿@model BaiTapLon.Models.TbPhongThiNghiem
+
+@{
+    ViewData["Title"] = "Xóa";
+}
+
+<h1>Xóa</h1>
+
+<h3>Bạn có chắc muốn xóa</h3>
+<div>
+    <h4>Phòng Thí Nghiệm</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MucDoDapUngNhuCauNckh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MucDoDapUngNhuCauNckh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NamDuaVaoSuDung)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NamDuaVaoSuDung)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdCongTrinhCsvcNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdCongTrinhCsvcNavigation.MaCongTrinh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdLinhVucNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdLinhVucNavigation.LinhVucNghienCuu)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdLoaiPhongThiNghiemNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdLoaiPhongThiNghiemNavigation.LoaiPhongThiNghiem)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IdPhongThiNghiem" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index">Trở lại</a>
+    </form>
+</div>

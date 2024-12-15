@@ -38,4 +38,5 @@ public partial class TbThietBiPtnThtren500Tr
     [DisplayName("Công trình cơ sở vật chất")]
 
     public virtual DmQuocTich? IdQuocGiaXuatXuNavigation { get; set; }
+
 }

@@ -94,7 +94,7 @@ namespace BaiTapLon.Controllers.CSVC
         {
             try
             {
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdCongTrinhCoSoVatChat", "IdCongTrinhCoSoVatChat");
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "IdTuyChon");
                 ViewData["IdLinhVuc"] = new SelectList(await ApiServices_.GetAll<DmLinhVucNghienCuu>("/api/dm/LinhVucNghienCuu"), "IdLinhVucNghienCuu", "LinhVucNghienCuu");
 
                 ViewData["IdLoaiPhongThiNghiem"] = new SelectList(await ApiServices_.GetAll<DmLoaiPhongThiNghiem>("/api/dm/LoaiPhongThiNghiem"), "IdLoaiPhongThiNghiem", "LoaiPhongThiNghiem");
@@ -124,7 +124,7 @@ namespace BaiTapLon.Controllers.CSVC
                     await ApiServices_.Create<TbPhongThiNghiem>("/api/csvc/PhongThiNghiem", tbPhongThiNghiem);
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdCongTrinhCoSoVatChat", "IdCongTrinhCoSoVatChat", tbPhongThiNghiem.IdCongTrinhCsvc);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "IdTuyChon", tbPhongThiNghiem.IdCongTrinhCsvc);
 
                 ViewData["IdLinhVuc"] = new SelectList(await ApiServices_.GetAll<DmLinhVucNghienCuu>("/api/dm/LinhVucNghienCuu"), "IdLinhVucNghienCuu", "IdLinhVucNghienCuu", tbPhongThiNghiem.IdLinhVuc);
 
@@ -153,7 +153,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdCongTrinhCoSoVatChat", "IdCongTrinhCoSoVatChat", tbPhongThiNghiem.IdCongTrinhCsvc);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "IdTuyChon", tbPhongThiNghiem.IdCongTrinhCsvc);
 
 
                 ViewData["IdLinhVuc"] = new SelectList(await ApiServices_.GetAll<DmLinhVucNghienCuu>("/api/dm/LinhVucNghienCuu"), "IdLinhVucNghienCuu", "LinhVucNghienCuu", tbPhongThiNghiem.IdLinhVuc);
@@ -201,7 +201,7 @@ namespace BaiTapLon.Controllers.CSVC
                     }
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdCongTrinhCoSoVatChat", "IdCongTrinhCoSoVatChat", tbPhongThiNghiem.IdCongTrinhCsvc);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "IdTuyChon", tbPhongThiNghiem.IdCongTrinhCsvc);
 
                 ViewData["IdLinhVuc"] = new SelectList(await ApiServices_.GetAll<DmLinhVucNghienCuu>("/api/dm/LinhVucNghienCuu"), "IdLinhVucNghienCuu", "IdLinhVucNghienCuu", tbPhongThiNghiem.IdLinhVuc);
 
@@ -227,7 +227,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                var tbPhongThiNghiems = await ApiServices_.GetAll<TbPhongThiNghiem>("/api/csvc/PhongThiNghiem");
+                var tbPhongThiNghiems = await TbPhongThiNghiems();
                 var tbPhongThiNghiem = tbPhongThiNghiems.FirstOrDefault(m => m.IdPhongThiNghiem == id);
                 if (tbPhongThiNghiem == null)
                 {

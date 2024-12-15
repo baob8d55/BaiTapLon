@@ -198,7 +198,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                var tbPhongThucHanhs = await ApiServices_.GetAll<TbPhongThucHanh>("/api/csvc/PhongThucHanh");
+                var tbPhongThucHanhs = await TbPhongThucHanhs();
                 var tbPhongThucHanh = tbPhongThucHanhs.FirstOrDefault(m => m.IdPhongThucHanh == id);
                 if (tbPhongThucHanh== null)
                 {

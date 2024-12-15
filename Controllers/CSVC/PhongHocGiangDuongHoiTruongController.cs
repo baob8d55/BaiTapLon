@@ -237,7 +237,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                var tbPhongHocGiangDuongHoiTruongs = await ApiServices_.GetAll<TbPhongHocGiangDuongHoiTruong>("/api/csvc/PhongHocGiangDuongHoiTruong");
+                var tbPhongHocGiangDuongHoiTruongs = await TbPhongHocGiangDuongHoiTruongs();
                 var tbPhongHocGiangDuongHoiTruong = tbPhongHocGiangDuongHoiTruongs.FirstOrDefault(m => m.IdPhongHocGiangDuongHoiTruong == id);
                 if (tbPhongHocGiangDuongHoiTruong == null)
                 {

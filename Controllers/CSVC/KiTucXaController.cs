@@ -220,7 +220,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                var tbKiTucXas = await ApiServices_.GetAll<TbKiTucXa>("/api/csvc/KiTucXa");
+                var tbKiTucXas = await TbKiTucXas();
                 var tbKiTucXa = tbKiTucXas.FirstOrDefault(m => m.IdKiTucXa == id);
                 if (tbKiTucXa == null)
                 {

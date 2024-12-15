@@ -1,0 +1,102 @@
+﻿@model BaiTapLon.Models.TbCongTrinhCoSoVatChat
+
+@{
+    ViewData["Title"] = "Chi tiết";
+}
+
+<h1>Chi tiết</h1>
+
+<div>
+    <h4>Công Trình Cơ Sở Vật Chất</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MaCongTrinh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaCongTrinh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TenCongTrinh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TenCongTrinh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DoiTuongSuDung)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DoiTuongSuDung)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DienTichSanXayDung)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DienTichSanXayDung)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.VonBanDau)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.VonBanDau)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.VonDauTu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.VonDauTu)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SoPhongOcongVu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SoPhongOcongVu)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SoChoOchoCanBoGiangDay)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SoChoOchoCanBoGiangDay)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NamDuaVaoSuDung)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NamDuaVaoSuDung)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CongTrinhCsvctrongNhaNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CongTrinhCsvctrongNhaNavigation.TuyChon)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdHinhThucSoHuuNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdLoaiCongTrinhNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdLoaiCongTrinhNavigation.LoaiCongTrinhCoSoVatChat)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdMucDichSuDungNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdMucDichSuDungNavigation.MucDichSuDungCsvc)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdTinhTrangCsvcNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.IdCongTrinhCoSoVatChat">Chỉnh sửa</a> |
+    <a asp-action="Index">Trở lại</a>
+</div>

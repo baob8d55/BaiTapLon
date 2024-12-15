@@ -214,7 +214,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                var tbDatDais = await ApiServices_.GetAll<TbDatDai>("/api/csvc/DatDai");
+                var tbDatDais = await TbDatDais();
                 var tbDatDai = tbDatDais.FirstOrDefault(m => m.IdDatDai == id);
                 if (tbDatDai == null)
                 {

@@ -219,7 +219,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                var tbThietBiPtnThtren500Trs = await ApiServices_.GetAll<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr");
+                var tbThietBiPtnThtren500Trs = await TbThietBiPtnThtren500Trs();
                 var tbThietBiPtnThtren500Tr = tbThietBiPtnThtren500Trs.FirstOrDefault(m => m.IdThietBiPtnTh == id);
                 if (tbThietBiPtnThtren500Tr == null)
                 {

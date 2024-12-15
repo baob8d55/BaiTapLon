@@ -1,0 +1,53 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbPhongThucHanh>
+
+@{
+    ViewData["Title"] = "Phòng Thực Hành";
+}
+
+<h1>Phòng Thực Hành</h1>
+
+<p>
+    <a asp-action="Create">Tạo mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MucDoDapUngNhuCauNckh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NamDuaVaoSuDung)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdCongTrinhCsvcNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdLinhVucNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MucDoDapUngNhuCauNckh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NamDuaVaoSuDung)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCongTrinhCsvcNavigation.MaCongTrinh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdLinhVucNavigation.LinhVucNghienCuu)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdPhongThucHanh">Chỉnh sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.IdPhongThucHanh">Chi tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdPhongThucHanh">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

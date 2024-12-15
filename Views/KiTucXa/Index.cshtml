@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<BaiTapLon.Models.TbKiTucXa>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Kí Túc Xá";
 }
 
-<h1>Index</h1>
+<h1>Kí Túc Xá</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Tạo mới</a>
 </p>
 <table class="table">
     <thead>
@@ -57,7 +57,7 @@
                 @Html.DisplayFor(modelItem => item.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdKiTucXa">Sửa</a> |
+                <a asp-action="Edit" asp-route-id="@item.IdKiTucXa">Chỉnh sửa</a> |
                 <a asp-action="Details" asp-route-id="@item.IdKiTucXa">Chi tiết</a> |
                 <a asp-action="Delete" asp-route-id="@item.IdKiTucXa">Xóa</a>
             </td>

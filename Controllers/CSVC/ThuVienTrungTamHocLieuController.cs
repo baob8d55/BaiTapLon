@@ -89,7 +89,7 @@ namespace BaiTapLon.Controllers.CSVC
             try
             {
                 ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu");
-                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCsvc", "TinhTrangCsvc");
+                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat");
                 return View();
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace BaiTapLon.Controllers.CSVC
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu", tbThuVienTrungTamHocLieu.IdHinhThucSoHuu);
-                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCsvc", "TinhTrangCsvc", tbThuVienTrungTamHocLieu.IdTinhTrangCsvc);
+                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat", tbThuVienTrungTamHocLieu.IdTinhTrangCsvc);
                 return View(tbThuVienTrungTamHocLieu);
             }
             catch (Exception ex)
@@ -136,8 +136,8 @@ namespace BaiTapLon.Controllers.CSVC
         // Phương thức này gần giống Create, nhưng nó nhập dữ liệu vào Id đã có trong database
         public async Task<IActionResult> Edit(int? id)
         {
-            try
-            {
+            //try
+            //{
                 if (id == null)
                 {
                     return NotFound();
@@ -149,13 +149,13 @@ namespace BaiTapLon.Controllers.CSVC
                     return NotFound();
                 }
                 ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu", tbThuVienTrungTamHocLieu.IdHinhThucSoHuu);
-                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCsvc", "TinhTrangCsvc", tbThuVienTrungTamHocLieu.IdTinhTrangCsvc);
+                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat", tbThuVienTrungTamHocLieu.IdTinhTrangCsvc);
                 return View(tbThuVienTrungTamHocLieu);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest();
+            //}
 
         }
 
@@ -197,7 +197,7 @@ namespace BaiTapLon.Controllers.CSVC
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu", tbThuVienTrungTamHocLieu.IdHinhThucSoHuu);
-                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCsvc", "TinhTrangCsvc", tbThuVienTrungTamHocLieu.IdTinhTrangCsvc);
+                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat", tbThuVienTrungTamHocLieu.IdTinhTrangCsvc);
                 return View(tbThuVienTrungTamHocLieu);
             }
             catch (Exception ex)
