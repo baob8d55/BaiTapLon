@@ -8,22 +8,29 @@ using Microsoft.EntityFrameworkCore;
 using BaiTapLon.Models;
 using BaiTapLon.API;
 using BaiTapLon.Models.DM;
+using Newtonsoft.Json;
+using System.Security.Cryptography;
 
 namespace BaiTapLon.Controllers.CSVC
 {
 
+
     public class KiTucXaController : Controller
     {
+         private Dictionary<string, int> dic = new Dictionary<string, int>();
+        private Dictionary<string, int> dic1 = new Dictionary<string, int>();
         private readonly ApiServices ApiServices_;
+        private string ds_;
+
         // Lấy từ HemisContext 
-        public KiTucXaController(ApiServices services)
+        public KiTucXaController(ApiServices _services)
         {
-            ApiServices_ = services;
+            ApiServices_ = _services;
         }
 
         // GET: KiTucXa
         // Lấy danh sách KTX từ database, trả về view Index.
-
+        [HttpPost]
         private async Task<List<TbKiTucXa>> TbKiTucXas()
         {
             List<TbKiTucXa> tbKiTucXas = await ApiServices_.GetAll<TbKiTucXa>("/api/csvc/KiTucXa");
@@ -36,7 +43,7 @@ namespace BaiTapLon.Controllers.CSVC
             return tbKiTucXas;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string ds)
         {
             try
             {
@@ -49,7 +56,6 @@ namespace BaiTapLon.Controllers.CSVC
             {
                 return BadRequest();
             }
-
         }
         public async Task<IActionResult> Chart()
         {
@@ -235,7 +241,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                var tbKiTucXas = await TbKiTucXas();
+                var tbKiTucXas = await ApiServices_.GetAll<TbKiTucXa>("/api/csvc/KiTucXa");
                 var tbKiTucXa = tbKiTucXas.FirstOrDefault(m => m.IdKiTucXa == id);
                 if (tbKiTucXa == null)
                 {
@@ -274,6 +280,78 @@ namespace BaiTapLon.Controllers.CSVC
             var tbKiTucXas = await ApiServices_.GetAll<TbKiTucXa>("/api/csvc/KiTucXa");
             return tbKiTucXas.Any(e => e.IdKiTucXa == id);
         }
+        public async Task<IActionResult> Receive(string json)
+        {
+            try
+            {
+                // Khai báo thông báo mặc định
+                var message = "No Lỗi";
+
+                // Giải mã dữ liệu JSON từ client
+                List<List<string>> data = JsonConvert.DeserializeObject<List<List<string>>>(json);
+
+                // Danh sách lưu các đối tượng TbKiTucXa
+                List<TbKiTucXa> lst = new List<TbKiTucXa>();
+
+                // Khởi tạo Random để tạo ID ngẫu nhiên
+                Random rnd = new Random();
+
+                // Duyệt qua từng dòng dữ liệu từ Excel
+                foreach (var item in data)
+                {
+                    TbKiTucXa model = new TbKiTucXa();
+
+                    // Tạo id ngẫu nhiên và kiểm tra xem id đã tồn tại chưa
+                    int id;
+                    do
+                    {
+                        id = rnd.Next(1, 100000); // Tạo id ngẫu nhiên
+                    } while (await TbKiTucXaExists(id)); // Kiểm tra id có tồn tại không
+
+                    // Gán dữ liệu cho các thuộc tính của model
+                    model.IdKiTucXa = id; // Gán ID
+                    model.MaKyTucxa = item[0]; // Gán mã ký túc xá từ cột đầu tiên
+                    model.TongChoO = ParseInt(item[1]); // Gán tổng chỗ ở (chuyển đổi từ string sang int)
+                    model.TongDienTich = ParseInt(item[2]); // Gán tổng diện tích (chuyển đổi từ string sang int)
+                    model.SoPhong = ParseInt(item[3]); // Gán số phòng (chuyển đổi từ string sang int)
+                    model.IdHinhThucSoHuu = ParseInt(item[4]); // Gán hình thức sở hữu (chuyển đổi từ string sang int)
+                    model.IdTinhTrangCsvc = ParseInt(item[5]); // Gán tình trạng CSVC (chuyển đổi từ string sang int)
+
+                    // Thêm model vào danh sách
+                    lst.Add(model);
+                }
+
+                // Lưu danh sách vào cơ sở dữ liệu (giả sử có một phương thức tạo đối tượng trong DB)
+                foreach (var item in lst)
+                {
+                    await CreateTbKiTucXa(item); // Giả sử có phương thức tạo dữ liệu vào DB
+                }
+
+                return Accepted(Json(new { msg = message }));
+            }
+            catch (Exception ex)
+            {
+                // Nếu có lỗi, trả về thông báo lỗi
+                return BadRequest(Json(new { msg = ex.Message }));
+            }
+        }
+
+        private async Task CreateTbKiTucXa(TbKiTucXa item)
+        {
+            await ApiServices_.Create<TbKiTucXa>("/api/csvc/KiTucXa", item);
+        }
+
+        private int? ParseInt(string v)
+        {
+             if (int.TryParse(v, out int result)) // Nếu chuỗi có thể chuyển thành int
+    {
+        return result; // Trả về giá trị int
+    }
+    else
+    {
+        return null; // Nếu không thể chuyển thành int, trả về null
+    }
+        }
+      
     }
 }
-

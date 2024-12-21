@@ -1,17 +1,126 @@
 ﻿@model IEnumerable<BaiTapLon.Models.TbKiTucXa>
-
+@using Newtonsoft.Json
 @{
-    ViewData["Title"] = "Kí Túc Xá";
+    ViewData["Title"] = "Index";
+    string labelJson = "", dataJson = "";
+    Dictionary<string, int> Times_Thu = new Dictionary<string, int>();
+    foreach (var item in Model)
+    {
+        string nguon = "";
+        if (item.IdHinhThucSoHuu.HasValue)
+        {
+            nguon = item.IdHinhThucSoHuuNavigation.HinhThucSoHuu;
+        }
+        if (Times_Thu.ContainsKey(nguon)) ++Times_Thu[nguon];
+        else Times_Thu[nguon] = 1;
+    }
+    List<string> label = new List<string>();
+    List<int> data = new List<int>();
+    foreach (var it in Times_Thu)
+    {
+        label.Add(it.Key);
+        data.Add(it.Value);
+    }
+    labelJson = JsonConvert.SerializeObject(label);
+    dataJson = JsonConvert.SerializeObject(data);
 }
+<head>
+    <meta charset="utf-8">
+    <title>Visualize Data Beautifully Using JS Charts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<h1>Kí Túc Xá</h1>
+    <style>
+        a:visited, a:link, a:hover {
+            text-decoration: none;
+            color: inherit;
+        }
 
-<p>
-    <a asp-action="Create">Tạo mới</a>
-</p>
-<table class="table">
+        #views {
+            border-collapse: collapse;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        }
+
+            #views th, td {
+                border-bottom: 2px solid #ddd;
+            }
+
+        .dtr-modal table {
+            width: 100%;
+        }
+
+        table.dataTable tbody tr:nth-child(odd) {
+            background-color: #f4f4f4;
+        }
+
+        table.dataTable tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        /* Thay đổi màu nền khi hover */
+        table.dataTable tbody tr:hover {
+            background-color: #dcdcdc;
+        }
+
+        /* Thêm đường viền cho bảng */
+        table.dataTable {
+            border: 2px solid #000;
+        }
+
+            table.dataTable th, table.dataTable td {
+                padding: 12px;
+                text-align: center;
+            }
+
+        #dt-search-0 {
+            margin-left: 650px;
+        }
+
+        .chart-container {
+            width: 800px;
+        }
+
+        /* Tăng cường hiển thị nút */
+        .btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        /* Tạo không gian xung quanh bảng */
+        .table-container {
+        }
+
+        /* Thêm padding cho bảng để dễ nhìn */
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        div.dataTable input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-left: 10px;
+            width: 200px;
+        }
+        body {
+            padding-bottom: 100px;
+        }
+    </style>
+
+</head>
+<h1 class="text-center my-4">Trang Chủ</h1>
+<h1 class="text-center my-4"><b>Kí Túc Xá</b></h1>
+<table class="table table-striped table-bordered mt-3" id="views" style=" padding: 20px; border: 2px solid black; border-radius: 8px;  box-shadow: 10px 10px 15px 5px rgba(0, 0, 0, 0.5); margin-bottom:20px">
     <thead>
         <tr>
+            <th class="_nonorder"></th>
+            <th>
+                STT
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.MaKyTucxa)
             </th>
@@ -31,12 +140,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.IdTinhTrangCsvcNavigation)
             </th>
-            <th></th>
+            <th class="_nonorder">Hành động</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+                <td></td>
+                <td></td>
             <td>
                 @Html.DisplayFor(modelItem => item.MaKyTucxa)
             </td>
@@ -57,11 +168,120 @@
                 @Html.DisplayFor(modelItem => item.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdKiTucXa">Chỉnh sửa</a> |
-                <a asp-action="Details" asp-route-id="@item.IdKiTucXa">Chi tiết</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdKiTucXa">Xóa</a>
+                        <button class="btn btn-primary" onclick="window.location.href = '@Url.Action("Edit", new {id = item.IdKiTucXa})'"><i class="fa-sharp-duotone fa-solid fa-user-pen"></i> Sửa</button>
+                        <button class="btn btn-primary" onclick="window.location.href = '@Url.Action("Details", new {id = item.IdKiTucXa})'"><i class="fa-sharp fa-solid fa-circle-info"></i> Chi tiết</button>
+                        <button class="btn btn-danger" onclick="window.location.href = '@Url.Action("Delete", new {id = item.IdKiTucXa})'"><i class="fa-solid fa-trash"></i> Xóa</button>
             </td>
         </tr>
 }
     </tbody>
 </table>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.1.8/b-3.2.0/b-html5-3.2.0/r-3.0.3/datatables.min.js"></script>
+    <script src="https://kit.fontawesome.com/5c202d0407.js" crossorigin="anonymous"></script>
+    <script src="~/js/Import_Excel.js"></script>
+    <script src="~/js/xlsx.full.min.js"></script>
+    @* <script src="~/lib/"></script> *@
+    <script>
+        // Datatable configuration
+        var table = new DataTable("#views", {
+            columnDefs: [
+                {
+                    className: 'dtr-control',
+                    targets: 0
+                },
+                {
+                    orderable: false,
+                    targets: '._nonorder'
+                },
+                {
+                    responsivePriority: 0,
+                    targets: -1
+                }
+            ],
+            order: [1, 'asc'],
+            responsive: {
+                details: {
+                    display: DataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return 'Thông tin của ' + data[2];
+                        }
+                    }),
+                    renderer: function (api, rowIdx, columns) {
+                        var data = $.map(columns, function (col, i) {
+                            return col.hidden
+                                ? `<tr><td class="p-3">${col.title}</td><td class="p-3">${col.data}</td></tr>`
+                                : '';
+                        }).join('');
+                        return data ? $('<table/>').append(data) : false;
+                    }
+                }
+            },
+            language: {
+                search: "",
+                info: "Tổng cộng _TOTAL_ bản ghi",
+                zeroRecords: "Không tìm thấy bản ghi nào"
+            },
+            createdRow: (row, data, index) => { },
+            layout: {
+                topStart: {
+                    buttons: [
+                        {
+                            className: 'btn btn-primary',
+                            text: 'Thêm người',
+                            action: function (e, dt, node, config) {
+                                window.location.href = '@Url.Action("Create")';
+                            }
+                        },
+                        {
+                            extend: "excel",
+                            className: 'btn btn-primary',
+                            text: 'Xuất Excel',
+                            exportOptions: {
+                                columns: function (idx, data, node) {
+                                    if (node.classList.contains("_nonorder")) return false;
+                                    return true;
+                                },
+                            }
+                        },
+                        {
+                            className: 'btn btn-primary',
+                            text: 'Import Excel',
+                            action: function (e, dt, node, config) {
+                                import_excel((json) => {
+                                    let sheets = JSON.parse(json);
+                                    let sheet = sheets['Sheet1'];
+                                    let raw_data = [];
+                                    for (let i = 0; i < sheet.length; ++i) {
+                                        let arr = [];
+                                        for (const [key, value] of Object.entries(sheet[i])) {
+                                            arr.push(value.toString());
+                                        }
+                                        raw_data.push(arr);
+                                    }
+                                    $.ajax({
+                                        method: "post",
+                                        url: "/KiTucXa/Receive",
+                                        data: {
+                                            json: JSON.stringify(raw_data),
+                                        },
+                                        error: function (xhr, status, error) {
+                                            @* console.log(xhr); *@
+                                            alert(xhr.responseJSON.value['msg']);
+                                        },
+                                        success: function (data, status, xhr) {
+                                            alert(xhr.responseJSON.value['msg']);
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    ]
+                }
+            }
+        });
+    </script>
+}
