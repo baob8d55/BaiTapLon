@@ -106,8 +106,8 @@
             margin-left: 10px;
             width: 200px;
         }
-        footer {
-            margin-top: 100px;
+        body {
+            padding-bottom: 100px;
         }
     </style>
 
@@ -222,7 +222,7 @@
             },
             language: {
                 search: "",
-                info: "Tổng cộng TOTAL bản ghi",
+                info: "Tổng cộng _TOTAL_ bản ghi",
                 zeroRecords: "Không tìm thấy bản ghi nào"
             },
             createdRow: (row, data, index) => { },
@@ -269,8 +269,8 @@
                                             json: JSON.stringify(raw_data),
                                         },
                                         error: function (xhr, status, error) {
-                                            console.log(xhr);
-                                            @* alert(xhr.responseJSON.value['msg']); *@
+                                            @* console.log(xhr); *@
+                                            alert(xhr.responseJSON.value['msg']);
                                         },
                                         success: function (data, status, xhr) {
                                             alert(xhr.responseJSON.value['msg']);

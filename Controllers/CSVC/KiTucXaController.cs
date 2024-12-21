@@ -56,11 +56,6 @@ namespace BaiTapLon.Controllers.CSVC
             {
                 return BadRequest();
             }
-            bool[] check = new bool[100000];
-            List<TbKiTucXa>? ds1 = JsonConvert.DeserializeObject<List<TbKiTucXa>>(ds_);
-            return Content(JsonConvert.SerializeObject(ds1));
-            return View();
-
         }
 
         // Lấy chi tiết 1 bản ghi dựa theo ID tương ứng đã truyền vào (IdKiTucXa)
