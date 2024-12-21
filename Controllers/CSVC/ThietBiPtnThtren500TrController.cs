@@ -89,7 +89,7 @@ namespace BaiTapLon.Controllers.CSVC
             try
             {
                 ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCsvc", "CongTrinhCsvc");
-                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocGiaXuatXu", "QuocGiaXuatXu");
+                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocGiaXuatXu", "QuocGiaXuatXu"); 
                 return View();
             }
             catch (Exception ex)

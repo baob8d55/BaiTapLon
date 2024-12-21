@@ -60,7 +60,22 @@ namespace BaiTapLon.Controllers.CSVC
 
 
         }
+        public async Task<IActionResult> Chart()
+        {
+            try
+            {
+                List<TbPhongThiNghiem> getall = await TbPhongThiNghiems();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
 
+
+        }
         // GET: PhongThiNghiem/Details/5
         public async Task<IActionResult> Details(int? id)
         {

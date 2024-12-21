@@ -42,26 +42,43 @@ namespace BaiTapLon.Controllers.CSVC
         //Nếu có lỗi xảy ra trong quá trình lấy dữ liệu, nó sẽ trả về mã trạng thái HTTP 400.
         public async Task<IActionResult> Index()
         {
-            try
+            //try
             {
                 List<TbDatDai> getall = await TbDatDais();
                 // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
                 return View(getall);
                 // Bắt lỗi các trường hợp ngoại lệ
             }
-            catch (Exception ex)
+            //catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
+        public async Task<IActionResult> chart()
+        {
+            //try
+            {
+                List<TbDatDai> getall = await TbDatDais();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+            //catch (Exception ex)
             {
                 return BadRequest();
             }
 
         }
 
+
+
         // GET: DatDai/Details/
         //Kiểm tra nếu id là null, nếu có, trả về NotFound.
         //Tìm một bản ghi cụ thể trong bảng TbDatDais dựa trên id và trả về view chi tiết nếu tìm thấy.
         public async Task<IActionResult> Details(int? id)
         {
-            try
+          //  try
             {
                 if (id == null)
                 {
@@ -80,7 +97,7 @@ namespace BaiTapLon.Controllers.CSVC
                 // Hiển thị thông thi chi tiết CTĐT thành công
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+          //  catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -91,12 +108,12 @@ namespace BaiTapLon.Controllers.CSVC
         //Tạo view để nhập thông tin cho một bản ghi mới, bao gồm danh sách chọn lựa cho trường IdHinhThucSoHuu.
         public async Task<IActionResult> Create()
         {
-            try
+          //  try
             {
                 ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu");
                 return View();
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -112,7 +129,7 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdDatDai,MaGiayChungNhanQuyenSoHuu,DienTichDat,IdHinhThucSoHuu,TenDonViSoHuu,MinhChungQuyenSoHuuDatDai,MucDichSuDungDat,NamBatDauSuDungDat,ThoiGianSuDungDat,DienTichDatDaSuDung")] TbDatDai tbDatDai)
         {
-            try
+            //try
             {
                 // Nếu trùng IDChuongTrinhDaoTao sẽ báo lỗi
                 if (await TbDatDaiExists(tbDatDai.IdDatDai)) ModelState.AddModelError("IdDatDai", "ID này đã tồn tại!");
@@ -125,7 +142,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -138,7 +155,7 @@ namespace BaiTapLon.Controllers.CSVC
         //Lấy bản ghi cần sửa và trả về view chỉnh sửa.
         public async Task<IActionResult> Edit(int? id)
         {
-            try
+         //   try
             {
                 if (id == null)
                 {
@@ -154,7 +171,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+          //  catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -168,7 +185,7 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdDatDai,MaGiayChungNhanQuyenSoHuu,DienTichDat,IdHinhThucSoHuu,TenDonViSoHuu,MinhChungQuyenSoHuuDatDai,MucDichSuDungDat,NamBatDauSuDungDat,ThoiGianSuDungDat,DienTichDatDaSuDung")] TbDatDai tbDatDai)
         {
-            try
+       //     try
             {
                 if (id != tbDatDai.IdDatDai)
                 {
@@ -198,7 +215,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+          //  catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -208,7 +225,7 @@ namespace BaiTapLon.Controllers.CSVC
         // GET: DatDai/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            try
+         //   try
             {
                 if (id == null)
                 {
@@ -223,7 +240,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+          //  catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -235,12 +252,12 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
+          //  try
             {
                 await ApiServices_.Delete<TbDatDai>("/api/csvc/DatDai", id);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
                 return BadRequest();
             }

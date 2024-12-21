@@ -1,0 +1,201 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbPhongHocGiangDuongHoiTruong>
+
+@{
+    ViewData["Title"] = "Chart";
+}
+
+<h1>Chart</h1>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<h2 style="text-align:center;">Hình Thức Sở Hữu</h2>
+<canvas id="pieChartHinhThucSoHuu"></canvas>
+<script>
+    var hinhThucLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Distinct().ToList()));
+    var hinhThucData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartHinhThucSoHuu'), {
+        type: 'pie',
+        data: {
+            labels: hinhThucLabels,
+            datasets: [{
+                data: hinhThucData,
+                backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+<h2 style="text-align:center;">Loại Đề Án</h2>
+<canvas id="pieChartLoaiDeAn"></canvas>
+<script>
+    var loaiDeAnLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLoaiDeAnNavigation.LoaiDeAnChuongTrinh).Distinct().ToList()));
+    var loaiDeAnData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdLoaiDeAnNavigation.LoaiDeAnChuongTrinh).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartLoaiDeAn'), {
+        type: 'pie',
+        data: {
+            labels: loaiDeAnLabels,
+            datasets: [{
+                data: loaiDeAnData,
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+<h2 style="text-align:center;">Loại Phòng Học</h2>
+<canvas id="pieChartLoaiPhongHoc"></canvas>
+<script>
+    var loaiPhongLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLoaiPhongHocNavigation.LoaiPhongHoc).Distinct().ToList()));
+    var loaiPhongData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdLoaiPhongHocNavigation.LoaiPhongHoc).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartLoaiPhongHoc'), {
+        type: 'pie',
+        data: {
+            labels: loaiPhongLabels,
+            datasets: [{
+                data: loaiPhongData,
+                backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(153, 102, 255, 0.8)', 'rgba(255, 159, 64, 0.5)'],
+                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+<h2 style="text-align:center;">Phân Loại CSVC</h2>
+<canvas id="pieChartPhanLoaiCsvc"></canvas>
+<script>
+    var phanLoaiLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdPhanLoaiCsvcNavigation.PhanLoaiCsvc).Distinct().ToList()));
+    var phanLoaiData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdPhanLoaiCsvcNavigation.PhanLoaiCsvc).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartPhanLoaiCsvc'), {
+        type: 'pie',
+        data: {
+            labels: phanLoaiLabels,
+            datasets: [{
+                data: phanLoaiData,
+                backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(255, 99, 132, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+<h2 style="text-align:center;">Tình Trạng CSVC</h2>
+<canvas id="pieChartTinhTrangCsvc"></canvas>
+<script>
+    var tinhTrangLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdTinhTrangCoSoVatChatNavigation.TinhTrangCoSoVatChat).Distinct().ToList()));
+    var tinhTrangData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdTinhTrangCoSoVatChatNavigation.TinhTrangCoSoVatChat).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartTinhTrangCsvc'), {
+        type: 'pie',
+        data: {
+            labels: tinhTrangLabels,
+            datasets: [{
+                data: tinhTrangData,
+                backgroundColor: ['rgba(255, 159, 64, 0.2)', 'rgba(153, 102, 255, 0.5)', 'rgba(54, 162, 235, 0.5)'],
+                borderColor: ['rgba(255, 159, 64, 1)', 'rgba(153, 102, 255, 1)', 'rgba(54, 162, 235, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+<h2 style="text-align:center;">Số lượng công trình theo Năm</h2>
+<canvas id="barChartNamDuaVaoSuDung"></canvas>
+<script>
+    var namLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.NamDuaVaoSuDung).Distinct().ToList()));
+    var namData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.NamDuaVaoSuDung).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('barChartNamDuaVaoSuDung'), {
+        type: 'bar',
+        data: {
+            labels: namLabels,
+            datasets: [{
+                label: 'Số lượng công trình theo năm',
+                data: namData,
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+<h2 style="text-align:center;">Quy mô Chỗ ngồi</h2>
+<canvas id="barChartQuyMoChoNgoi"></canvas>
+<script>
+    var tenPhongLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenPhongHocGiangDuongHoiTruong).ToList()));
+    var quyMoChoNgoiData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.QuyMoChoNgoi).ToList()));
+
+    new Chart(document.getElementById('barChartQuyMoChoNgoi'), {
+        type: 'bar',
+        data: {
+            labels: tenPhongLabels,
+            datasets: [{
+                label: 'Quy mô chỗ ngồi',
+                data: quyMoChoNgoiData,
+                backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>

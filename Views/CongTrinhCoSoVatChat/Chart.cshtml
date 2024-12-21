@@ -1,0 +1,503 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbCongTrinhCoSoVatChat>
+
+
+@{
+    ViewData["Title"] = "Chart";
+}
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+@{
+    ViewData["Title"] = "Biểu đồ đối tượng sử dụng";
+}
+
+<head>
+    <meta charset="utf-8">
+    <title>Visualize Data Beautifully Using JS Charts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        /* Phong cách cho nhãn */
+        label {
+            font-family: 'Arial', sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+          
+            text-align:center;
+        }
+
+        /* Phong cách cho dropdown */
+        #chartDropdown {
+            width: 90%;
+            max-width: 700px; /* Tăng kích thước tối đa */
+            padding: 12px 16px;
+            font-size: 15px;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px; 
+            outline: none;
+          
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+            transition: all 0.25s ease;
+            /* Căn giữa theo chiều ngang */
+            display: block; /* Đảm bảo là khối */
+            margin: 0 auto; /* Căn giữa ngang */
+        
+        }
+
+            /* Hiệu ứng hover */
+            #chartDropdown:hover {
+                background-color: #fff;
+                border-color: green;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Hiệu ứng khi focus */
+            #chartDropdown:focus {
+                border-color: darkgreen;
+                box-shadow: lightgreen;
+            }
+            /* Tùy chỉnh các tùy chọn trong dropdown */
+            #chartDropdown option {
+                padding: 10px;
+                font-size: 15px;
+                color: #333;
+                background-color: #fff; /* Màu nền mặc định */
+                transition: background-color 0.3s ease;
+            }
+        /* Hiệu ứng cho tiêu đề */
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 25px;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<label for="customDropdown">HÃY CHỌN BIỂU ĐỒ MÀ BẠN MUỐN XEM</label>
+<div class="custom-dropdown" id="customDropdown">
+    <select id="chartDropdown" style="margin-bottom:100px" class="dropdown-btn">
+    <option value="">LỰA CHỌN BIỂU ĐỒ</option>
+    <option value="chart1">Biểu đồ 1: ĐỐI TƯỢNG SỬ DỤNG</option>
+    <option value="chart2">Biểu đồ 2: HÌNH THỨC SỞ HỮU</option>
+    <option value="chart3">Biểu đồ 3: LOẠI CÔNG TRÌNH </option>
+    <option value="chart5">Biểu đồ 4: SÀN DIỆN TÍCH XÂY DỰNG</option>
+    <option value="chart6">Biểu đồ 5: VỐN ĐẦU TƯ BAN ĐẦU</option>
+    <option value="chart7">Biểu đồ 6: TÌNH TRẠNG CƠ SỞ VẬT CHẤT</option>
+    <option value="chart8">Biểu đồ 7: SỐ PHÒNG Ở</option>
+ 
+
+</select>
+</div>
+<br></br>
+ @* Biểu đồ tròn cho đối tượng sử dụng  *@
+<div id="chart1" class="chart-container" style=" margin-bottom:100px">
+    <h1 style="text-align:center;">Biểu đồ đối tượng sử dụng</h1>
+    <canvas id="usagePieChart"></canvas>
+</div>
+
+<script>
+    // Lấy dữ liệu từ Model
+    var rawData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.DoiTuongSuDung).ToList()));
+
+    // Đếm số lượng mỗi đối tượng sử dụng
+    var groupedData = rawData.reduce((acc, item) => {
+        acc[item] = (acc[item] || 0) + 1;
+        return acc;
+    }, {});
+
+    // Tách dữ liệu thành nhãn (labels) và số lượng (data)
+    var labels = Object.keys(groupedData); // Các đối tượng sử dụng
+    var data = Object.values(groupedData); // Số lượng mỗi đối tượng
+
+    // Tạo màu sắc tự động cho biểu đồ
+    var backgroundColors = labels.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`);
+
+    // Vẽ biểu đồ tròn
+    var ctx = document.getElementById('usagePieChart').getContext('2d');
+    var usagePieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels, // Đối tượng sử dụng
+            datasets: [{
+                data: data, // Số lượng mỗi đối tượng
+                backgroundColor: backgroundColors, // Màu sắc
+                borderColor: backgroundColors.map(color => color.replace('0.5', '1')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            var label = tooltipItem.label || '';
+                            var value = tooltipItem.raw || 0;
+                            return `${label}: ${value} đối tượng`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+<div id="chart2" class="chart-container" style=" margin-bottom:100px">
+    <h2 style="text-align:center;">Hình Thức Sở Hữu</h2>
+<canvas id="pieChartHinhThuc"></canvas>
+</div>
+<script>
+    var hinhThucLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Distinct().ToList()));
+    var hinhThucData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartHinhThuc'), {
+        type: 'pie',
+        data: {
+            labels: hinhThucLabels,
+            datasets: [{
+                data: hinhThucData,
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+
+
+
+<div id="chart3" class="chart-container" style=" margin-bottom:100px">
+
+    <h2 style="text-align:center; class=" chart-container" style=" margin-bottom:100px">Loại Công Trình</h2>
+<canvas id="pieChartLoaiCongTrinh"></canvas>
+</div>
+<script>
+    var loaiCongTrinhLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLoaiCongTrinhNavigation.LoaiCongTrinhCoSoVatChat).Distinct().ToList()));
+    var loaiCongTrinhData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdLoaiCongTrinhNavigation.LoaiCongTrinhCoSoVatChat).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartLoaiCongTrinh'), {
+        type: 'pie',
+        data: {
+            labels: loaiCongTrinhLabels,
+            datasets: [{
+                data: loaiCongTrinhData,
+                backgroundColor: ['rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)', 'rgba(54, 162, 235, 0.5)'],
+                borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)', 'rgba(54, 162, 235, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+
+<div id="chart4 " class="chart-container" style=" margin-bottom:100px">
+    <h2 style="text-align:center;">Mục Đích Sử Dụng</h2>
+<canvas id="pieChartMucDich"></canvas>
+</div>
+<script>
+    var mucDichLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdMucDichSuDungNavigation.MucDichSuDungCsvc).Distinct().ToList()));
+    var mucDichData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdMucDichSuDungNavigation.MucDichSuDungCsvc).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartMucDich'), {
+        type: 'pie',
+        data: {
+            labels: mucDichLabels,
+            datasets: [{
+                data: mucDichData,
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(54, 162, 235, 0.5)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)', 'rgba(54, 162, 235, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+
+
+
+
+@* Biểu đồ cột cho Sàn diện tích xây dựng *@
+
+<div id="chart5" class="chart-container" style=" margin-bottom:100px">
+    <h1 style="text-align:center;">Sàn Diện Tích Xây Dựng</h1>
+<canvas id="barChartDienTich"></canvas>
+</div>
+<script>
+    var dienTichLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenCongTrinh).ToList()));
+    var dienTichData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.DienTichSanXayDung).ToList()));
+
+    new Chart(document.getElementById('barChartDienTich'), {
+        type: 'bar', // Loại biểu đồ cột
+        data: {
+            labels: dienTichLabels, // Tên công trình
+            datasets: [{
+                label: 'Diện tích sàn xây dựng (m²)',
+                data: dienTichData, // Dữ liệu diện tích
+                backgroundColor: 'rgba(75, 192, 192, 0.6)', // Màu nền cột
+                borderColor: 'rgba(75, 192, 192, 1)', // Màu viền cột
+                borderWidth: 2 // Độ dày viền
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Biểu đồ diện tích sàn xây dựng theo công trình',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `Diện tích: ${tooltipItem.raw} m²`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Tên công trình',
+                        font: { size: 14 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Diện tích (m²)',
+                        font: { size: 14 }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+@* Biểu đồ cho vốn đầu tư ban đầu *@
+
+<div id="chart6" class="chart-container" style=" margin-bottom:100px">
+    <h1>Vốn đầu tư ban đầu</h1>
+<canvas id="barChartVon"></canvas>
+</div>
+<script>
+    // Lấy dữ liệu tên công trình và vốn đầu tư
+    var vonLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenCongTrinh).ToList()));
+    var vonData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.VonBanDau).ToList()));
+
+    // Tạo biểu đồ cột
+    new Chart(document.getElementById('barChartVon'), {
+        type: 'bar', // Thay đổi thành biểu đồ cột
+        data: {
+            labels: vonLabels, // Tên công trình
+            datasets: [{
+                label: 'Vốn đầu tư ban đầu (VNĐ)',
+                data: vonData, // Dữ liệu vốn đầu tư
+                backgroundColor: 'rgba(54, 162, 235, 0.5)', // Màu nền cột
+                borderColor: 'rgba(54, 162, 235, 1)', // Màu viền
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Biểu đồ vốn đầu tư ban đầu theo công trình',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `Vốn: ${tooltipItem.raw.toLocaleString()} VNĐ`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Tên công trình',
+                        font: { size: 14 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Vốn (VNĐ)',
+                        font: { size: 14 }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+
+    <div id="chart7" class="chart-container" style=" margin-bottom:100px">
+    <div style="width: 800px; height: 800px; ">
+<canvas id="pieChartTinhTrang"></canvas>
+</div>
+</div>
+<script>
+    var tinhTrangLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat).Distinct().ToList()));
+    var tinhTrangData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupBy(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat).Select(g => g.Count()).ToList()));
+
+    new Chart(document.getElementById('pieChartTinhTrang'), {
+        type: 'pie',
+        data: {
+            labels: tinhTrangLabels,
+            datasets: [{
+                data: tinhTrangData,
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>
+<div id="chart8" class="chart-container" style=" margin-bottom:100px">
+<canvas id="groupedBarChartPhong"></canvas>
+</div>
+<script>
+    var phongLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenCongTrinh).ToList()));
+    var soPhongData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoPhongOcongVu).ToList()));
+    var soChoData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoChoOchoCanBoGiangDay).ToList()));
+
+    new Chart(document.getElementById('groupedBarChartPhong'), {
+        type: 'bar',
+        data: {
+            labels: phongLabels,
+            datasets: [
+                {
+                    label: 'Số phòng ở công vụ',
+                    data: soPhongData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Số chỗ ở cho cán bộ giảng dạy',
+                    data: soChoData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+<!-- code dropdown-->
+<script>
+    // Lấy dropdown và các container biểu đồ
+    const chartDropdown = document.getElementById('chartDropdown');
+    const chartContainers = document.querySelectorAll('.chart-container');
+
+    // Ẩn tất cả các biểu đồ khi tải lại trang
+    window.addEventListener('DOMContentLoaded', function () {
+        chartContainers.forEach(container => container.style.display = 'none');
+    });
+
+    // Lắng nghe sự kiện thay đổi trên dropdown
+    chartDropdown.addEventListener('change', function () {
+        // Ẩn tất cả các biểu đồ
+        chartContainers.forEach(container => container.style.display = 'none');
+
+        // Hiển thị biểu đồ được chọn
+        const selectedChartId = chartDropdown.value;
+        if (selectedChartId) {
+            const selectedChart = document.getElementById(selectedChartId);
+            if (selectedChart) {
+                selectedChart.style.display = 'block';
+            }
+        }
+    });
+</script>
+@* thay đổi nền cho option *@
+<script>
+       // Lấy các thành phần dropdown
+    const dropdown = document.querySelector('.custom-dropdown');
+    const dropdownBtn = dropdown.querySelector('.dropdown-btn');
+    const dropdownOptions = dropdown.querySelectorAll('.dropdown-options li');
+
+    // Hiển thị hoặc ẩn danh sách khi bấm nút
+    dropdownBtn.addEventListener('click', () => {
+        dropdown.classList.toggle('active');
+    });
+
+    // Cập nhật giá trị nút và ẩn danh sách khi chọn một tùy chọn
+    dropdownOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            dropdownBtn.textContent = option.textContent;
+            dropdown.classList.remove('active');
+            console.log('Bạn đã chọn:', option.getAttribute('data-value')); // Giá trị tùy chọn
+        });
+    });
+
+    // Ẩn dropdown khi click bên ngoài
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+</script>

@@ -1,0 +1,99 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbKiTucXa>
+
+@{
+    ViewData["Title"] = "Chart";
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<h1>Chart</h1>
+
+<h2 style="text-align:center;">Tổng Chỗ Ở</h2>
+<canvas id="barChartTongChoO"></canvas>
+<script>
+    var choOLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MaKyTucxa).ToList()));
+    var choOData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TongChoO).ToList()));
+
+    new Chart(document.getElementById('barChartTongChoO'), {
+        type: 'bar',
+        data: {
+            labels: choOLabels,
+            datasets: [{
+                label: 'Tổng chỗ ở',
+                data: choOData,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+<h2 style="text-align:center;">Tình Trạng Cơ Sở Vật Chất</h2>
+<canvas id="pieChartTinhTrang"></canvas>
+<script>
+    var tinhTrangLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat).Distinct().ToList()));
+    var tinhTrangData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartTinhTrang'), {
+        type: 'pie',
+        data: {
+            labels: tinhTrangLabels,
+            datasets: [{
+                data: tinhTrangData,
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+<h2 style="text-align:center;">Số Phòng và Tổng Diện Tích</h2>
+<canvas id="groupedBarChartPhongVaDienTich"></canvas>
+<script>
+    var groupedLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MaKyTucxa).ToList()));
+    var soPhongData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoPhong).ToList()));
+    var tongDienTichData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TongDienTich).ToList()));
+
+    new Chart(document.getElementById('groupedBarChartPhongVaDienTich'), {
+        type: 'bar',
+        data: {
+            labels: groupedLabels,
+            datasets: [
+                {
+                    label: 'Số phòng',
+                    data: soPhongData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Tổng diện tích',
+                    data: tongDienTichData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,216 @@
+﻿@using Newtonsoft.Json
+@model IEnumerable<BaiTapLon.Models.TbDatDai>
+
+@{
+    ViewData["Title"] = "Chart Example";
+    var jsonLabels = JsonConvert.SerializeObject(Model.Select(item => item.TenDonViSoHuu).ToList());
+}
+
+<h1 style="text-align:center;">ĐƠN VỊ SỞ HỮU</h1>
+
+<!-- Biểu đồ tròn -->
+<canvas id="myPieChart" style="width: 100px; height: 100px; "></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Lấy dữ liệu từ Razor
+    var labels = @Html.Raw(jsonLabels);
+
+    // Lấy danh sách nhãn duy nhất
+    var uniqueLabels = Array.from(new Set(labels));
+
+    // Đếm số lần xuất hiện của mỗi nhãn
+    var counts = uniqueLabels.map(function (label) {
+        return labels.filter(function (l) {
+            return l === label;
+        }).length;
+    });
+
+    // Khởi tạo biểu đồ
+    var ctx = document.getElementById('myPieChart').getContext('2d');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: uniqueLabels, // Nhãn (Tên đơn vị sở hữu đất)
+            datasets: [{
+                data: counts, // Dữ liệu (Số lần xuất hiện)
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<h2>Biểu đồ tròn: Hình Thức Sở Hữu</h2>
+<canvas id="pieChart" width="400" height="200"></canvas>
+
+<script>
+    // Lấy dữ liệu từ Model
+    var labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.Select(item => item.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Distinct()
+    ));
+
+    var counts = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(item => item.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
+             .Select(group => group.Count())
+    ));
+
+    // Khởi tạo biểu đồ tròn
+    var ctx = document.getElementById('pieChart').getContext('2d');
+    var pieChart = new Chart(ctx, {
+        type: 'pie', // Biểu đồ tròn
+        data: {
+            labels: labels, // Nhãn (Hình Thức Sở Hữu)
+            datasets: [{
+                data: counts, // Dữ liệu
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top', // Chú thích phía trên
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + ' mục';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+@{
+    ViewData["Title"] = "Đất Đai";
+}
+
+<h1>Đất Đai</h1>
+
+<!-- Biểu đồ -->
+<canvas id="stackedBarChart" width="600" height="400"></canvas>
+
+<script>
+    // Lấy dữ liệu từ Model
+    var labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenDonViSoHuu).Distinct().ToList()));
+    var totalArea = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupBy(x => x.TenDonViSoHuu).Select(g => g.Sum(x => x.DienTichDat)).ToList()));
+    var usedArea = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupBy(x => x.TenDonViSoHuu).Select(g => g.Sum(x => x.DienTichDatDaSuDung)).ToList()));
+
+    // Tính diện tích còn lại
+    var remainingArea = totalArea.map((total, index) => total - usedArea[index]);
+
+    // Vẽ biểu đồ cột xếp chồng
+    var ctx = document.getElementById('stackedBarChart').getContext('2d');
+    var stackedBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Diện tích đã sử dụng',
+                    data: usedArea,
+                    backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Diện tích còn lại',
+                    data: remainingArea,
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top', // Đặt chú thích ở trên
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw + ' ha';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true, // Xếp chồng trục x
+                },
+                y: {
+                    stacked: true, // Xếp chồng trục y
+                    title: {
+                        display: true,
+                        text: 'Diện tích (ha)'
+                    }
+                }
+            }
+        }
+    });
+</script>
+<style>
+    .container {
+        width:500px;
+        
+
+    }
+
+
+
+  
+</style>
+

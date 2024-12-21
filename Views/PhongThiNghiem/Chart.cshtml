@@ -1,0 +1,89 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbPhongThiNghiem>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@{
+    ViewData["Title"] = "Chart";
+}
+
+<h1>Chart</h1>
+<h2 style="text-align:center;">Mức Độ Đáp Ứng Nhu Cầu</h2>
+<canvas id="pieChartMucDoDapUng"></canvas>
+<script>
+    var mucDoLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MucDoDapUngNhuCauNckh).Distinct().ToList()));
+    var mucDoData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.MucDoDapUngNhuCauNckh).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartMucDoDapUng'), {
+        type: 'pie',
+        data: {
+            labels: mucDoLabels,
+            datasets: [{
+                data: mucDoData,
+                backgroundColor:['#FF6384', '#36A2EB', '#FFCE56', '#FF5733', '#33FF57'], // Thêm màu khác biệt
+                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733', '#33FF57'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+<h2 style="text-align:center;">Lĩnh Vực Nghiên Cứu</h2>
+<canvas id="pieChartLinhVucNghienCuu"></canvas>
+<script>
+    var linhVucLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLinhVucNavigation.LinhVucNghienCuu).Distinct().ToList()));
+    var linhVucData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdLinhVucNavigation.LinhVucNghienCuu).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartLinhVucNghienCuu'), {
+        type: 'pie',
+        data: {
+            labels: linhVucLabels,
+            datasets: [{
+                data: linhVucData,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733', '#33FF57'], // Thêm màu khác biệt
+                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733', '#33FF57'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+<h2 style="text-align:center;">Loại Phòng Thí Nghiệm</h2>
+<canvas id="pieChartLoaiPhongThiNghiem"></canvas>
+<script>
+    var loaiPhongLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLoaiPhongThiNghiemNavigation.LoaiPhongThiNghiem).Distinct().ToList()));
+    var loaiPhongData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdLoaiPhongThiNghiemNavigation.LoaiPhongThiNghiem).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartLoaiPhongThiNghiem'), {
+        type: 'pie',
+        data: {
+            labels: loaiPhongLabels,
+            datasets: [{
+                data: loaiPhongData,
+                backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<BaiTapLon.Models.TbDatDai>
+﻿<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@model IEnumerable<BaiTapLon.Models.TbDatDai>
 
 @{
     ViewData["Title"] = "Đất Đai";
@@ -9,6 +11,9 @@
 <p>
     <a asp-action="Create">Tạo mới</a>
 </p>
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -43,41 +48,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaGiayChungNhanQuyenSoHuu)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DienTichDat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenDonViSoHuu)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinhChungQuyenSoHuuDatDai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MucDichSuDungDat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NamBatDauSuDungDat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ThoiGianSuDungDat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DienTichDatDaSuDung)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdDatDai">Chỉnh sửa</a> |
-                <a asp-action="Details" asp-route-id="@item.IdDatDai">Chi tiết</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdDatDai">Xóa</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaGiayChungNhanQuyenSoHuu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DienTichDat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenDonViSoHuu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinhChungQuyenSoHuuDatDai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MucDichSuDungDat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NamBatDauSuDungDat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThoiGianSuDungDat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DienTichDatDaSuDung)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdDatDai">Chỉnh sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdDatDai">Chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdDatDai">Xóa</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

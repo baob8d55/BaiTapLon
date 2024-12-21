@@ -67,6 +67,21 @@ namespace BaiTapLon.Controllers.CSVC
             }
 
         }
+        public async Task<IActionResult> Chart()
+        {
+            try
+            {
+                List<TbCongTrinhCoSoVatChat> getall = await TbCongTrinhCoSoVatChats();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
 
 
         // GET: CongTrinhCoSoVatChat/Details/5
