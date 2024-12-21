@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,6 +49,22 @@ namespace BaiTapLon.Controllers.CSVC
 
         }
 
+        public async Task<IActionResult> Chart()
+        {
+            try
+            {
+                List<TbPhongThucHanh> getall = await TbPhongThucHanhs();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
+
         // Lấy chi tiết 1 bản ghi dựa theo ID tương ứng đã truyền vào (IdChuongTrinhDaoTao)
         // Hiển thị bản ghi đó ở view Details
         public async Task<IActionResult> Details(int? id)
@@ -79,11 +96,11 @@ namespace BaiTapLon.Controllers.CSVC
 
 
         // GET: PhongThucHanh/Create
-       public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create()
         {
             try
             {
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "IdCongTrinhCoSoVatChat");
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh");
                 ViewData["IdLinhVuc"] = new SelectList(await ApiServices_.GetAll<DmLinhVucNghienCuu>("/api/dm/LinhVucNghienCuu"), "IdLinhVucNghienCuu", "LinhVucNghienCuu");
                 return View();
             }
@@ -92,10 +109,10 @@ namespace BaiTapLon.Controllers.CSVC
                 return BadRequest();
             }
         }
-            // POST: PhongThucHanh/Create
-            // To protect from overposting attacks, enable the specific properties you want to bind to.
-            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-            [HttpPost]
+        // POST: PhongThucHanh/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdPhongThucHanh,IdCongTrinhCsvc,IdLinhVuc,MucDoDapUngNhuCauNckh,NamDuaVaoSuDung")] TbPhongThucHanh tbPhongThucHanh)
         {
@@ -108,7 +125,7 @@ namespace BaiTapLon.Controllers.CSVC
                     await ApiServices_.Create<TbPhongThucHanh>("/api/csvc/PhongThucHanh", tbPhongThucHanh);
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "IdCongTrinhCoSoVatChat", tbPhongThucHanh.IdCongTrinhCsvc);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh", tbPhongThucHanh.IdCongTrinhCsvc);
                 ViewData["IdLinhVuc"] = new SelectList(await ApiServices_.GetAll<DmLinhVucNghienCuu>("/api/dm/LinhVucNghienCuu"), "IdLinhVucNghienCuu", "LinhVucNghienCuu", tbPhongThucHanh.IdLinhVuc);
 
                 return View(tbPhongThucHanh);
@@ -134,7 +151,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "IdCongTrinhCoSoVatChat", tbPhongThucHanh.IdCongTrinhCsvc);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh", tbPhongThucHanh.IdCongTrinhCsvc);
                 ViewData["IdLinhVuc"] = new SelectList(await ApiServices_.GetAll<DmLinhVucNghienCuu>("/api/dm/LinhVucNghienCuu"), "IdLinhVucNghienCuu", "LinhVucNghienCuu", tbPhongThucHanh.IdLinhVuc);
 
                 return View(tbPhongThucHanh);
@@ -178,7 +195,7 @@ namespace BaiTapLon.Controllers.CSVC
                     }
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "IdCongTrinhCoSoVatChat", tbPhongThucHanh.IdCongTrinhCsvc);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh", tbPhongThucHanh.IdCongTrinhCsvc);
                 ViewData["IdLinhVuc"] = new SelectList(await ApiServices_.GetAll<DmLinhVucNghienCuu>("/api/dm/LinhVucNghienCuu"), "IdLinhVucNghienCuu", "LinhVucNghienCuu", tbPhongThucHanh.IdLinhVuc);
 
                 return View(tbPhongThucHanh);
@@ -200,7 +217,7 @@ namespace BaiTapLon.Controllers.CSVC
                 }
                 var tbPhongThucHanhs = await TbPhongThucHanhs();
                 var tbPhongThucHanh = tbPhongThucHanhs.FirstOrDefault(m => m.IdPhongThucHanh == id);
-                if (tbPhongThucHanh== null)
+                if (tbPhongThucHanh == null)
                 {
                     return NotFound();
                 }
@@ -239,4 +256,3 @@ namespace BaiTapLon.Controllers.CSVC
         }
     }
 }
-

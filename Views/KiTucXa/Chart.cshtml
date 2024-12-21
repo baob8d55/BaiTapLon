@@ -1,10 +1,26 @@
-﻿@model IEnumerable<BaiTapLon.Models.TbKiTucXa>
+﻿Kí túc xá:
+@model IEnumerable<BaiTapLon.Models.TbKiTucXa>
 
 @{
     ViewData["Title"] = "Chart";
 }
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<h1>Chart</h1>
+
+<style>
+    #pieChartTinhTrang {
+        width: 700px; /* Chiều rộng của tất cả các biểu đồ */
+        height: 700px; /* Chiều cao của tất cả các biểu đồ */
+        margin: 0 auto; /* Căn giữa biểu đồ */
+        display: block; /* Đảm bảo hiển thị dưới dạng block */
+    }
+
+    #barChartTongChoO {
+        width: 1000px; /* Chiều rộng của tất cả các biểu đồ */
+        height: 1000px; /* Chiều cao của tất cả các biểu đồ */
+        margin: 0 auto; /* Căn giữa biểu đồ */
+        display: block; /* Đảm bảo hiển thị dưới dạng block */
+    }
+</style>
 
 <h2 style="text-align:center;">Tổng Chỗ Ở</h2>
 <canvas id="barChartTongChoO"></canvas>
@@ -33,35 +49,70 @@
     });
 </script>
 
-<h2 style="text-align:center;">Tình Trạng Cơ Sở Vật Chất</h2>
-<canvas id="pieChartTinhTrang"></canvas>
+<h2 style="text-align:center; margin-top: 100px;">Tình Trạng Cơ Sở Vật Chất</h2>
+<div style="width: 700px; height: 700px; margin: 0 auto;">
+    <canvas id="pieChartTinhTrang"></canvas>
+</div>
 <script>
     var tinhTrangLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat).Distinct().ToList()));
     var tinhTrangData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
         Model.GroupBy(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat).Select(g => g.Count()).ToList()
     ));
 
-    new Chart(document.getElementById('pieChartTinhTrang'), {
+    // Hàm tạo màu ngẫu nhiên
+    function getRandomColor() {
+        return 'rgba(' +
+            Math.floor(Math.random() * 256) + ',' +
+            Math.floor(Math.random() * 256) + ',' +
+            Math.floor(Math.random() * 256) + ', 0.5)';
+    }
+
+    // Tạo danh sách màu ngẫu nhiên tương ứng số lượng dữ liệu
+    var backgroundColors = Array.from({ length: tinhTrangData.length }, getRandomColor);
+    var borderColors = backgroundColors.map(color => color.replace('0.5', '1')); // Đổi alpha thành 1 cho viền
+
+    new Chart(document.getElementById('pieChartTinhTrang').getContext('2d'), {
         type: 'pie',
         data: {
             labels: tinhTrangLabels,
             datasets: [{
                 data: tinhTrangData,
-                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(255, 206, 86, 0.5)'],
-                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)'],
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top' }
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        color: '#333'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return context.label + ': ' + context.raw + ' mục';
+                        }
+                    }
+                }
+            },
+            layout: {
+                padding: 20
             }
         }
     });
 </script>
 
-<h2 style="text-align:center;">Số Phòng và Tổng Diện Tích</h2>
+
+
+<h2 style="text-align:center; margin-top: 100px">Số Phòng và Tổng Diện Tích</h2>
 <canvas id="groupedBarChartPhongVaDienTich"></canvas>
 <script>
     var groupedLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MaKyTucxa).ToList()));

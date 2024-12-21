@@ -1,0 +1,246 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbThuVienTrungTamHocLieu>
+
+@{
+    ViewData["Title"] = "Chart";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    #pieChartHinhThucSoHuu, #pieChartTinhTrangCsvc {
+        width: 700px; /* Chiều rộng của tất cả các biểu đồ */
+        height: 700px; /* Chiều cao của tất cả các biểu đồ */
+        margin: 0 auto; /* Căn giữa biểu đồ */
+        display: block; /* Đảm bảo hiển thị dưới dạng block */
+    }
+</style>
+
+@*Biểu đồ So sánh số lượng sách, tạp chí, sách điện tử, tạp chí điện tử*@
+<h1 style="text-align:center;">So Sánh Số Lượng Sách, Tạp Chí, Sách Điện Tử, Tạp Chí Điện Tử</h1>
+<canvas id="barChartSoLuongTaiLieu"></canvas>
+<script>
+    var thuVienLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenThuVienTrungTamHocLieu).ToList()));
+    var soLuongSachData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoLuongSach).ToList()));
+    var soLuongTapChiData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoLuongTapChi).ToList()));
+    var soLuongSachDienTuData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoLuongSachDienTu).ToList()));
+    var soLuongTapChiDienTuData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoLuongTapChiDienTu).ToList()));
+
+    new Chart(document.getElementById('barChartSoLuongTaiLieu'), {
+        type: 'bar', // Loại biểu đồ cột
+        data: {
+            labels: thuVienLabels, // Tên thư viện
+            datasets: [
+                {
+                    label: 'Số lượng sách',
+                    data: soLuongSachData, // Dữ liệu số lượng sách
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)', // Màu nền cột
+                    borderColor: 'rgba(75, 192, 192, 1)', // Màu viền cột
+                    borderWidth: 2 // Độ dày viền
+                },
+                {
+                    label: 'Số lượng tạp chí',
+                    data: soLuongTapChiData, // Dữ liệu số lượng tạp chí
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)', // Màu nền cột
+                    borderColor: 'rgba(153, 102, 255, 1)', // Màu viền cột
+                    borderWidth: 2 // Độ dày viền
+                },
+                {
+                    label: 'Số lượng sách điện tử',
+                    data: soLuongSachDienTuData, // Dữ liệu số lượng sách điện tử
+                    backgroundColor: 'rgba(255, 159, 64, 0.6)', // Màu nền cột
+                    borderColor: 'rgba(255, 159, 64, 1)', // Màu viền cột
+                    borderWidth: 2 // Độ dày viền
+                },
+                {
+                    label: 'Số lượng tạp chí điện tử',
+                    data: soLuongTapChiDienTuData, // Dữ liệu số lượng tạp chí điện tử
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)', // Màu nền cột
+                    borderColor: 'rgba(255, 99, 132, 1)', // Màu viền cột
+                    borderWidth: 2 // Độ dày viền
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Biểu đồ so sánh số lượng sách, tạp chí, sách điện tử và tạp chí điện tử theo thư viện',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.dataset.label}: ${tooltipItem.raw} đơn vị`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Tên thư viện',
+                        font: { size: 14 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Số lượng tài liệu',
+                        font: { size: 14 }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+@*Biểu đồ so sánh số phòng đọc, số lượng chỗ ngồi, số lượng máy tính*@
+<h1 style="text-align:center;">So Sánh Số Phòng Đọc, Số Lượng Chỗ Ngồi, Số Lượng Máy Tính</h1>
+<canvas id="barChartPhongDocChongNgoiMayTinh"></canvas>
+<script>
+    var soPhongDocData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoPhongDoc).ToList()));
+    var soLuongChoNgoiData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoLuongChoNgoi).ToList()));
+    var soLuongMayTinhData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoLuongMayTinh).ToList()));
+
+    new Chart(document.getElementById('barChartPhongDocChongNgoiMayTinh'), {
+        type: 'bar', // Loại biểu đồ cột
+        data: {
+            labels: thuVienLabels, // Tên thư viện
+            datasets: [
+                {
+                    label: 'Số phòng đọc',
+                    data: soPhongDocData, // Dữ liệu số phòng đọc
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)', // Màu nền cột
+                    borderColor: 'rgba(75, 192, 192, 1)', // Màu viền cột
+                    borderWidth: 2 // Độ dày viền
+                },
+                {
+                    label: 'Số lượng chỗ ngồi',
+                    data: soLuongChoNgoiData, // Dữ liệu số lượng chỗ ngồi
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)', // Màu nền cột
+                    borderColor: 'rgba(153, 102, 255, 1)', // Màu viền cột
+                    borderWidth: 2 // Độ dày viền
+                },
+                {
+                    label: 'Số lượng máy tính',
+                    data: soLuongMayTinhData, // Dữ liệu số lượng máy tính
+                    backgroundColor: 'rgba(255, 159, 64, 0.6)', // Màu nền cột
+                    borderColor: 'rgba(255, 159, 64, 1)', // Màu viền cột
+                    borderWidth: 2 // Độ dày viền
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Biểu đồ so sánh số phòng đọc, số lượng chỗ ngồi và số lượng máy tính theo thư viện',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.dataset.label}: ${tooltipItem.raw} đơn vị`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Tên thư viện',
+                        font: { size: 14 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Số lượng',
+                        font: { size: 14 }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+@*Biểu đồ tỉ lệ các loại hình thức sở hữu*@
+<h1 style="text-align:center;">Tỷ Lệ Các Thành Phần Trong Loại Hình Sở Hữu</h1>
+<canvas id="pieChartHinhThucSoHuu"></canvas>
+<script>
+    var hinhThucSoHuuData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
+        .Select(g => g.Count())
+        .ToList()
+        ));
+
+    var randomColors = hinhThucSoHuuData.map(() => {
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        return `rgba(${r}, ${g}, ${b}, 0.6)`;
+    });
+
+    new Chart(document.getElementById('pieChartHinhThucSoHuu'), {
+        type: 'pie',
+        data: {
+            labels: thuVienLabels,
+            datasets: [{
+                data: hinhThucSoHuuData,
+                backgroundColor: randomColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Tỷ lệ các hình thức sở hữu'
+                }
+            }
+        }
+    });
+</script>
+
+@*Biểu đồ so sánh các loại tình trạng cơ sở vật chất*@
+<h1 style="text-align:center;">Tỷ Lệ Các Thành Phần Trong Tình Trạng Cơ Sở Vật Chất</h1>
+<canvas id="pieChartTinhTrangCsvc"></canvas>
+<script>
+    var tinhTrangCsvcData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat)
+        .Select(g => g.Count())
+        .ToList()
+        ));
+
+    new Chart(document.getElementById('pieChartTinhTrangCsvc'), {
+        type: 'pie',
+        data: {
+            labels: thuVienLabels,
+            datasets: [{
+                data: tinhTrangCsvcData,
+                backgroundColor: randomColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Tỷ lệ tình trạng cơ sở vật chất'
+                }
+            }
+        }
+    });
+</script>

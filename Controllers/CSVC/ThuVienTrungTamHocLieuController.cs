@@ -50,6 +50,21 @@ namespace BaiTapLon.Controllers.CSVC
             }
 
         }
+        public async Task<IActionResult> Chart()
+        {
+            try
+            {
+                List<TbThuVienTrungTamHocLieu> getall = await TbThuVienTrungTamHocLieus();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
 
         // Lấy chi tiết 1 bản ghi dựa theo ID tương ứng đã truyền vào (IdThuVienTrungTamHocLieu)
         // Hiển thị bản ghi đó ở view Details

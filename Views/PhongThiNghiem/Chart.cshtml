@@ -1,89 +1,134 @@
 ﻿@model IEnumerable<BaiTapLon.Models.TbPhongThiNghiem>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1"></script>
 @{
     ViewData["Title"] = "Chart";
 }
 
-<h1>Chart</h1>
-<h2 style="text-align:center;">Mức Độ Đáp Ứng Nhu Cầu</h2>
-<canvas id="pieChartMucDoDapUng"></canvas>
+<h1 style="text-align: center;">Mức độ đáp ứng</h1>
+<div style="width: 600px; height: 600px; margin: auto;">
+    <canvas id="pieChartMucDoDapUng"></canvas>
+</div>
+
 <script>
     var mucDoLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MucDoDapUngNhuCauNckh).Distinct().ToList()));
     var mucDoData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
         Model.GroupBy(x => x.MucDoDapUngNhuCauNckh).Select(g => g.Count()).ToList()
     ));
 
-    new Chart(document.getElementById('pieChartMucDoDapUng'), {
+    function getRandomColor() {
+        return `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`;
+    }
+
+    var randomBackgroundColors = mucDoLabels.map(() => getRandomColor());
+    var randomBorderColors = randomBackgroundColors.map(color => color.replace('0.6', '1'));
+
+    new Chart(document.getElementById('pieChartMucDoDapUng').getContext('2d'), {
         type: 'pie',
         data: {
             labels: mucDoLabels,
             datasets: [{
                 data: mucDoData,
-                backgroundColor:['#FF6384', '#36A2EB', '#FFCE56', '#FF5733', '#33FF57'], // Thêm màu khác biệt
-                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733', '#33FF57'],
+                backgroundColor: randomBackgroundColors,
+                borderColor: randomBorderColors,
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top' }
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Biểu đồ: Mức Độ Đáp Ứng Nhu Cầu',
+                    font: { size: 18, weight: 'bold' }
+                }
             }
         }
     });
 </script>
-<h2 style="text-align:center;">Lĩnh Vực Nghiên Cứu</h2>
-<canvas id="pieChartLinhVucNghienCuu"></canvas>
+
+<h1 style="text-align: center; margin-top: 100px;">Lĩnh vực nghiên cứu</h1>
+<div style="width: 600px; height: 400px; margin: auto;">
+    <canvas id="barChartLinhVucNghienCuu"></canvas>
+</div>
 <script>
     var linhVucLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLinhVucNavigation.LinhVucNghienCuu).Distinct().ToList()));
     var linhVucData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
         Model.GroupBy(x => x.IdLinhVucNavigation.LinhVucNghienCuu).Select(g => g.Count()).ToList()
     ));
 
-    new Chart(document.getElementById('pieChartLinhVucNghienCuu'), {
-        type: 'pie',
+    new Chart(document.getElementById('barChartLinhVucNghienCuu').getContext('2d'), {
+        type: 'bar',
         data: {
             labels: linhVucLabels,
             datasets: [{
+                label: 'Số lượng nghiên cứu',
                 data: linhVucData,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733', '#33FF57'], // Thêm màu khác biệt
-                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733', '#33FF57'],
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top' }
+                legend: { display: true, position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Biểu đồ: Lĩnh Vực Nghiên Cứu',
+                    font: { size: 18, weight: 'bold' }
+                }
+            },
+            scales: {
+                x: { title: { display: true, text: '', font: { size: 14, weight: 'bold' } } },
+                y: {
+                    title: { display: true, text: 'Số lượng nghiên cứu', font: { size: 14, weight: 'bold' } },
+                    beginAtZero: true
+                }
             }
         }
     });
 </script>
-<h2 style="text-align:center;">Loại Phòng Thí Nghiệm</h2>
-<canvas id="pieChartLoaiPhongThiNghiem"></canvas>
+
+<h1 style="text-align: center; margin-top: 100px;">Loại phòng thí nghiệm</h1>
+<div style="width: 600px; height: 400px; margin: auto;">
+    <canvas id="barChartLoaiPhongThiNghiem"></canvas>
+</div>
 <script>
     var loaiPhongLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLoaiPhongThiNghiemNavigation.LoaiPhongThiNghiem).Distinct().ToList()));
     var loaiPhongData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
         Model.GroupBy(x => x.IdLoaiPhongThiNghiemNavigation.LoaiPhongThiNghiem).Select(g => g.Count()).ToList()
     ));
 
-    new Chart(document.getElementById('pieChartLoaiPhongThiNghiem'), {
-        type: 'pie',
+    new Chart(document.getElementById('barChartLoaiPhongThiNghiem').getContext('2d'), {
+        type: 'bar',
         data: {
             labels: loaiPhongLabels,
             datasets: [{
+                label: 'Số lượng phòng thí nghiệm',
                 data: loaiPhongData,
-                backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'],
-                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top' }
+                legend: { display: true, position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Biểu đồ: Loại Phòng Thí Nghiệm',
+                    font: { size: 18, weight: 'bold' }
+                }
+            },
+            scales: {
+                x: { title: { display: true, text: '', font: { size: 14, weight: 'bold' } } },
+                y: {
+                    title: { display: true, text: 'Số lượng phòng', font: { size: 14, weight: 'bold' } },
+                    beginAtZero: true
+                }
             }
         }
     });
 </script>
-

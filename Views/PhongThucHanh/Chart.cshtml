@@ -1,0 +1,156 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbPhongThucHanh>
+
+@{
+    ViewData["Title"] = "Chart";
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Biểu đồ thể hiện tỷ lệ các phòng thực hành theo năm đưa vào sử dụng -->
+<h1 style="text-align:center;">Tỷ Lệ Các Phòng Thực Hành Theo Năm Đưa Vào Sử Dụng</h1>
+<canvas id="pieChartNamDuaVaoSuDung"></canvas>
+
+<script>
+    // Hàm tạo màu ngẫu nhiên với độ trong suốt
+    function getRandomColor() {
+        return `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`;
+    }
+
+    var namLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.NamDuaVaoSuDung).Distinct().ToList()));
+    var namData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.NamDuaVaoSuDung).Select(g => g.Count()).ToList()
+    ));
+
+    var randomColors = namLabels.map(() => getRandomColor());
+
+    new Chart(document.getElementById('pieChartNamDuaVaoSuDung'), {
+        type: 'pie',
+        data: {
+            labels: namLabels,
+            datasets: [{
+                data: namData,
+                backgroundColor: randomColors,
+                borderColor: randomColors.map(color => color.replace('0.6', '1')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Tỷ lệ các phòng thực hành theo năm đưa vào sử dụng',
+                    font: { size: 18, weight: 'bold' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.raw} phòng`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Biểu đồ thể hiện mức độ đáp ứng nhu cầu NCKH -->
+<h1 style="text-align:center;">Tỷ Lệ Các Mức Độ Đáp Ứng Nhu Cầu NCKH</h1>
+<canvas id="pieChartMucDoDapUng"></canvas>
+
+<script>
+    var mucDoLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MucDoDapUngNhuCauNckh).Distinct().ToList()));
+    var mucDoData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.MucDoDapUngNhuCauNckh).Select(g => g.Count()).ToList()
+    ));
+
+    var mucDoColors = mucDoLabels.map(() => getRandomColor());
+
+    new Chart(document.getElementById('pieChartMucDoDapUng'), {
+        type: 'pie',
+        data: {
+            labels: mucDoLabels,
+            datasets: [{
+                data: mucDoData,
+                backgroundColor: mucDoColors,
+                borderColor: mucDoColors.map(color => color.replace('0.6', '1')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Tỷ lệ các mức độ đáp ứng nhu cầu NCKH',
+                    font: { size: 18, weight: 'bold' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.raw} phòng`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Biểu đồ thể hiện sự phân bổ phòng thực hành theo lĩnh vực nghiên cứu -->
+<h1 style="text-align:center;">Sự Phân Bổ Phòng Thực Hành Theo Lĩnh Vực Nghiên Cứu</h1>
+<canvas id="barChartLinhVucNghienCuu"></canvas>
+
+<script>
+    var linhVucLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLinhVucNavigation.LinhVucNghienCuu).Distinct().ToList()));
+    var linhVucData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdLinhVucNavigation.LinhVucNghienCuu).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('barChartLinhVucNghienCuu'), {
+        type: 'bar',
+        data: {
+            labels: linhVucLabels,
+            datasets: [{
+                label: 'Số lượng phòng',
+                data: linhVucData,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Phân bổ phòng thực hành theo lĩnh vực nghiên cứu',
+                    font: { size: 18, weight: 'bold' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `Số lượng: ${tooltipItem.raw}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Lĩnh vực nghiên cứu',
+                        font: { size: 14 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Số lượng phòng',
+                        font: { size: 14 }
+                    }
+                }
+            }
+        }
+    });
+</script>

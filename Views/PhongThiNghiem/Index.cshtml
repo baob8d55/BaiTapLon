@@ -31,29 +31,30 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MucDoDapUngNhuCauNckh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NamDuaVaoSuDung)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdCongTrinhCsvcNavigation.MaCongTrinh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdLinhVucNavigation.LinhVucNghienCuu)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdLoaiPhongThiNghiemNavigation.LoaiPhongThiNghiem)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdPhongThiNghiem">Chỉnh sửa</a> |
-                <a asp-action="Details" asp-route-id="@item.IdPhongThiNghiem">Chi tiết</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdPhongThiNghiem">Xóa</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MucDoDapUngNhuCauNckh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NamDuaVaoSuDung)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdCongTrinhCsvcNavigation.TenCongTrinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdLinhVucNavigation.LinhVucNghienCuu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdLoaiPhongThiNghiemNavigation.LoaiPhongThiNghiem)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdPhongThiNghiem">Chỉnh sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdPhongThiNghiem">Chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdPhongThiNghiem">Xóa</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
