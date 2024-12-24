@@ -10,10 +10,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-@{
-    ViewData["Title"] = "Biểu đồ đối tượng sử dụng";
-}
-
 <head>
     <meta charset="utf-8">
     <title>Visualize Data Beautifully Using JS Charts</title>
@@ -27,8 +23,7 @@
             font-weight: bold;
             color: #333;
             margin-bottom: 15px;
-          
-            text-align:center;
+            text-align: center;
         }
 
         /* Phong cách cho dropdown */
@@ -41,16 +36,14 @@
             color: #333;
             background-color: #f9f9f9;
             border: 2px solid #ddd;
-            border-radius: 8px; 
+            border-radius: 8px;
             outline: none;
-          
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
             transition: all 0.25s ease;
             /* Căn giữa theo chiều ngang */
             display: block; /* Đảm bảo là khối */
             margin: 0 auto; /* Căn giữa ngang */
-        
         }
 
             /* Hiệu ứng hover */
@@ -76,9 +69,10 @@
         /* Hiệu ứng cho tiêu đề */
         h1 {
             font-family: 'Arial', sans-serif;
-            font-size: 25px;
+            font-size: 40px;
             color: #444;
             margin-bottom: 20px;
+            font-weight: bold;
         }
 
     </style>
@@ -86,21 +80,22 @@
 <label for="customDropdown">HÃY CHỌN BIỂU ĐỒ MÀ BẠN MUỐN XEM</label>
 <div class="custom-dropdown" id="customDropdown">
     <select id="chartDropdown" style="margin-bottom:100px" class="dropdown-btn">
-    <option value="">LỰA CHỌN BIỂU ĐỒ</option>
-    <option value="chart1">Biểu đồ 1: ĐỐI TƯỢNG SỬ DỤNG</option>
-    <option value="chart2">Biểu đồ 2: HÌNH THỨC SỞ HỮU</option>
-    <option value="chart3">Biểu đồ 3: LOẠI CÔNG TRÌNH </option>
-    <option value="chart5">Biểu đồ 4: SÀN DIỆN TÍCH XÂY DỰNG</option>
-    <option value="chart6">Biểu đồ 5: VỐN ĐẦU TƯ BAN ĐẦU</option>
-    <option value="chart7">Biểu đồ 6: TÌNH TRẠNG CƠ SỞ VẬT CHẤT</option>
-    <option value="chart8">Biểu đồ 7: SỐ PHÒNG Ở</option>
- 
+        <option value="">LỰA CHỌN BIỂU ĐỒ</option>
+        <option value="chart1">Biểu đồ 1: Đối tượng sử dụng</option>
+        <option value="chart2">Biểu đồ 2: Hình thức sở hữu</option>
+        <option value="chart3">Biểu đồ 3: Loại công trình </option>
+        <option value="chart4">Biểu đồ 4: Mục đích sử dụng </option>
+        <option value="chart5">Biểu đồ 5: Sàn diện tích xây dựng</option>
+        <option value="chart6">Biểu đồ 6: Vốn đầu tư ban đầu</option>
+        <option value="chart7">Biểu đồ 7: Tình trạng cơ sở vật chất</option>
+        <option value="chart8">Biểu đồ 8: Số phòng ở</option>
 
-</select>
+
+    </select>
 </div>
 <br></br>
- @* Biểu đồ tròn cho đối tượng sử dụng  *@
-<div id="chart1" class="chart-container" style=" margin-bottom:100px">
+@* Biểu đồ tròn cho đối tượng sử dụng  *@
+<div id="chart1" class="chart-container" style="width: 700px; height: 900px; margin: auto;">
     <h1 style="text-align:center;">Biểu đồ đối tượng sử dụng</h1>
     <canvas id="usagePieChart"></canvas>
 </div>
@@ -143,7 +138,7 @@
                 },
                 tooltip: {
                     callbacks: {
-                        label: function(tooltipItem) {
+                        label: function (tooltipItem) {
                             var label = tooltipItem.label || '';
                             var value = tooltipItem.raw || 0;
                             return `${label}: ${value} đối tượng`;
@@ -156,15 +151,15 @@
 </script>
 
 
-<div id="chart2" class="chart-container" style=" margin-bottom:100px">
+<div id="chart2" class="chart-container" style="width: 700px; height: 900px; margin: auto;">
     <h2 style="text-align:center;">Hình Thức Sở Hữu</h2>
-<canvas id="pieChartHinhThuc"></canvas>
+    <canvas id="pieChartHinhThuc"></canvas>
 </div>
 <script>
     var hinhThucLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Distinct().ToList()));
     var hinhThucData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
         Model.GroupBy(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Select(g => g.Count()).ToList()
-    ));
+        ));
 
     new Chart(document.getElementById('pieChartHinhThuc'), {
         type: 'pie',
@@ -189,16 +184,16 @@
 
 
 
-<div id="chart3" class="chart-container" style=" margin-bottom:100px">
+<div id="chart3" class="chart-container" style="width: 700px; height: 900px; margin: auto;">
 
-    <h2 style="text-align:center; class=" chart-container" style=" margin-bottom:100px">Loại Công Trình</h2>
-<canvas id="pieChartLoaiCongTrinh"></canvas>
+    <h2 style="text-align:center;">Loại Công Trình</h2>
+    <canvas id="pieChartLoaiCongTrinh"></canvas>
 </div>
 <script>
     var loaiCongTrinhLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLoaiCongTrinhNavigation.LoaiCongTrinhCoSoVatChat).Distinct().ToList()));
     var loaiCongTrinhData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
         Model.GroupBy(x => x.IdLoaiCongTrinhNavigation.LoaiCongTrinhCoSoVatChat).Select(g => g.Count()).ToList()
-    ));
+        ));
 
     new Chart(document.getElementById('pieChartLoaiCongTrinh'), {
         type: 'pie',
@@ -221,15 +216,15 @@
 </script>
 
 
-<div id="chart4 " class="chart-container" style=" margin-bottom:100px">
+<div id="chart4" class="chart-container" style="width: 700px; height: 900px; margin: auto;">
     <h2 style="text-align:center;">Mục Đích Sử Dụng</h2>
-<canvas id="pieChartMucDich"></canvas>
+    <canvas id="pieChartMucDich"></canvas>
 </div>
 <script>
     var mucDichLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdMucDichSuDungNavigation.MucDichSuDungCsvc).Distinct().ToList()));
     var mucDichData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
         Model.GroupBy(x => x.IdMucDichSuDungNavigation.MucDichSuDungCsvc).Select(g => g.Count()).ToList()
-    ));
+        ));
 
     new Chart(document.getElementById('pieChartMucDich'), {
         type: 'pie',
@@ -257,9 +252,9 @@
 
 @* Biểu đồ cột cho Sàn diện tích xây dựng *@
 
-<div id="chart5" class="chart-container" style=" margin-bottom:100px">
+<div id="chart5" class="chart-container" style="width: 1500px; height:900px; margin: auto;">
     <h1 style="text-align:center;">Sàn Diện Tích Xây Dựng</h1>
-<canvas id="barChartDienTich"></canvas>
+    <canvas id="barChartDienTich"></canvas>
 </div>
 <script>
     var dienTichLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenCongTrinh).ToList()));
@@ -290,7 +285,7 @@
                 },
                 tooltip: {
                     callbacks: {
-                        label: function(tooltipItem) {
+                        label: function (tooltipItem) {
                             return `Diện tích: ${tooltipItem.raw} m²`;
                         }
                     }
@@ -320,9 +315,9 @@
 
 @* Biểu đồ cho vốn đầu tư ban đầu *@
 
-<div id="chart6" class="chart-container" style=" margin-bottom:100px">
-    <h1>Vốn đầu tư ban đầu</h1>
-<canvas id="barChartVon"></canvas>
+<div id="chart6" class="chart-container" style="width: 1500px; height:900px; margin: auto;">
+    <h1 style="text-align:center;">Vốn đầu tư ban đầu</h1>
+    <canvas id="barChartVon"></canvas>
 </div>
 <script>
     // Lấy dữ liệu tên công trình và vốn đầu tư
@@ -355,7 +350,7 @@
                 },
                 tooltip: {
                     callbacks: {
-                        label: function(tooltipItem) {
+                        label: function (tooltipItem) {
                             return `Vốn: ${tooltipItem.raw.toLocaleString()} VNĐ`;
                         }
                     }
@@ -384,10 +379,9 @@
 
 
 
-    <div id="chart7" class="chart-container" style=" margin-bottom:100px">
-    <div style="width: 800px; height: 800px; ">
-<canvas id="pieChartTinhTrang"></canvas>
-</div>
+<div id="chart7" class="chart-container" style="width: 700px; height: 900px; margin: auto;">
+    <h1 style="text-align:center;">Tình trạng cơ sở vật chất</h1>
+    <canvas id="pieChartTinhTrang"></canvas>
 </div>
 <script>
     var tinhTrangLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat).Distinct().ToList()));
@@ -409,9 +403,9 @@
         }
     });
 </script>
-<div id="chart8" class="chart-container" style=" margin-bottom:100px">
+<div id="chart8" class="chart-container" style="width: 1500px; height:900px; margin: auto;">
     <h1 style="text-align:center;">Biểu Đồ Số Phòng Ở</h1>
-<canvas id="groupedBarChartPhong"></canvas>
+    <canvas id="groupedBarChartPhong"></canvas>
 </div>
 <script>
     var phongLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenCongTrinh).ToList()));
@@ -475,7 +469,7 @@
 </script>
 @* thay đổi nền cho option *@
 <script>
-       // Lấy các thành phần dropdown
+    // Lấy các thành phần dropdown
     const dropdown = document.querySelector('.custom-dropdown');
     const dropdownBtn = dropdown.querySelector('.dropdown-btn');
     const dropdownOptions = dropdown.querySelectorAll('.dropdown-options li');

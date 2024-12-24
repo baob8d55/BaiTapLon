@@ -3,72 +3,120 @@
 @{
     ViewData["Title"] = "Chỉnh sửa";
 }
+@section Heads
+{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-<h1>Chỉnh sửa</h1>
 
-<h4>Đất Đai</h4>
+}
+<h1 style="text-align:center;margin-bottom:20px;color:#adefd1ff;font-size:60px"><b>Chỉnh Sửa</b></h1>
+<h2 class="text-center my-4" style="color:burlywood;font-size:50px"><b>Đất Đai</b></h2>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdDatDai" />
-            <div class="form-group">
-                <label asp-for="MaGiayChungNhanQuyenSoHuu" class="control-label"></label>
-                <input asp-for="MaGiayChungNhanQuyenSoHuu" class="form-control" />
-                <span asp-validation-for="MaGiayChungNhanQuyenSoHuu" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DienTichDat" class="control-label"></label>
-                <input asp-for="DienTichDat" class="form-control" />
-                <span asp-validation-for="DienTichDat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdHinhThucSoHuu" class="control-label"></label>
-                <select asp-for="IdHinhThucSoHuu" class="form-control" asp-items="ViewBag.IdHinhThucSoHuu"></select>
-                <span asp-validation-for="IdHinhThucSoHuu" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TenDonViSoHuu" class="control-label"></label>
-                <input asp-for="TenDonViSoHuu" class="form-control" />
-                <span asp-validation-for="TenDonViSoHuu" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MinhChungQuyenSoHuuDatDai" class="control-label"></label>
-                <input asp-for="MinhChungQuyenSoHuuDatDai" class="form-control" />
-                <span asp-validation-for="MinhChungQuyenSoHuuDatDai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MucDichSuDungDat" class="control-label"></label>
-                <input asp-for="MucDichSuDungDat" class="form-control" />
-                <span asp-validation-for="MucDichSuDungDat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NamBatDauSuDungDat" class="control-label"></label>
-                <input asp-for="NamBatDauSuDungDat" class="form-control" />
-                <span asp-validation-for="NamBatDauSuDungDat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ThoiGianSuDungDat" class="control-label"></label>
-                <input asp-for="ThoiGianSuDungDat" class="form-control" />
-                <span asp-validation-for="ThoiGianSuDungDat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DienTichDatDaSuDung" class="control-label"></label>
-                <input asp-for="DienTichDatDaSuDung" class="form-control" />
-                <span asp-validation-for="DienTichDatDaSuDung" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Lưu" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<body>
+    <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-md-6 col-lg-4">
+            @* /* Khoảng cách 20px giữa nội dung và viền */ *@
+            @* /* Viền dày 2px, màu đen */ *@
+            @* /* Góc viền được làm tròn với bán kính 8px */ *@
+            @* /* Bóng đổ với độ dịch chuyển và độ mờ nhất định */ *@
 
-<div>
-    <a asp-action="Index">Trở về</a>
-</div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <hr />
+            <div class="row">
+                <div class="form-group">
+                    <form asp-action="Edit" style="margin-top:20px; padding: 20px; border: 2px solid black; border-radius: 8px;  box-shadow: 10px 10px 15px 5px rgba(0, 0, 0, 0.5);background-color:white; color:black">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input style="border: 2px solid black;border-radius: 8px;" type="hidden" asp-for="IdDatDai" />
+                        <div class="form-group">
+                            <label asp-for="MaGiayChungNhanQuyenSoHuu" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="MaGiayChungNhanQuyenSoHuu" class="form-control" />
+                            <span asp-validation-for="MaGiayChungNhanQuyenSoHuu" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DienTichDat" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="DienTichDat" class="form-control" />
+                            <span asp-validation-for="DienTichDat" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="IdHinhThucSoHuuNavigation" class="control-label"></label>
+                            <select style="border: 2px solid black;border-radius: 8px;" asp-for="IdHinhThucSoHuu" class="form-control" asp-items="ViewBag.IdHinhThucSoHuu"></select>
+                            <span asp-validation-for="IdHinhThucSoHuu" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TenDonViSoHuu" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="TenDonViSoHuu" class="form-control" />
+                            <span asp-validation-for="TenDonViSoHuu" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="MinhChungQuyenSoHuuDatDai" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="MinhChungQuyenSoHuuDatDai" class="form-control" />
+                            <span asp-validation-for="MinhChungQuyenSoHuuDatDai" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="MucDichSuDungDat" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="MucDichSuDungDat" class="form-control" />
+                            <span asp-validation-for="MucDichSuDungDat" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NamBatDauSuDungDat" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="NamBatDauSuDungDat" class="form-control" />
+                            <span asp-validation-for="NamBatDauSuDungDat" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ThoiGianSuDungDat" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="ThoiGianSuDungDat" class="form-control" />
+                            <span asp-validation-for="ThoiGianSuDungDat" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DienTichDatDaSuDung" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="DienTichDatDaSuDung" class="form-control" />
+                            <span asp-validation-for="DienTichDatDaSuDung" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Lưu Lại
+                                </button>
+                            </div>
+                            <div>
+                                <a class="btn btn-primary" asp-action="Index">
+                                    <i class="fa-solid fas fa-chevron-left" style="margin-right:5px"></i>Quay lại
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+<style>
+    .btn:hover {
+        transform: translateY(-5px); /* Nổi lên khi hover */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Tạo bóng đổ */
+    }
+
+    .btn {
+        border-radius: 20px; /* Bo góc nút */
+        transition: all 0.3s ease;
+        /* Hiệu ứng chuyển động cho nút */
+        font-size: 18px; /* Tăng kích thước chữ */
+        padding: 15px 30px; /* Tăng khoảng cách giữa các cạnh của nút */
+    }
+
+    body {
+        /* Thiết lập màu nền đơn giản bằng mã RGB (màu hồng nhạt) */
+        background: #34495e;
+        /* Thiết lập nền gradient từ màu hồng nhạt ở trên cùng xuống màu xanh nhạt ở dưới cùng */ ` margin: 0;
+        /* Đặt chiều cao của phần tử bằng 100% chiều cao của khung nhìn */
+        height: 100vh;
+        /* Thiết lập font chữ cho nội dung là Arial, nếu không có thì dùng font sans-serif mặc định */
+        font-family: Arial, sans-serif;
+    }
+</style>

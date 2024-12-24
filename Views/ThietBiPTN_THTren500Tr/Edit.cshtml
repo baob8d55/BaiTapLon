@@ -1,12 +1,12 @@
 ﻿@model BaiTapLon.Models.TbThietBiPtnThtren500Tr
 
 @{
-    ViewData["Title"] = "Chỉnh sửa";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Chỉnh sửa</h1>
+<h1>Edit</h1>
 
-<h4>Thiết bị PTN-TH trên 500Tr</h4>
+<h4>TbThietBiPtnThtren500Tr</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -54,14 +54,14 @@
                 <span asp-validation-for="NamDuaVaoSuDung" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Trở lại</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

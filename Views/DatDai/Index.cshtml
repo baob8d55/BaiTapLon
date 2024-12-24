@@ -1,22 +1,129 @@
-﻿<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-@model IEnumerable<BaiTapLon.Models.TbDatDai>
+﻿@model IEnumerable<BaiTapLon.Models.TbDatDai>
 
 @{
     ViewData["Title"] = "Đất Đai";
 }
 
-<h1>Đất Đai</h1>
+<head>
+    <meta charset="utf-8">
+    <title>Trang Chủ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        a:visited, a:link, a:hover {
+            text-decoration: none;
+            color: inherit;
+        }
 
-<p>
-    <a asp-action="Create">Tạo mới</a>
-</p>
+        #views {
+            border-collapse: collapse;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        }
 
+            #views th, td {
+                border-bottom: 2px solid black;
+                color: white;
+            }
 
+        .dtr-modal table {
+            width: 100%;
+        }
 
-<table class="table">
+        table.dataTable tbody tr:nth-child(odd) {
+            background-color: #f4f4f4;
+        }
+
+        table.dataTable tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        /* Thay đổi màu nền khi hover */
+        table.dataTable tbody tr:hover {
+            background-color: #dcdcdc;
+        }
+
+        /* Thêm đường viền cho bảng */
+        table.dataTable {
+            border: 2px solid #000;
+        }
+
+            table.dataTable th, table.dataTable td {
+                padding: 12px;
+                text-align: center;
+            }
+
+        #dt-search-0 {
+            margin-left: 1547px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .chart-container {
+            width: 800px;
+        }
+
+        /* Tăng cường hiển thị nút */
+        .btn {
+            transition: all 0.3s ease; /* Hiệu ứng chuyển động cho nút */
+        }
+
+            .btn:hover {
+                transform: translateY(-5px); /* Nổi lên khi hover */
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Tạo bóng đổ */
+            }
+
+        body {
+            background-color: #34495e;
+        }
+
+        .dt-info {
+            color: white;
+        }
+
+        .image-box {
+            width: 300px;
+            height: 200px;
+            background-image: url("https://i.imgur.com/TJrzbkm.jpeg");
+            background-size: cover;
+            background-position: center;
+            float: left;
+        }
+
+        .image-box {
+            background-image: url("https://i.imgur.com/n0ud5PE.jpeg");
+            background-size: cover;
+            float: right;
+        }
+    </style>
+</head>
+
+<<div style="display: flex; justify-content: space-between; align-items: center;">
+    <!-- Thẻ image-box -->
+    <div class="image-box" style="margin-bottom: 10px;"></div>
+
+    <!-- Thẻ chứa tiêu đề -->
+    <div style="margin-right:150px;">
+        <h1 class="text-center my-4" style="color:#adefd1ff;font-size:60px;"><b>Trang Chủ</b></h1>
+        <h2 class="text-center my-4" style="color:burlywood;font-size:50px"><b>Đất Đai</b></h2>
+    </div>
+
+    <!-- Thẻ logo-container -->
+    <div class="logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/vi/8/85/Logo_hoc_vien_ANND.png" alt="Logo Học viện An ninh nhân dân" width="170px" />
+    </div>
+</div>
+
+<table class="table table-striped table-bordered mt-3" id="views" style=" padding: 20px; border: 2px solid black; border-radius: 8px;  box-shadow: 10px 10px 15px 5px rgba(0, 0, 0, 0.5); margin-bottom:20px">
     <thead>
-        <tr>
+        <tr style="color:white">
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.MaGiayChungNhanQuyenSoHuu)
             </th>
@@ -44,13 +151,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.IdHinhThucSoHuuNavigation)
             </th>
-            <th></th>
+            <th class="_nonorder">Hành động</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                <td></td>
                 <td>
                     @Html.DisplayFor(modelItem => item.MaGiayChungNhanQuyenSoHuu)
                 </td>
@@ -79,11 +187,121 @@
                     @Html.DisplayFor(modelItem => item.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdDatDai">Chỉnh sửa</a> |
-                    <a asp-action="Details" asp-route-id="@item.IdDatDai">Chi tiết</a> |
-                    <a asp-action="Delete" asp-route-id="@item.IdDatDai">Xóa</a>
+                    <button class="btn-warning-rgb" onclick="window.location.href = '@Url.Action("Edit", new {id = item.IdDatDai})'"><i class="fa-sharp-duotone fa-solid fa-user-pen"></i> Sửa</button>
+                    <button class="btn-warning-rgb" onclick="window.location.href = '@Url.Action("Details", new {id = item.IdDatDai})'"><i class="fa-sharp fa-solid fa-circle-info"></i> Chi tiết</button>
+                    <button class="btn-warning-rgb" onclick="window.location.href = '@Url.Action("Delete", new {id = item.IdDatDai})'"><i class="fa-solid fa-trash"></i> Xóa</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.1.8/b-3.2.0/b-html5-3.2.0/r-3.0.3/datatables.min.js"></script>
+    <script src="https://kit.fontawesome.com/5c202d0407.js" crossorigin="anonymous"></script>
+    <script>
+        // Datatable configuration
+        var table = new DataTable("#views", {
+            columnDefs: [
+                {
+                    className: 'dtr-control',
+                    targets: 0
+                },
+                {
+                    orderable: false,
+                    targets: '._nonorder'
+                },
+                {
+                    responsivePriority: 0,
+                    targets: -1
+                }
+            ],
+            order: [1, 'asc'],
+            responsive: {
+                details: {
+                    display: DataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return 'Thông tin của ' + data[2];
+                        }
+                    }),
+                    renderer: function (api, rowIdx, columns) {
+                        var data = $.map(columns, function (col, i) {
+                            return col.hidden
+                                ? `<tr><td class="p-3">${col.title}</td><td class="p-3">${col.data}</td></tr>`
+                                : '';
+                        }).join('');
+                        return data ? $('<table/>').append(data) : false;
+                    }
+                }
+            },
+            language: {
+                search: "",
+                searchPlaceholder: "Tìm kiếm...",
+                info: "Tổng cộng _TOTAL_ bản ghi",
+                zeroRecords: "Không tìm thấy bản ghi nào"
+            },
+            createdRow: (row, data, index) => {
+                $('td', row).eq(0).html(index + 1);
+            },
+            layout: {
+                topStart: {
+                    buttons: [
+                        {
+                            className: 'btn btn-primary',
+                            text: 'Thêm mới',
+                            action: function (e, dt, node, config) {
+                                window.location.href = '@Url.Action("Create")';
+                            }
+                        },
+                        {
+                            extend: "excel",
+                            className: 'btn btn-primary',
+                            text: 'Xuất Excel',
+                            exportOptions: {
+                                columns: function (idx, data, node) {
+                                    if (node.classList.contains("_nonorder")) return false;
+                                    return true;
+                                },
+                            }
+                        },
+                        {
+                            className: 'btn btn-primary',
+                            text: 'Import Excel',
+                            action: function (e, dt, node, config) {
+                                import_excel((json) => {
+                                    let sheets = JSON.parse(json);
+                                    let sheet = sheets['Sheet1'];
+                                    let raw_data = [];
+                                    for (let i = 0; i < sheet.length; ++i) {
+                                        let arr = [];
+                                        for (const [key, value] of Object.entries(sheet[i])) {
+                                            arr.push(value.toString());
+                                        }
+                                        raw_data.push(arr);
+                                    }
+                                    $.ajax({
+                                        method: "post",
+                                        url: "/KiTucXa/Receive",
+                                        data: {
+                                            json: JSON.stringify(raw_data),
+                                        },
+                                        error: function (xhr, status, error) {
+        @* console.log(xhr); *@
+                                                alert(xhr.responseJSON.value['msg']);
+                                        },
+                                        success: function (data, status, xhr) {
+                                            alert(xhr.responseJSON.value['msg']);
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    ]
+                }
+            }
+        });
+    </script>
+}

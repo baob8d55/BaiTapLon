@@ -1,29 +1,93 @@
-﻿Kí túc xá:
-@model IEnumerable<BaiTapLon.Models.TbKiTucXa>
+﻿@model IEnumerable<BaiTapLon.Models.TbKiTucXa>
 
 @{
     ViewData["Title"] = "Chart";
 }
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style>
-    #pieChartTinhTrang {
-        width: 700px; /* Chiều rộng của tất cả các biểu đồ */
-        height: 700px; /* Chiều cao của tất cả các biểu đồ */
-        margin: 0 auto; /* Căn giữa biểu đồ */
-        display: block; /* Đảm bảo hiển thị dưới dạng block */
-    }
+<head>
+    <meta charset="utf-8">
+    <title>Visualize Data Beautifully Using JS Charts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        /* Phong cách cho nhãn */
+        label {
+            font-family: 'Arial', sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
 
-    #barChartTongChoO {
-        width: 1000px; /* Chiều rộng của tất cả các biểu đồ */
-        height: 1000px; /* Chiều cao của tất cả các biểu đồ */
-        margin: 0 auto; /* Căn giữa biểu đồ */
-        display: block; /* Đảm bảo hiển thị dưới dạng block */
-    }
-</style>
+        /* Phong cách cho dropdown */
+        #chartDropdown {
+            width: 90%;
+            max-width: 700px; /* Tăng kích thước tối đa */
+            padding: 12px 16px;
+            font-size: 15px;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+            transition: all 0.25s ease;
+            /* Căn giữa theo chiều ngang */
+            display: block; /* Đảm bảo là khối */
+            margin: 0 auto; /* Căn giữa ngang */
+        }
 
-<h2 style="text-align:center;">Tổng Chỗ Ở</h2>
-<canvas id="barChartTongChoO"></canvas>
+            /* Hiệu ứng hover */
+            #chartDropdown:hover {
+                background-color: #fff;
+                border-color: green;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Hiệu ứng khi focus */
+            #chartDropdown:focus {
+                border-color: darkgreen;
+                box-shadow: lightgreen;
+            }
+            /* Tùy chỉnh các tùy chọn trong dropdown */
+            #chartDropdown option {
+                padding: 10px;
+                font-size: 15px;
+                color: #333;
+                background-color: #fff; /* Màu nền mặc định */
+                transition: background-color 0.3s ease;
+            }
+        /* Hiệu ứng cho tiêu đề */
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 40px;
+            color: #444;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<label for="customDropdown">HÃY CHỌN BIỂU ĐỒ MÀ BẠN MUỐN XEM</label>
+<div class="custom-dropdown" id="customDropdown">
+    <select id="chartDropdown" style="margin-bottom:100px" class="dropdown-btn">
+        <option value="">Lựa chọn biểu đồ</option>
+        <option value="chart1">Biểu đồ 1: Tổng chỗ ở</option>
+        <option value="chart2">Biểu đồ 2: Tình trạng cơ sở vật chất</option>
+        <option value="chart3">Biểu đồ 3: Số phòng và tổng diện tích </option>
+    </select>
+</div>
+<br></br>
+
+<div id="chart1" class="chart-container">
+    <h1 style="text-align:center;">Tổng Chỗ Ở</h1>
+    <canvas id="barChartTongChoO"></canvas>
+</div>
+
 <script>
     var choOLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MaKyTucxa).ToList()));
     var choOData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TongChoO).ToList()));
@@ -49,10 +113,11 @@
     });
 </script>
 
-<h2 style="text-align:center; margin-top: 100px;">Tình Trạng Cơ Sở Vật Chất</h2>
-<div style="width: 700px; height: 700px; margin: 0 auto;">
+<div id="chart2" class="chart-container" style="width: 700px; height: 900px; margin: 0 auto;">
+    <h1 style="text-align:center;">Tình Trạng Cơ Sở Vật Chất</h1>
     <canvas id="pieChartTinhTrang"></canvas>
 </div>
+
 <script>
     var tinhTrangLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat).Distinct().ToList()));
     var tinhTrangData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
@@ -111,9 +176,11 @@
 </script>
 
 
-
-<h2 style="text-align:center; margin-top: 100px">Số Phòng và Tổng Diện Tích</h2>
+<div id="chart3" class="chart-container">
+<h1 style="text-align:center;">Số phòng và tổng diện tích</h1>
 <canvas id="groupedBarChartPhongVaDienTich"></canvas>
+</div>
+
 <script>
     var groupedLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MaKyTucxa).ToList()));
     var soPhongData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.SoPhong).ToList()));
@@ -148,3 +215,58 @@
         }
     });
 </script>
+
+    <script>
+        // Lấy dropdown và các container biểu đồ
+        const chartDropdown = document.getElementById('chartDropdown');
+        const chartContainers = document.querySelectorAll('.chart-container');
+
+        // Ẩn tất cả các biểu đồ khi tải lại trang
+        window.addEventListener('DOMContentLoaded', function () {
+            chartContainers.forEach(container => container.style.display = 'none');
+        });
+
+        // Lắng nghe sự kiện thay đổi trên dropdown
+        chartDropdown.addEventListener('change', function () {
+            // Ẩn tất cả các biểu đồ
+            chartContainers.forEach(container => container.style.display = 'none');
+
+            // Hiển thị biểu đồ được chọn
+            const selectedChartId = chartDropdown.value;
+            if (selectedChartId) {
+                const selectedChart = document.getElementById(selectedChartId);
+                if (selectedChart) {
+                    selectedChart.style.display = 'block';
+                }
+            }
+        });
+    </script>
+    @* thay đổi nền cho option *@
+    <script>
+        // Lấy các thành phần dropdown
+        const dropdown = document.querySelector('.custom-dropdown');
+        const dropdownBtn = dropdown.querySelector('.dropdown-btn');
+        const dropdownOptions = dropdown.querySelectorAll('.dropdown-options li');
+
+        // Hiển thị hoặc ẩn danh sách khi bấm nút
+        dropdownBtn.addEventListener('click', () => {
+            dropdown.classList.toggle('active');
+        });
+
+        // Cập nhật giá trị nút và ẩn danh sách khi chọn một tùy chọn
+        dropdownOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                dropdownBtn.textContent = option.textContent;
+                dropdown.classList.remove('active');
+                console.log('Bạn đã chọn:', option.getAttribute('data-value')); // Giá trị tùy chọn
+            });
+        });
+
+        // Ẩn dropdown khi click bên ngoài
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+    </script>
