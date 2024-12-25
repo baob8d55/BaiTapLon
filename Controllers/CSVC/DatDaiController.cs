@@ -24,8 +24,8 @@ namespace BaiTapLon.Controllers.CSVC
             ApiServices_ = services;
         }
 
-        // GET: ChuongTrinhDaoTao
-        // Lấy danh sách CTĐT từ database, trả về view Index.
+        // GET: DATDAI
+        // Lấy danh sách Datdai từ database, trả về view Index.
 
         private async Task<List<TbDatDai>> TbDatDais()
         {
@@ -132,7 +132,7 @@ namespace BaiTapLon.Controllers.CSVC
         {
             //try
             {
-                // Nếu trùng IDChuongTrinhDaoTao sẽ báo lỗi
+                // Nếu trùng IDdatdai sẽ báo lỗi
                 if (await TbDatDaiExists(tbDatDai.IdDatDai)) ModelState.AddModelError("IdDatDai", "ID này đã tồn tại!");
                 if (ModelState.IsValid)
                 {
@@ -156,7 +156,7 @@ namespace BaiTapLon.Controllers.CSVC
         //Lấy bản ghi cần sửa và trả về view chỉnh sửa.
         public async Task<IActionResult> Edit(int? id)
         {
-         //   try
+            try
             {
                 if (id == null)
                 {
@@ -172,7 +172,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-          //  catch (Exception ex)
+           catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -186,7 +186,7 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdDatDai,MaGiayChungNhanQuyenSoHuu,DienTichDat,IdHinhThucSoHuu,TenDonViSoHuu,MinhChungQuyenSoHuuDatDai,MucDichSuDungDat,NamBatDauSuDungDat,ThoiGianSuDungDat,DienTichDatDaSuDung")] TbDatDai tbDatDai)
         {
-       //     try
+            try
             {
                 if (id != tbDatDai.IdDatDai)
                 {
@@ -216,7 +216,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-          //  catch (Exception ex)
+           catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -226,7 +226,7 @@ namespace BaiTapLon.Controllers.CSVC
         // GET: DatDai/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-         //   try
+           try
             {
                 if (id == null)
                 {
@@ -241,7 +241,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-          //  catch (Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest();
             }

@@ -39,14 +39,30 @@ namespace BaiTapLon.Controllers.CSVC
 
         public async Task<IActionResult> Index()
         {
-            //try
+            try
             {
                 List<TbThietBiPtnThtren500Tr> getall = await TbThietBiPtnThtren500Trs();
                 // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
                 return View(getall);
                 // Bắt lỗi các trường hợp ngoại lệ
             }
-            //   catch (Exception ex)
+               catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
+
+        public async Task<IActionResult> Chart()
+        {
+            try
+            {
+                List<TbThietBiPtnThtren500Tr> getall = await TbThietBiPtnThtren500Trs();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+               catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -57,7 +73,7 @@ namespace BaiTapLon.Controllers.CSVC
         // Hiển thị bản ghi đó ở view Details
         public async Task<IActionResult> Details(int? id)
         {
-            //try
+            try
             {
                 if (id == null)
                 {
@@ -76,7 +92,7 @@ namespace BaiTapLon.Controllers.CSVC
                 // Hiển thị thông thi chi tiết TBPTN_THT500T thành công
                 return View(tbThietBiPtnThtren500Tr);
             }
-            //catch (Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -88,13 +104,13 @@ namespace BaiTapLon.Controllers.CSVC
         // Truyền data từ các table khác hiển thị tại view Create (khóa ngoài)
         public async Task<IActionResult> Create()
         {
-            // try
+             try
             {
                 ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh");
                 ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocTich", "TenNuoc");
                 return View();
             }
-            //  catch (Exception ex)
+              catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -112,7 +128,7 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken] // Một phương thức bảo mật thông qua Token được tạo tự động cho các Form khác nhau
         public async Task<IActionResult> Create([Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,NamBatDauTuyenSinh,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
         {
-            // try
+             try
             {
                 // Nếu trùng IDThietBiPtnThtren500Tr sẽ báo lỗi
                 if (await TbThietBiPtnThtren500TrExists(tbThietBiPtnThtren500Tr.IdThietBiPtnTh)) ModelState.AddModelError("IdThietBiPtnThtren500Tr", "ID này đã tồn tại!");
@@ -126,7 +142,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbThietBiPtnThtren500Tr);
             }
-            // catch (Exception ex)
+             catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -139,7 +155,7 @@ namespace BaiTapLon.Controllers.CSVC
         // Phương thức này gần giống Create, nhưng nó nhập dữ liệu vào Id đã có trong database
         public async Task<IActionResult> Edit(int? id)
         {
-            // try
+             try
             {
                 if (id == null)
                 {
@@ -155,7 +171,7 @@ namespace BaiTapLon.Controllers.CSVC
                 ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocTich", "TenNuoc", tbThietBiPtnThtren500Tr.IdQuocGiaXuatXu);
                 return View(tbThietBiPtnThtren500Tr);
             }
-            // catch (Exception ex)
+             catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -174,7 +190,7 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken] // Một phương thức bảo mật thông qua Token được tạo tự động cho các Form khác nhau
         public async Task<IActionResult> Edit(int id, [Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,NamBatDauTuyenSinh,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
         {
-            // try
+             try
             {
                 if (id != tbThietBiPtnThtren500Tr.IdThietBiPtnTh)
                 {
@@ -203,7 +219,7 @@ namespace BaiTapLon.Controllers.CSVC
                 ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocTich", "TenNuoc", tbThietBiPtnThtren500Tr.IdQuocGiaXuatXu);
                 return View(tbThietBiPtnThtren500Tr);
             }
-            // catch (Exception ex)
+             catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -216,7 +232,7 @@ namespace BaiTapLon.Controllers.CSVC
         // Hàm này để hiển thị thông tin cho người dùng trước khi xóa
         public async Task<IActionResult> Delete(int? id)
         {
-            //try
+            try
             {
                 if (id == null)
                 {
@@ -231,7 +247,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbThietBiPtnThtren500Tr);
             }
-            //   catch (Exception ex)
+               catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -244,12 +260,12 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id) // Lệnh xác nhận xóa hẳn một TBPTN_THT500T
         {
-            // try
+             try
             {
                 await ApiServices_.Delete<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr", id);
                 return RedirectToAction(nameof(Index));
             }
-            // catch (Exception ex)
+             catch (Exception ex)
             {
                 return BadRequest();
             }

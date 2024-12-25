@@ -21,7 +21,7 @@ namespace BaiTapLon.Controllers.CSVC
             ApiServices_ = services;
         }
         // GET: CongTrinhCoSoVatChat
-        // Lấy danh sách CTĐT từ database, trả về view Index.
+        // Lấy danh sách Congtrinhcosovatchat từ database, trả về view Index.
 
         private async Task<List<TbCongTrinhCoSoVatChat>> TbCongTrinhCoSoVatChats()
         {
@@ -117,8 +117,8 @@ namespace BaiTapLon.Controllers.CSVC
 
         }
         // GET: CongTrinhCoSoVatChat/Create
-        // GET: ChuongTrinhDaoTao/Create
-        // Hiển thị view Create để tạo một bản ghi CTĐT mới
+      
+        // Hiển thị view Create để tạo một bản ghi CTCSVC mới
         // Truyền data từ các table khác hiển thị tại view Create (khóa ngoài)
         public async Task<IActionResult> Create()
         {
@@ -273,8 +273,8 @@ namespace BaiTapLon.Controllers.CSVC
         }
 
         // GET: CongTrinhCoSoVatChat/Delete/5
-        // Xóa một CTĐT khỏi Database
-        // Lấy data CTĐT từ Database, hiển thị Data tại view Delete
+        // Xóa một CTCSVC khỏi Database
+        // Lấy data CTCSVC từ Database, hiển thị Data tại view Delete
         // Hàm này để hiển thị thông tin cho người dùng trước khi xóa
         public async Task<IActionResult> Delete(int? id)
         {
@@ -300,10 +300,10 @@ namespace BaiTapLon.Controllers.CSVC
         }
 
         // POST: CongTrinhCoSoVatChat/Delete/5
-        // Xóa CTĐT khỏi Database sau khi nhấn xác nhận 
+        // Xóa CTCSVC khỏi Database sau khi nhấn xác nhận 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id) // Lệnh xác nhận xóa hẳn một CTĐT
+        public async Task<IActionResult> DeleteConfirmed(int id) // Lệnh xác nhận xóa hẳn một CTCSVC
         {
             try
             {

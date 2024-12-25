@@ -65,7 +65,7 @@
         /* Hiệu ứng cho tiêu đề */
         h1 {
             font-family: 'Arial', sans-serif;
-            font-size: 50px;
+            font-size: 42px;
             color: #444;
             margin-bottom: 20px;
             font-weight: bold;
@@ -79,7 +79,8 @@
         <option value="">Lựa chọn biểu đồ</option>
         <option value="chart1">Biểu đồ 1: Đơn vị sở hữu</option>
         <option value="chart2">Biểu đồ 2: Hình thức sở hữu</option>
-        <option value="chart3">Biểu đồ 3: Đất đai </option>
+        <option value="chart3">Biểu đồ 3: Minh chứng quyền sở hữu đất đai </option>
+        <option value="chart4">Biểu đồ 4: Mục đich sử dụng đất </option>
     </select>
 </div>
 
@@ -210,68 +211,62 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-<div id="chart3" class="chart-container" style="width: 1500px; height:900px; margin: auto;">
-    <h1 style="text-align: center;"><b>Đất đai</b></h1>
-
-<!-- Biểu đồ -->
-<canvas id="stackedBarChart" width="400" height="200"></canvas>
+<!-- Biểu đồ Minh Chứng Quyền Sở Hữu Đất Đai -->
+<div id="chart3" class="chart-container" style="width: 700px; height: 900px; margin: 0 auto;">
+    <h1 style="text-align:center;">Minh Chứng Quyền Sở Hữu Đất Đai</h1>
+    <canvas id="pieChartMinhChung"></canvas>
 </div>
 
 <script>
-    // Lấy dữ liệu từ Model
-    var labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenDonViSoHuu).Distinct().ToList()));
-    var totalArea = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupBy(x => x.TenDonViSoHuu).Select(g => g.Sum(x => x.DienTichDat)).ToList()));
-    var usedArea = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupBy(x => x.TenDonViSoHuu).Select(g => g.Sum(x => x.DienTichDatDaSuDung)).ToList()));
+    // Hàm tạo màu ngẫu nhiên với độ trong suốt
+    function getRandomColor() {
+        return `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`;
+    }
 
-    // Tính diện tích còn lại
-    var remainingArea = totalArea.map((total, index) => total - usedArea[index]);
+    // Dữ liệu cho Minh Chứng Quyền Sở Hữu Đất Đai
+    var minhChungLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MinhChungQuyenSoHuuDatDai).Distinct().ToList()));
+    var minhChungData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.MinhChungQuyenSoHuuDatDai).Select(g => g.Count()).ToList()
+        ));
+    var minhChungColors = minhChungLabels.map(() => getRandomColor());
 
-    // Vẽ biểu đồ cột xếp chồng
-    var ctx = document.getElementById('stackedBarChart').getContext('2d');
-    var stackedBarChart = new Chart(ctx, {
-        type: 'bar',
+    // Tạo biểu đồ Minh Chứng Quyền Sở Hữu Đất Đai
+    new Chart(document.getElementById('pieChartMinhChung'), {
+        type: 'pie',
         data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Diện tích đã sử dụng',
-                    data: usedArea,
-                    backgroundColor: 'rgba(75, 192, 192, 0.8)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Diện tích còn lại',
-                    data: remainingArea,
-                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                }
-            ]
+            labels: minhChungLabels,
+            datasets: [{
+                data: minhChungData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: {
-                    position: 'top', // Đặt chú thích ở trên
+                title: {
+                    display: true,
+                    text: '',
+                    font: { size: 18, weight: 'bold' }
                 },
                 tooltip: {
                     callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw + ' ha';
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.raw} trường hợp`;
                         }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    stacked: true, // Xếp chồng trục x
-                },
-                y: {
-                    stacked: true, // Xếp chồng trục y
-                    title: {
-                        display: true,
-                        text: 'Diện tích (ha)'
                     }
                 }
             }
@@ -279,6 +274,64 @@
     });
 </script>
 
+
+<!-- Biểu đồ Mục Đích Sử Dụng Đất -->
+<div id="chart4" class="chart-container" style="width: 700px; height: 900px; margin: 0 auto;">
+    <h1 style="text-align:center;">Mục Đích Sử Dụng Đất</h1>
+    <canvas id="pieChartMucDich"></canvas>
+</div>
+
+<script>   
+// Dữ liệu cho Mục Đích Sử Dụng Đất
+    var mucDichLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.MucDichSuDungDat).Distinct().ToList()));
+    var mucDichData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.MucDichSuDungDat).Select(g => g.Count()).ToList()
+        ));
+    var mucDichColors = mucDichLabels.map(() => getRandomColor());
+
+    // Tạo biểu đồ Mục Đích Sử Dụng Đất
+    new Chart(document.getElementById('pieChartMucDich'), {
+        type: 'pie',
+        data: {
+            labels: mucDichLabels,
+            datasets: [{
+                data: mucDichData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '',
+                    font: { size: 18, weight: 'bold' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.raw} mục đích`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
 
 <script>
     // Lấy dropdown và các container biểu đồ

@@ -82,8 +82,7 @@
         <option value="chart3">Biểu đồ 3: Loại phòng học </option>
         <option value="chart4">Biểu đồ 4: Phân loại CSVC</option>
         <option value="chart5">Biểu đồ 5: Tình trạng CSVC</option>
-        <option value="chart6">Biểu đồ 6: Số lượng công trình theo năm</option>
-        <option value="chart7">Biểu đồ 7: Quy mô chỗ ngồi</option>
+        <option value="chart6">Biểu đồ 6: Quy mô chỗ ngồi</option>
 
 
     </select>
@@ -248,42 +247,7 @@
     });
 </script>
 
-
 <div id="chart6" class="chart-container" style="width: 1500px; height: 900px; margin: 0 auto;">
-<h1 style="text-align:center;">Số lượng công trình theo năm</h1>
-<canvas id="barChartNamDuaVaoSuDung"></canvas>
-</div>
-
-<script>
-    var namLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.NamDuaVaoSuDung).Distinct().ToList()));
-    var namData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
-        Model.GroupBy(x => x.NamDuaVaoSuDung).Select(g => g.Count()).ToList()
-    ));
-
-    new Chart(document.getElementById('barChartNamDuaVaoSuDung'), {
-        type: 'bar',
-        data: {
-            labels: namLabels,
-            datasets: [{
-                label: 'Số lượng công trình theo năm',
-                data: namData,
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-</script>
-
-
-
-<div id="chart7" class="chart-container" style="width: 1500px; height: 900px; margin: 0 auto;">
 <h1 style="text-align:center;">Quy mô chỗ ngồi</h1>
 <canvas id="barChartQuyMoChoNgoi"></canvas>
 </div>
