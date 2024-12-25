@@ -282,9 +282,10 @@
                                         }
                                         raw_data.push(arr);
                                     }
+                                      console.log(sheet);
                                     $.ajax({
                                         method: "post",
-                                        url: "/KiTucXa/Receive",
+                                        url: "/DatDai/Receive",
                                         data: {
                                             json: JSON.stringify(raw_data),
                                         },

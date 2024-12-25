@@ -207,6 +207,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.1.8/b-3.2.0/b-html5-3.2.0/r-3.0.3/datatables.min.js"></script>
     <script src="https://kit.fontawesome.com/5c202d0407.js" crossorigin="anonymous"></script>
+     <script src="~/js/Import_Excel.js"></script>
+    <script src="~/js/xlsx.full.min.js"></script>
     <script>
             // Datatable configuration
             var table = new DataTable("#views", {
@@ -288,9 +290,10 @@
                                             }
                                             raw_data.push(arr);
                                         }
+                                          console.log(sheet);
                                         $.ajax({
                                             method: "post",
-                                            url: "/KiTucXa/Receive",
+                                            url: "/PhongHocGiangDuongHoiTruong/Receive",
                                             data: {
                                                 json: JSON.stringify(raw_data),
                                             },

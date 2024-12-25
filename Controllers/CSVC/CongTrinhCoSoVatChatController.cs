@@ -37,7 +37,7 @@ namespace BaiTapLon.Controllers.CSVC
             List<DmTinhTrangCoSoVatChat> dmtinhTrangCoSoVatChats = await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat");
 
             tbCongTrinhCoSoVatChats.ForEach(item => {
-                item.CongTrinhCsvctrongNhaNavigation = dmtuyChons.FirstOrDefault(x => x.IdTuyChon == item.IdCongTrinhCoSoVatChat);
+                item.CongTrinhCsvctrongNhaNavigation = dmtuyChons.FirstOrDefault(x => x.IdTuyChon == item.CongTrinhCsvctrongNha);
 
                 item.IdHinhThucSoHuuNavigation = dmhinhThucSoHuus.FirstOrDefault(x => x.IdHinhThucSoHuu == item.IdHinhThucSoHuu);
 
@@ -361,7 +361,7 @@ namespace BaiTapLon.Controllers.CSVC
                     } while (await TbCongTrinhCoSoVatChatExists(id)); // Kiểm tra id có tồn tại không
 
                     // Gán dữ liệu cho các thuộc tính của model
-                    model.IdCongTrinhCoSoVatChat = id; // Gán ID
+                    model.IdCongTrinhCoSoVatChat = id;
                     model.MaCongTrinh = item[0];
                     model.TenCongTrinh = item[1];
                     model.DoiTuongSuDung = item[2];
@@ -371,11 +371,11 @@ namespace BaiTapLon.Controllers.CSVC
                     model.SoPhongOcongVu = ParseInt(item[6]);
                     model.SoChoOchoCanBoGiangDay = ParseInt(item[7]);
                     model.NamDuaVaoSuDung = item[8];
-                    model.CongTrinhCsvctrongNha = id;
-                    model.IdHinhThucSoHuu = id;
-                    model.IdLoaiCongTrinh = id;
-                    model.IdMucDichSuDung = id;
-                    model.IdTinhTrangCsvc = id;
+                    model.CongTrinhCsvctrongNha = ParseInt(item[9]);
+                    model.IdHinhThucSoHuu = ParseInt(item[10]);
+                    model.IdLoaiCongTrinh = ParseInt(item[11]);
+                    model.IdMucDichSuDung = ParseInt(item[12]);
+                    model.IdTinhTrangCsvc = ParseInt(item[13]);
 
                     // Thêm model vào danh sách
                     lst.Add(model);

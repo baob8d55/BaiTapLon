@@ -40,6 +40,12 @@
                             <input style="border: 2px solid black;border-radius: 8px;" asp-for="IdLinhVucNavigation.LinhVucNghienCuu" class="form-control" readonly />
                             <span asp-validation-for="IdLinhVucNavigation.LinhVucNghienCuu" class="text-danger"></span>
                         </div>
+
+                        <!-- Xác nhận xóa -->
+                        <div class="form-group">
+                            <label style="color: red; font-weight: bold;">Bạn có chắc chắn muốn xóa ký túc xá này không?</label>
+                        </div>
+
                         <div class="d-flex justify-content-between mt-4">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-danger">

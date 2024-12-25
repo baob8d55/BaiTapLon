@@ -1,62 +1,101 @@
 ﻿@model BaiTapLon.Models.TbKiTucXa
 
 @{
-    ViewData["Title"] = "Tạo mới";
+    ViewData["Title"] = "Thêm Mới";
 }
 
-<h1>Tạo mới</h1>
+@section Heads
+{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+}
 
-<h4>Kí Túc Xá</h4>
+<h1 style="text-align:center;margin-bottom:20px;color:#adefd1ff;font-size:60px"><b>Tạo Mới</b></h1>
+<h2 class="text-center my-4" style="color:burlywood;font-size:50px"><b>Kí Túc Xá</b></h2>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<body>
+    <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-md-6 col-lg-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IdKiTucXa" class="control-label"></label>
-                <input asp-for="IdKiTucXa" class="form-control" />
-                <span asp-validation-for="IdKiTucXa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaKyTucxa" class="control-label"></label>
-                <input asp-for="MaKyTucxa" class="form-control" />
-                <span asp-validation-for="MaKyTucxa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdHinhThucSoHuu" class="control-label"></label>
-                <select asp-for="IdHinhThucSoHuu" class ="form-control" asp-items="ViewBag.IdHinhThucSoHuu"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="TongChoO" class="control-label"></label>
-                <input asp-for="TongChoO" class="form-control" />
-                <span asp-validation-for="TongChoO" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TongDienTich" class="control-label"></label>
-                <input asp-for="TongDienTich" class="form-control" />
-                <span asp-validation-for="TongDienTich" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdTinhTrangCsvc" class="control-label"></label>
-                <select asp-for="IdTinhTrangCsvc" class ="form-control" asp-items="ViewBag.IdTinhTrangCsvc"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SoPhong" class="control-label"></label>
-                <input asp-for="SoPhong" class="form-control" />
-                <span asp-validation-for="SoPhong" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Tạo mới" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+            <hr />
+            <div class="row">
+                <div class="form-group">
+                    <form asp-action="Create" method="post" style="margin-top:20px; padding: 20px; border: 2px solid black; border-radius: 8px; box-shadow: 10px 10px 15px 5px rgba(0, 0, 0, 0.5); background-color:white; color:black">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<div>
-    <a asp-action="Index">Trở lại</a>
-</div>
+                        <!-- Không cần mã IdKiTucXa, vì đây là tạo mới -->
+                        <div class="form-group">
+                            <label asp-for="MaKyTucxa" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="MaKyTucxa" class="form-control" />
+                            <span asp-validation-for="MaKyTucxa" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="IdHinhThucSoHuu" class="control-label"></label>
+                            <select style="border: 2px solid black;border-radius: 8px;" asp-for="IdHinhThucSoHuu" class="form-control" asp-items="ViewBag.IdHinhThucSoHuu"></select>
+                            <span asp-validation-for="IdHinhThucSoHuu" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TongChoO" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="TongChoO" class="form-control" />
+                            <span asp-validation-for="TongChoO" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TongDienTich" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="TongDienTich" class="form-control" />
+                            <span asp-validation-for="TongDienTich" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="IdTinhTrangCsvc" class="control-label"></label>
+                            <select style="border: 2px solid black;border-radius: 8px;" asp-for="IdTinhTrangCsvc" class="form-control" asp-items="ViewBag.IdTinhTrangCsvc"></select>
+                            <span asp-validation-for="IdTinhTrangCsvc" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SoPhong" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="SoPhong" class="form-control" />
+                            <span asp-validation-for="SoPhong" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Lưu Lại
+                                </button>
+                            </div>
+                            <div>
+                                <a class="btn btn-primary" asp-action="Index">
+                                    <i class="fa-solid fas fa-chevron-left" style="margin-right:5px"></i>Quay lại
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<style>
+    .btn:hover {
+        transform: translateY(-5px); /* Nổi lên khi hover */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Tạo bóng đổ */
+    }
+
+    .btn {
+        border-radius: 20px; /* Bo góc nút */
+        transition: all 0.3s ease;
+        font-size: 18px; /* Tăng kích thước chữ */
+        padding: 15px 30px; /* Tăng khoảng cách giữa các cạnh của nút */
+    }
+
+    body {
+        background: #34495e; /* Màu nền */
+        margin: 0;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+</style>

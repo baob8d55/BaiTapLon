@@ -126,9 +126,6 @@
         <tr style="color:white">
             <th class="_nonorder"></th>
             <th>
-                STT
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.MaCongTrinh)
             </th>
             <th>
@@ -177,7 +174,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td></td>
+
                 <td></td>
                 <td>
                     @Html.DisplayFor(modelItem => item.MaCongTrinh)
@@ -207,7 +204,7 @@
                     @Html.DisplayFor(modelItem => item.NamDuaVaoSuDung)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CongTrinhCsvctrongNhaNavigation)
+                    @Html.DisplayFor(modelItem => item.CongTrinhCsvctrongNhaNavigation.TuyChon)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
@@ -319,6 +316,7 @@
                                         }
                                         raw_data.push(arr);
                                     }
+                                    console.log(sheet);
                                     $.ajax({
                                         method: "post",
                                         url: "/CongTrinhCoSoVatChat/Receive",

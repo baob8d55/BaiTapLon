@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BaiTapLon.Models;
 using BaiTapLon.API;
 using BaiTapLon.Models.DM;
+using Newtonsoft.Json;
 
 namespace BaiTapLon.Controllers.CSVC
 {
@@ -253,5 +254,85 @@ namespace BaiTapLon.Controllers.CSVC
             var tbPhongThucHanhs = await ApiServices_.GetAll<TbPhongThucHanh>("/api/csvc/PhongThucHanh");
             return tbPhongThucHanhs.Any(e => e.IdPhongThucHanh == id);
         }
+        public async Task<IActionResult> Receive(string json)
+        {
+            try
+            {
+                // Khai báo thông báo mặc định
+                var message = "No Lỗi";
+
+                // Giải mã dữ liệu JSON từ client
+                List<List<string>> data = JsonConvert.DeserializeObject<List<List<string>>>(json);
+
+                if (data == null || !data.Any())
+                {
+                    return BadRequest(Json(new { msg = "Dữ liệu không hợp lệ." }));
+                }
+
+                // Danh sách lưu các đối tượng TbPhongThucHanh
+                List<TbPhongThucHanh> lst = new List<TbPhongThucHanh>();
+
+                // Khởi tạo Random để tạo ID ngẫu nhiên
+                Random rnd = new Random();
+
+                // Duyệt qua từng dòng dữ liệu từ Excel
+                foreach (var item in data)
+                {
+                    if (item.Count < 4) // Kiểm tra nếu dòng dữ liệu không đủ số cột
+                    {
+                        return BadRequest(Json(new { msg = "Dữ liệu không đầy đủ." }));
+                    }
+
+                    TbPhongThucHanh model = new TbPhongThucHanh();
+
+                    // Tạo id ngẫu nhiên và kiểm tra xem id đã tồn tại chưa
+                    int id;
+                    do
+                    {
+                        id = rnd.Next(1, 100000); // Tạo id ngẫu nhiên
+                    } while (await TbPhongThucHanhExists(id)); // Kiểm tra id có tồn tại không
+
+                    // Gán dữ liệu cho các thuộc tính của model
+                    model.IdPhongThucHanh = id;
+                    model.IdCongTrinhCsvc = ParseInt(item[0]);
+                    model.IdLinhVuc = ParseInt(item[1]);
+                    model.MucDoDapUngNhuCauNckh = item[2];
+                    model.NamDuaVaoSuDung = item[3];
+                    // Thêm model vào danh sách
+                    lst.Add(model);
+                }
+
+                // Lưu danh sách vào cơ sở dữ liệu
+                foreach (var item in lst)
+                {
+                    await CreateTbPhongThucHanh(item);
+                }
+
+                return Accepted(Json(new { msg = message }));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(Json(new { msg = ex.Message }));
+            }
+        }
+
+        private async Task CreateTbPhongThucHanh(TbPhongThucHanh item)
+        {
+            await ApiServices_.Create<TbPhongThucHanh>("/api/csvc/PhongThucHanh", item);
+        }
+
+        private int? ParseInt(string v)
+        {
+            if (int.TryParse(v, out int result)) // Nếu chuỗi có thể chuyển thành int
+            {
+                return result; // Trả về giá trị int
+            }
+            else
+            {
+                return null; // Nếu không thể chuyển thành int, trả về null
+            }
+        }
+
     }
 }
+   

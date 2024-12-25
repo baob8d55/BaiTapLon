@@ -131,7 +131,7 @@ namespace BaiTapLon.Controllers.CSVC
             // Bắt lỗi ngoại lệ sao cho người nhập BẮT BUỘC phải nhập khác IdThuVienTrungTamHocLieu đã có
             [HttpPost]
             [ValidateAntiForgeryToken] // Một phương thức bảo mật thông qua Token được tạo tự động cho các Form khác nhau
-            public async Task<IActionResult> Create([Bind("IdThuVienTrungTamHocLieu,MaThuVienTrungTamHocLieu,TenThuVienTrungTamHocLieu,NamDuaVaoSuDung,DienTich,DienTichPhongDoc,SoPhongDoc,SoLuongMayTinh,SoLuongChoNgoi,SoLuongSach,SoLuongTapChi,SoLuongSachDienTu,SoLuongTapChiDienTu,SoLuongThuVienDienTuLienKetNn,IdTinhTrangCsvc,IdHinhThucSoHuu,SoLuongDauSach,SoLuongDauTapChi,SoLuongDauSachDienTu,SoLuongDauTapChiDienTu")] TbThuVienTrungTamHocLieu tbThuVienTrungTamHocLieu)
+            public async Task<IActionResult> Create([Bind("IdThuVienTrungTamHocLieu,MaThuVienTrungTamHocLieu,TenThuVienTrungTamHocLieu,NamDuaVaoSuDung,DienTich,DienTichPhongDoc,SoPhongDoc,SoLuongMayTinh,SoLuongChoNgoi,SoLuongSach,SoLuongTapChi,SoLuongSachDienTu,SoLuongTapChiDienTu,SoLuonngThuVienDienTuLienKetNn,IdTinhTrangCsvc,IdHinhThucSoHuu,SoLuongDauSach,SoLuongDauTapChi,SoLuongDauSachDienTu,SoLuongDauTapChiDienTu")] TbThuVienTrungTamHocLieu tbThuVienTrungTamHocLieu)
             {
                 try
                 {
@@ -192,7 +192,7 @@ namespace BaiTapLon.Controllers.CSVC
 
             [HttpPost]
             [ValidateAntiForgeryToken] // Một phương thức bảo mật thông qua Token được tạo tự động cho các Form khác nhau
-            public async Task<IActionResult> Edit(int id, [Bind("IdThuVienTrungTamHocLieu,MaThuVienTrungTamHocLieu,TenThuVienTrungTamHocLieu,NamDuaVaoSuDung,DienTich,DienTichPhongDoc,SoPhongDoc,SoLuongMayTinh,SoLuongChoNgoi,SoLuongSach,SoLuongTapChi,SoLuongSachDienTu,SoLuongTapChiDienTu,SoLuongThuVienDienTuLienKetNn,IdTinhTrangCsvc,IdHinhThucSoHuu,SoLuongDauSach,SoLuongDauTapChi,SoLuongDauSachDienTu,SoLuongDauTapChiDienTu")] TbThuVienTrungTamHocLieu tbThuVienTrungTamHocLieu)
+            public async Task<IActionResult> Edit(int id, [Bind("IdThuVienTrungTamHocLieu,MaThuVienTrungTamHocLieu,TenThuVienTrungTamHocLieu,NamDuaVaoSuDung,DienTich,DienTichPhongDoc,SoPhongDoc,SoLuongMayTinh,SoLuongChoNgoi,SoLuongSach,SoLuongTapChi,SoLuongSachDienTu,SoLuongTapChiDienTu,SoLuonngThuVienDienTuLienKetNn,IdTinhTrangCsvc,IdHinhThucSoHuu,SoLuongDauSach,SoLuongDauTapChi,SoLuongDauSachDienTu,SoLuongDauTapChiDienTu")] TbThuVienTrungTamHocLieu tbThuVienTrungTamHocLieu)
             {
                 try
                 {
