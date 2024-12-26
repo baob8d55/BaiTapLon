@@ -137,7 +137,7 @@ namespace BaiTapLon.Controllers.CSVC
                 if (await TbThietBiPtnThtren500TrExists(tbThietBiPtnThtren500Tr.IdThietBiPtnTh)) ModelState.AddModelError("IdThietBiPtnThtren500Tr", "ID này đã tồn tại!");
                 if (ModelState.IsValid)
                 {
-                    await ApiServices_.Create<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr", tbThietBiPtnThtren500Tr);
+                    await ApiServices_.Create<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr", tbThietBiPtnThtren500Tr);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh", tbThietBiPtnThtren500Tr.IdCongTrinhCsvc);
