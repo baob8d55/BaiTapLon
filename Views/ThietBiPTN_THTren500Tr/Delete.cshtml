@@ -1,69 +1,98 @@
 ﻿@model BaiTapLon.Models.TbThietBiPtnThtren500Tr
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Xóa";
+}
+@section Heads {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 }
 
-<h1>Delete</h1>
+<h1 style="text-align:center;margin-bottom:20px;color:#adefd1ff;font-size:60px"><b>Xóa</b></h1>
+<h2 class="text-center my-4" style="color:burlywood;font-size:50px"><b>Thiết Bị PTN-TH Trên 500Tr</b></h2>
+<hr />
+<body>
+    <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-md-6 col-lg-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <hr />
+            <form asp-action="Delete" method="post" style="margin-top:20px; padding: 20px; border: 2px solid black; border-radius: 8px; box-shadow: 10px 10px 15px 5px rgba(0, 0, 0, 0.5); background-color:white; color:black">
+                <!-- Hiển thị thông tin chi tiết -->
+                <div class="form-group">
+                    <label asp-for="MaThietBi" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="MaThietBi" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="TenThietBi" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="TenThietBi" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="NamSanXuat" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="NamSanXuat" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="HangSanXuat" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="HangSanXuat" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="SoLuongThietBiCungLoai" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="SoLuongThietBiCungLoai" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="NamDuaVaoSuDung" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="NamDuaVaoSuDung" class="form-control" readonly />
+                </div><div class="form-group">
+                    <label asp-for="IdCongTrinhCsvcNavigation" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="IdCongTrinhCsvcNavigation.MaCongTrinh" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="IdQuocGiaXuatXuNavigation" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="IdQuocGiaXuatXuNavigation.IdQuocTich" class="form-control" readonly />
+                </div>
+                <!-- Xác nhận xóa -->
+                <div class="form-group">
+                    <label style="color: red; font-weight: bold;">Bạn có chắc chắn muốn xóa ký túc xá này không?</label>
+                </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>TbThietBiPtnThtren500Tr</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaThietBi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaThietBi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenThietBi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenThietBi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NamSanXuat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NamSanXuat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HangSanXuat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HangSanXuat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SoLuongThietBiCungLoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SoLuongThietBiCungLoai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NamDuaVaoSuDung)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NamDuaVaoSuDung)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdCongTrinhCsvcNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdCongTrinhCsvcNavigation.MaCongTrinh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdQuocGiaXuatXuNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdQuocGiaXuatXuNavigation.IdQuocTich)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="IdThietBiPtnTh" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+                <!-- Nút hành động -->
+                <div class="d-flex justify-content-between mt-4">
+                    <div>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Xóa
+                        </button>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary" asp-action="Index">
+                            <i class="fa-solid fas fa-chevron-left" style="margin-right:5px"></i>Quay lại
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn {
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        font-size: 18px;
+        padding: 15px 30px;
+    }
+
+    body {
+        background: #34495e;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+</style>

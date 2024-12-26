@@ -65,7 +65,7 @@ namespace BaiTapLon.Controllers.CSVC
 
         }
 
-        // Lấy chi tiết 1 bản ghi dựa theo ID tương ứng đã truyền vào (IdChuongTrinhDaoTao)
+        // Lấy chi tiết 1 bản ghi dựa theo ID tương ứng đã truyền vào (IdCPhongThuchanh)
         // Hiển thị bản ghi đó ở view Details
         public async Task<IActionResult> Details(int? id)
         {
@@ -85,7 +85,7 @@ namespace BaiTapLon.Controllers.CSVC
                     return NotFound();
                 }
                 // Nếu đã tìm thấy Id tương ứng, chương trình sẽ dẫn đến view Details
-                // Hiển thị thông thi chi tiết CTĐT thành công
+                // Hiển thị thông thi chi tiết PhongThucHanh thành công
                 return View(tbPhongThucHanh);
             }
             catch (Exception ex)
@@ -118,7 +118,7 @@ namespace BaiTapLon.Controllers.CSVC
         {
             try
             {
-                // Nếu trùng IDChuongTrinhDaoTao sẽ báo lỗi
+                // Nếu trùng IDPhongThucHanh sẽ báo lỗi
                 if (await TbPhongThucHanhExists(tbPhongThucHanh.IdPhongThucHanh)) ModelState.AddModelError("IdPhongThucHanh", "ID này đã tồn tại!");
                 if (ModelState.IsValid)
                 {
@@ -231,11 +231,11 @@ namespace BaiTapLon.Controllers.CSVC
 
         }
 
-        // POST: ChuongTrinhDaoTao/Delete
-        // Xóa CTĐT khỏi Database sau khi nhấn xác nhận 
+        // POST: PhongThucHanh/Delete
+        // Xóa PhongThucHanh khỏi Database sau khi nhấn xác nhận 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id) // Lệnh xác nhận xóa hẳn một CTĐT
+        public async Task<IActionResult> DeleteConfirmed(int id) // Lệnh xác nhận xóa hẳn một PhongThucHanh
         {
             try
             {
@@ -293,11 +293,12 @@ namespace BaiTapLon.Controllers.CSVC
                     } while (await TbPhongThucHanhExists(id)); // Kiểm tra id có tồn tại không
 
                     // Gán dữ liệu cho các thuộc tính của model
-                    model.IdPhongThucHanh = id;
-                    model.IdCongTrinhCsvc = ParseInt(item[0]);
-                    model.IdLinhVuc = ParseInt(item[1]);
-                    model.MucDoDapUngNhuCauNckh = item[2];
-                    model.NamDuaVaoSuDung = item[3];
+                    model.IdPhongThucHanh = id;// gán id
+                    model.MucDoDapUngNhuCauNckh = item[0];// Gán mức độ đáp ứng nhu cầu NCKH cho cột đầu tiên
+                    model.NamDuaVaoSuDung = item[1];// Gán năm đưa vào sử dụng (chuyển đổi từ string sang int)
+                    model.IdCongTrinhCsvc = ParseInt(item[2]);// Gán id công trình csvc (chuyển đổi từ string sang int)
+                    model.IdLinhVuc = ParseInt(item[3]);// Gán lĩnh vực (chuyển đổi từ string sang int)
+
                     // Thêm model vào danh sách
                     lst.Add(model);
                 }

@@ -311,29 +311,29 @@ namespace BaiTapLon.Controllers.CSVC
 
                         // Gán dữ liệu cho các thuộc tính của model
                         model.IdThuVienTrungTamHocLieu = id; // Gán ID
-                    model.IdHinhThucSoHuu = id;
-                    model.IdTinhTrangCsvc = id;
-                    model.TenThuVienTrungTamHocLieu = item[0];
-                        model.NamDuaVaoSuDung = item[1];
-                        model.DienTich = ParseInt(item[2]);
-                        model.DienTichPhongDoc = ParseInt(item[3]);
-                        model.SoPhongDoc = ParseInt(item[4]);
-                        model.SoLuongMayTinh = ParseInt(item[5]);
-                        model.SoLuongChoNgoi = ParseInt(item[6]);
-                        model.SoLuongSach = ParseInt(item[7]);
-                        model.SoLuongTapChi = ParseInt(item[8]);
-                        model.SoLuongSachDienTu = ParseInt(item[9]);
-                        model.SoLuongTapChiDienTu = ParseInt(item[10]);
-                        model.SoLuonngThuVienDienTuLienKetNn = ParseInt(item[11]);
-                        model.SoLuongDauSach = ParseInt(item[12]);
-                        model.SoLuongDauTapChi = ParseInt(item[13]);
-                        model.SoLuongDauSachDienTu = ParseInt(item[14]);
-                        model.SoLuongDauTapChiDienTu = ParseInt(item[15]);
-                       
+                    model.IdHinhThucSoHuu = id; // gán id
+                    model.IdTinhTrangCsvc = id;// gán id
+                    model.TenThuVienTrungTamHocLieu = item[0]; //gán tên thư viện trung tâm học liệu cho cột đầu tiên
+                        model.NamDuaVaoSuDung = item[1];// Gán năm đưa vào sử dụng (chuyển đổi từ string sang int)
+                    model.DienTich = ParseInt(item[2]);// Gán diện tích (chuyển đổi từ string sang int)
+                    model.DienTichPhongDoc = ParseInt(item[3]);// Gán S phòng đọc (chuyển đổi từ string sang int)
+                    model.SoPhongDoc = ParseInt(item[4]);// Gán phòng đọc (chuyển đổi từ string sang int)
+                    model.SoLuongMayTinh = ParseInt(item[5]);// Gán số lượng máy tính(chuyển đổi từ string sang int)
+                    model.SoLuongChoNgoi = ParseInt(item[6]);// Gán số lượng chỗ ngồi(chuyển đổi từ string sang int)
+                    model.SoLuongSach = ParseInt(item[7]);// Gán số luwojgn sáhc (chuyển đổi từ string sang int)
+                    model.SoLuongTapChi = ParseInt(item[8]);// Gán số lượng tạp chí (chuyển đổi từ string sang int)
+                    model.SoLuongSachDienTu = ParseInt(item[9]);// Gán số lượng sach điện tử(chuyển đổi từ string sang int)
+                    model.SoLuongTapChiDienTu = ParseInt(item[10]);// Gán số lượng tạp chí diện tử (chuyển đổi từ string sang int)
+                    model.SoLuonngThuVienDienTuLienKetNn = ParseInt(item[11]);// Gán só lượng thư viện điện tử liên kết (chuyển đổi từ string sang int)
+                    model.SoLuongDauSach = ParseInt(item[12]);// Gán lường đàu sách (chuyển đổi từ string sang int)
+                    model.SoLuongDauTapChi = ParseInt(item[13]);// Gán lượng tạp chí (chuyển đổi từ string sang int)
+                    model.SoLuongDauSachDienTu = ParseInt(item[14]);// Gán lượng đầu sachs điện tử(chuyển đổi từ string sang int)
+                    model.SoLuongDauTapChiDienTu = ParseInt(item[15]);// Gán lượng tạp chí điện tử (chuyển đổi từ string sang int)
 
 
-                        // Thêm model vào danh sách
-                        lst.Add(model);
+
+                    // Thêm model vào danh sách
+                    lst.Add(model);
                     }
 
                     // Lưu danh sách vào cơ sở dữ liệu (giả sử có một phương thức tạo đối tượng trong DB)

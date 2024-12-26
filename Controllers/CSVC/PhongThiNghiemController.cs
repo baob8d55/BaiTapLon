@@ -319,12 +319,12 @@ namespace BaiTapLon.Controllers.CSVC
                     } while (await TbPhongThiNghiemExists(id)); // Kiểm tra id có tồn tại không
 
                     // Gán dữ liệu cho các thuộc tính của model
-                    model.IdPhongThiNghiem = id;
-                    model.IdCongTrinhCsvc = ParseInt(item[0]);
-                    model.IdLoaiPhongThiNghiem = ParseInt(item[1]);
-                    model.IdLinhVuc = ParseInt(item[2]);
-                    model.MucDoDapUngNhuCauNckh = item[3];
-                    model.NamDuaVaoSuDung = item[4];
+                    model.IdPhongThiNghiem = id; // gán id
+                    model.MucDoDapUngNhuCauNckh = item[0];// Gán mức độ đáp ứng NCKH từ cột đầu tiên
+                    model.NamDuaVaoSuDung = item[1];// Gán năm đưa vào sử dụng (chuyển đổi từ string sang int)
+                    model.IdCongTrinhCsvc = ParseInt(item[2]);// Gán id công trình csvc (chuyển đổi từ string sang int)
+                    model.IdLinhVuc = ParseInt(item[3]);// Gán id lĩnh vực (chuyển đổi từ string sang int)
+                    model.IdLoaiPhongThiNghiem = ParseInt(item[4]);// Gán id loại phòng thí nghiệm (chuyển đổi từ string sang int);
 
                     // Thêm model vào danh sách
                     lst.Add(model);

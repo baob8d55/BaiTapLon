@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BaiTapLon.Models;
 using BaiTapLon.API;
 using BaiTapLon.Models.DM;
+using Newtonsoft.Json;
 
 namespace BaiTapLon.Controllers.CSVC
 {
@@ -291,5 +292,87 @@ namespace BaiTapLon.Controllers.CSVC
             var tbPhongHocGiangDuongHoiTruongs = await ApiServices_.GetAll<TbPhongHocGiangDuongHoiTruong>("/api/csvc/PhongHocGiangDuongHoiTruong");
             return tbPhongHocGiangDuongHoiTruongs.Any(e => e.IdPhongHocGiangDuongHoiTruong == id);
         }
+        public async Task<IActionResult> Receive(string json)
+        {
+            try
+            {
+                // Khai báo thông báo mặc định
+                var message = "No Lỗi";
+
+                // Giải mã dữ liệu JSON từ client
+                List<List<string>> data = JsonConvert.DeserializeObject<List<List<string>>>(json);
+
+                // Danh sách lưu các đối tượng Tb    public class PhongHocGiangDuongHoiTruong
+                List<TbPhongHocGiangDuongHoiTruong> lst = new List<TbPhongHocGiangDuongHoiTruong>();
+
+                // Khởi tạo Random để tạo ID ngẫu nhiên
+                Random rnd = new Random();
+
+                // Duyệt qua từng dòng dữ liệu từ Excel
+                foreach (var item in data)
+                {
+                    if (item.Count < 10) // Kiểm tra nếu dòng dữ liệu không đủ số cột
+                    {
+                        return BadRequest(Json(new { msg = "Dữ liệu không đầy đủ." }));
+                    }
+                    TbPhongHocGiangDuongHoiTruong model = new TbPhongHocGiangDuongHoiTruong();
+
+                    // Tạo id ngẫu nhiên và kiểm tra xem id đã tồn tại chưa
+                    int id;
+                    do
+                    {
+                        id = rnd.Next(1, 100000); // Tạo id ngẫu nhiên
+                    } while (await TbPhongHocGiangDuongHoiTruongExists(id)); // Kiểm tra id có tồn tại không
+
+                    // Gán dữ liệu cho các thuộc tính của model
+                    model.IdPhongHocGiangDuongHoiTruong = id;// Gán id
+                    model.IdHinhThucSoHuu = ParseInt(item[5]);// Gán hình thức sở hữu (chuyển đổi từ string sang int)
+                    model.IdTinhTrangCoSoVatChat = ParseInt(item[9]);// Gán tình trạng cơ sở vật chất (chuyển đổi từ string sang int)
+                    model.IdPhanLoaiCsvc = ParseInt(item[8]);// Gán phân loại cơ sở vật chất (chuyển đổi từ string sang int)
+                    model.IdLoaiPhongHoc = ParseInt(item[7]);// Gán laoij phòng học (chuyển đổi từ string sang int)
+                    model.IdLoaiDeAn = ParseInt(item[6]);// Gán loại đề án (chuyển đổi từ string sang int)
+                    model.MaPhongHocGiangDuongHoiTruong = item[0];// Gán mã phòng học giảng đường hội trường từ cột đầu tiên
+                    model.TenPhongHocGiangDuongHoiTruong = item[1];// Gán tên phòng học giảng đường hội trường (chuyển đổi từ string sang int)
+                    model.DienTich = ParseInt(item[2]);// Gán  diện tích (chuyển đổi từ string sang int)
+                    model.QuyMoChoNgoi = ParseInt(item[3]);// Gán quy mô chỗ ngồi (chuyển đổi từ string sang int)
+                    model.NamDuaVaoSuDung = item[4];// Gán năm đưa vào sử dụng (chuyển đổi từ string sang int)
+
+
+
+                    // Thêm model vào danh sách
+                    lst.Add(model);
+                }
+
+                // Lưu danh sách vào cơ sở dữ liệu (giả sử có một phương thức tạo đối tượng trong DB)
+                foreach (var item in lst)
+                {
+                    await CreateTbPhongHocGiangDuongHoiTruong(item); // Giả sử có phương thức tạo dữ liệu vào DB
+                }
+
+                return Accepted(Json(new { msg = message }));
+            }
+            catch (Exception ex)
+            {
+                // Nếu có lỗi, trả về thông báo lỗi
+                return BadRequest(Json(new { msg = ex.Message }));
+            }
+        }
+        private async Task CreateTbPhongHocGiangDuongHoiTruong(TbPhongHocGiangDuongHoiTruong item)
+        {
+            await ApiServices_.Create<TbPhongHocGiangDuongHoiTruong>("/api/csvc/PhongHocGiangDuongHoiTruong", item);
+        }
+
+        private int? ParseInt(string v)
+        {
+            if (int.TryParse(v, out int result)) // Nếu chuỗi có thể chuyển thành int
+            {
+                return result; // Trả về giá trị int
+            }
+            else
+            {
+                return null; // Nếu không thể chuyển thành int, trả về null
+            }
+        }
+
     }
 }

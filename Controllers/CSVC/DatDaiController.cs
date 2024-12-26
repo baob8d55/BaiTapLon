@@ -309,16 +309,17 @@ namespace BaiTapLon.Controllers.CSVC
                     } while (await TbDatDaiExists(id)); // Kiểm tra id có tồn tại không
 
                     // Gán dữ liệu cho các thuộc tính của model
-                    model.IdDatDai = id;
-                    model.MaGiayChungNhanQuyenSoHuu = item[0];
-                    model.DienTichDat = ParseInt(item[1]);
-                    model.IdHinhThucSoHuu = ParseInt(item[2]);
-                    model.TenDonViSoHuu = item[3];
-                    model.MinhChungQuyenSoHuuDatDai = item[4];
-                    model.NamBatDauSuDungDat = item[6];
-                    model.ThoiGianSuDungDat = ParseInt(item[7]);
-                    model.DienTichDatDaSuDung = ParseInt(item[8]);
-                    model.MucDichSuDungDat = item[5];
+                    model.IdDatDai = id;// Gán ID
+                    model.MaGiayChungNhanQuyenSoHuu = item[0]; // Gán mã giấy chứng nhận từ cột đầu tiên
+                    model.DienTichDat = ParseInt(item[1]); // Gán diện tích đất (chuyển đổi từ string sang int)
+
+                    model.TenDonViSoHuu = item[2];// Gán tên đơn vị sở hữu (chuyển đổi từ string sang int)
+                    model.MinhChungQuyenSoHuuDatDai = item[3];// Gán minh chứng quyền sở hữu dd (chuyển đổi từ string sang int)
+                    model.NamBatDauSuDungDat = item[4];// Gán năm bắt đầu sử dụng đất (chuyển đổi từ string sang int)
+                    model.ThoiGianSuDungDat = ParseInt(item[5]);// Gán thời gian sử dụng (chuyển đổi từ string sang int)
+                    model.DienTichDatDaSuDung = ParseInt(item[6]);// Gán tổng diện tích đất đã sử dụng (chuyển đổi từ string sang int)
+                    model.MucDichSuDungDat = item[7];// Gán mục đích đã sử dụng (chuyển đổi từ string sang int)
+                    model.IdHinhThucSoHuu = ParseInt(item[8]);// Gán hình thứ sở hữu (chuyển đổi từ string sang int)
 
                     // Thêm model vào danh sách
                     lst.Add(model);
@@ -333,6 +334,7 @@ namespace BaiTapLon.Controllers.CSVC
                 return Accepted(Json(new { msg = message }));
             }
             catch (Exception ex)
+            // Nếu có lỗi, trả về thông báo lỗi
             {
                 return BadRequest(Json(new { msg = ex.Message }));
             }

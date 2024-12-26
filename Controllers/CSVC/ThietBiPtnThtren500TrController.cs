@@ -9,6 +9,9 @@ using BaiTapLon.Models;
 using BaiTapLon.API;
 using BaiTapLon.Models.DM;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.Security.Policy;
+
 
 namespace BaiTapLon.Controllers.CSVC
 {
@@ -126,7 +129,7 @@ namespace BaiTapLon.Controllers.CSVC
         // Bắt lỗi ngoại lệ sao cho người nhập BẮT BUỘC phải nhập khác IdThietBiPtnThtren500Tr đã có
         [HttpPost]
         [ValidateAntiForgeryToken] // Một phương thức bảo mật thông qua Token được tạo tự động cho các Form khác nhau
-        public async Task<IActionResult> Create([Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,NamBatDauTuyenSinh,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
+        public async Task<IActionResult> Create([Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
         {
              try
             {
@@ -188,7 +191,7 @@ namespace BaiTapLon.Controllers.CSVC
 
         [HttpPost]
         [ValidateAntiForgeryToken] // Một phương thức bảo mật thông qua Token được tạo tự động cho các Form khác nhau
-        public async Task<IActionResult> Edit(int id, [Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,NamBatDauTuyenSinh,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
+        public async Task<IActionResult> Edit(int id, [Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
         {
              try
             {
@@ -302,7 +305,7 @@ namespace BaiTapLon.Controllers.CSVC
                 // Duyệt qua từng dòng dữ liệu từ Excel
                 foreach (var item in data)
                 {
-                    if (item.Count < 9) // Kiểm tra nếu dòng dữ liệu không đủ số cột
+                    if (item.Count < 8) // Kiểm tra nếu dòng dữ liệu không đủ số cột
                     {
                         return BadRequest(Json(new { msg = "Dữ liệu không đầy đủ." }));
                     }
@@ -317,15 +320,15 @@ namespace BaiTapLon.Controllers.CSVC
                     } while (await TbThietBiPtnThtren500TrExists(id)); // Kiểm tra id có tồn tại không
 
                     // Gán dữ liệu cho các thuộc tính của model
-                    model.IdThietBiPtnTh = id;
-                    model.MaThietBi = item[0];
-                    model.IdCongTrinhCsvc = ParseInt(item[1]);
-                    model.TenThietBi = item[2];
-                    model.NamSanXuat = item[3];
-                    model.IdQuocGiaXuatXu = ParseInt(item[4]);
-                    model.HangSanXuat = item[5];
-                    model.SoLuongThietBiCungLoai = ParseInt(item[6]);
-                    model.NamDuaVaoSuDung = item[7];
+                    model.IdThietBiPtnTh = id; //Gán id
+                    model.MaThietBi = item[0];// Gán mã thiết bị cho cột đầu tiên
+                    model.TenThietBi = item[1];// Gán tên thiest bị (chuyển đổi từ string sang int)
+                    model.NamSanXuat = item[2];// Gán năm sản xuất (chuyển đổi từ string sang int)
+                    model.HangSanXuat = item[3];// Gán loại đề án (chuyển đổi từ string sang int)
+                    model.SoLuongThietBiCungLoai = ParseInt(item[4]);// Gán loại đề án (chuyển đổi từ string sang int)
+                    model.NamDuaVaoSuDung = item[5];//// Gán năm ddauw vào sử dụng (chuyển đổi từ string sang int)
+                    model.IdCongTrinhCsvc = ParseInt(item[6]);// Gán công trình csvc(chuyển đổi từ string sang int)m[6]);
+                    model.IdQuocGiaXuatXu = ParseInt(item[7]);// Gán id quốc gia xuát sử (chuyển đổi từ string sang int)
 
 
                     // Thêm model vào danh sách
@@ -348,7 +351,7 @@ namespace BaiTapLon.Controllers.CSVC
 
         private async Task CreateTbThietBiPtnThtren500Tr(TbThietBiPtnThtren500Tr item)
         {
-            await ApiServices_.Create<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr", item);
+            await ApiServices_.Create<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr", item);
         }
 
         private int? ParseInt(string v)

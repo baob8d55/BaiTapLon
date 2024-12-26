@@ -361,21 +361,21 @@ namespace BaiTapLon.Controllers.CSVC
                     } while (await TbCongTrinhCoSoVatChatExists(id)); // Kiểm tra id có tồn tại không
 
                     // Gán dữ liệu cho các thuộc tính của model
-                    model.IdCongTrinhCoSoVatChat = id;
-                    model.MaCongTrinh = item[0];
-                    model.TenCongTrinh = item[1];
-                    model.DoiTuongSuDung = item[2];
-                    model.DienTichSanXayDung = ParseInt(item[3]);
-                    model.VonBanDau = ParseInt(item[4]);
-                    model.VonDauTu = ParseInt(item[5]);
-                    model.SoPhongOcongVu = ParseInt(item[6]);
-                    model.SoChoOchoCanBoGiangDay = ParseInt(item[7]);
-                    model.NamDuaVaoSuDung = item[8];
-                    model.CongTrinhCsvctrongNha = ParseInt(item[9]);
-                    model.IdHinhThucSoHuu = ParseInt(item[10]);
-                    model.IdLoaiCongTrinh = ParseInt(item[11]);
-                    model.IdMucDichSuDung = ParseInt(item[12]);
-                    model.IdTinhTrangCsvc = ParseInt(item[13]);
+                    model.IdCongTrinhCoSoVatChat = id;// Gán ID
+                    model.MaCongTrinh = item[0];// Gán mã công trình từ cột đầu tiên
+                    model.TenCongTrinh = item[1];// Gán tên công trình (chuyển đổi từ string sang int)
+                    model.DoiTuongSuDung = item[2];// Gán đói tượng sử dụng (chuyển đổi từ string sang int)
+                    model.DienTichSanXayDung = ParseInt(item[3]);// Gán diện tích sàn xây dựng (chuyển đổi từ string sang int)
+                    model.VonBanDau = ParseInt(item[4]);// Gán vốn ban đầu (chuyển đổi từ string sang int)
+                    model.VonDauTu = ParseInt(item[5]);// Gán vốn đầu tư (chuyển đổi từ string sang int)
+                    model.SoPhongOcongVu = ParseInt(item[6]);// Gán số phòng ở công vụ (chuyển đổi từ string sang int)
+                    model.SoChoOchoCanBoGiangDay = ParseInt(item[7]);// Gán số chỗ ở cho cán bộ giảng dạy (chuyển đổi từ string sang int)
+                    model.NamDuaVaoSuDung = item[8];// Gán năm đưa vào sử dụng(chuyển đổi từ string sang int)
+                    model.CongTrinhCsvctrongNha = ParseInt(item[9]);// Gán công trình nhà nước csvc (chuyển đổi từ string sang int)
+                    model.IdHinhThucSoHuu = ParseInt(item[10]);// Gán hình thức sở hữu (chuyển đổi từ string sang int)
+                    model.IdLoaiCongTrinh = ParseInt(item[11]);// Gán loại công trinh (chuyển đổi từ string sang int)
+                    model.IdMucDichSuDung = ParseInt(item[12]);// Gán mục đích sử dụng (chuyển đổi từ string sang int)
+                    model.IdTinhTrangCsvc = ParseInt(item[13]);// Gán tình trạng cơ sở vật chất (chuyển đổi từ string sang int)
 
                     // Thêm model vào danh sách
                     lst.Add(model);
