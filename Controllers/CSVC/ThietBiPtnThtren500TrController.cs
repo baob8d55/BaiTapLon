@@ -137,7 +137,7 @@ namespace BaiTapLon.Controllers.CSVC
                 if (await TbThietBiPtnThtren500TrExists(tbThietBiPtnThtren500Tr.IdThietBiPtnTh)) ModelState.AddModelError("IdThietBiPtnThtren500Tr", "ID này đã tồn tại!");
                 if (ModelState.IsValid)
                 {
-                    await ApiServices_.Create<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr", tbThietBiPtnThtren500Tr);
+                    await ApiServices_.Create<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr", tbThietBiPtnThtren500Tr);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh", tbThietBiPtnThtren500Tr.IdCongTrinhCsvc);
@@ -305,10 +305,7 @@ namespace BaiTapLon.Controllers.CSVC
                 // Duyệt qua từng dòng dữ liệu từ Excel
                 foreach (var item in data)
                 {
-                    if (item.Count < 8) // Kiểm tra nếu dòng dữ liệu không đủ số cột
-                    {
-                        return BadRequest(Json(new { msg = "Dữ liệu không đầy đủ." }));
-                    }
+                
 
                     TbThietBiPtnThtren500Tr model = new TbThietBiPtnThtren500Tr();
 
@@ -327,7 +324,7 @@ namespace BaiTapLon.Controllers.CSVC
                     model.HangSanXuat = item[3];// Gán loại đề án (chuyển đổi từ string sang int)
                     model.SoLuongThietBiCungLoai = ParseInt(item[4]);// Gán loại đề án (chuyển đổi từ string sang int)
                     model.NamDuaVaoSuDung = item[5];//// Gán năm ddauw vào sử dụng (chuyển đổi từ string sang int)
-                    model.IdCongTrinhCsvc = ParseInt(item[6]);// Gán công trình csvc(chuyển đổi từ string sang int)m[6]);
+                    model.IdCongTrinhCsvc = ParseInt(item[6]);// Gán công trình csvc(chuyển đổi từ string sang int));
                     model.IdQuocGiaXuatXu = ParseInt(item[7]);// Gán id quốc gia xuát sử (chuyển đổi từ string sang int)
 
 

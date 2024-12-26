@@ -14,7 +14,8 @@ namespace BaiTapLon.API
         public ApiServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(configuration.GetConnectionString("API") ?? "http://14.0.22.12:8080");
+            //_httpClient.BaseAddress = new Uri(configuration.GetConnectionString("API") ?? "http://14.0.22.12:8080");
+            _httpClient.BaseAddress = new Uri(configuration.GetConnectionString("API") ?? "http://10.0.28.54:8080");
             // _authenticationStateProvider = authenticationStateProvider;
         }
 
