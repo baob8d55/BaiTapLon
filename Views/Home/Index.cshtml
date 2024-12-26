@@ -2,7 +2,344 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+@*Chữ Group 9*@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Animation</title>
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+        html, body {
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: #FFF;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .text-container {
+            display: flex;
+            gap: 1rem; /* Khoảng cách giữa các chữ */
+            position: relative;
+        }
+
+        .text {
+            font-size: 5rem;
+            opacity: 0;
+            color: #fff;
+            animation: text-fade-in 1s ease-in-out forwards;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-animation 1s ease-out forwards;
+        }
+
+        @@keyframes text-fade-in {
+            0%
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes particle-animation {
+            0%
+
+        {
+            opacity: 1;
+            transform: scale(1) translate(0, 0);
+        }
+
+        100% {
+            opacity: 0;
+            transform: scale(0) translate(100px, -100px);
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="text-container"></div>
+    <script>
+        const texts = ['G', 'R', 'O', 'U', 'P', '9', '', ''];
+        const number_of_particles = 12;
+
+        const textContainer = document.querySelector('.text-container');
+
+        // Function to create text elements
+        texts.forEach((char, i) => {
+          const textElement = document.createElement('div');
+          textElement.className = 'text';
+          textElement.style.animationDelay = `${i * 0.2}s`;
+          textElement.textContent = char;
+          textContainer.appendChild(textElement);
+
+          // Generate particles for each character
+          for (let j = 0; j < number_of_particles; j++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.animationDelay = `${i * 0.2 + j * 0.05}s`;
+
+            // Random position around text
+            const angle = (360 / number_of_particles) * j;
+            const x = Math.cos((angle * Math.PI) / 180) * 50;
+            const y = Math.sin((angle * Math.PI) / 180) * 50;
+
+            particle.style.left = `${textContainer.offsetLeft + i * 60 + 30}px`;
+            particle.style.top = `${textContainer.offsetTop}px`;
+            particle.style.transform = `translate(${x}px, ${y}px)`;
+            document.body.appendChild(particle);
+          }
+        });
+    </script>
+</body>
+</html>
+
+
+@*Cái chữ chạy hello*@
+<html>
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+<div class="content">
+    <div class="content__container">
+        <p class="content__container__text">
+            Chào mọi người, mình là:
+        </p>
+
+        <ul class="content__container__list">
+            <li class="content__container__list__item">Hiếu !</li>
+            <li class="content__container__list__item">Bảo !</li>
+            <li class="content__container__list__item">Linh !</li>
+            <li class="content__container__list__item">Việt !</li>
+          
+            
+        </ul>
+    </div>
 </div>
+</html>
+<style>
+    body {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: #34495e;
+}
+
+.content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-30%, -30%);
+  height: 100px;
+  overflow: hidden;
+  font-family: "Lato", sans-serif;
+  font-size: 35px;
+  line-height: 40px;
+  color: #ecf0f1;
+}
+.content__container {
+  font-weight: 600;
+  overflow: hidden;
+  height: 40px;
+  padding: 0 40px;
+}
+.content__container:before {
+  content: "[";
+  left: 0;
+}
+.content__container:after {
+  content: "]";
+  position: center;
+  right: 0;
+}
+.content__container:after, .content__container:before {
+  position: absolute;
+  top: 0;
+  color: #16a085;
+  font-size: 40px;
+  line-height: 40px;
+  -webkit-animation-name: opacity;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: ;
+  animation-name: opacity;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+.content__container__text {
+  display: inline;
+  float: left;
+  margin: 0;
+}
+.content__container__list {
+  margin-top: 0;
+  padding-left: 110px;
+  text-align: right;
+  float:right;
+  list-style: none;
+  -webkit-animation-name: change;
+  -webkit-animation-duration: 0s;
+  -webkit-animation-iteration-count: infinite;
+  animation-name: change;
+  animation-duration:13s;
+  animation-iteration-count: infinite;
+}
+.content__container__list__item {
+  line-height: 40px;
+  margin: 0;
+}
+
+@@-webkit-keyframes opacity {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@@-webkit-keyframes change {
+        0%, 10%, 100% {
+            transform: translate3d(0, 0, 0); /* Phần tử đầu tiên */
+        }
+
+        20%, 30% {
+            transform: translate3d(0, -25%, 0); /* Phần tử thứ hai */
+        }
+
+        40%, 50% {
+            transform: translate3d(0, -50%, 0); /* Phần tử thứ ba */
+        }
+
+        60%, 70% {
+            transform: translate3d(0, -75%, 0); /* Phần tử thứ tư */
+        }
+
+        80%, 90% {
+            transform: translate3d(0, -100%, 0); /* Phần tử thứ năm */
+        }
+}
+@@keyframes opacity {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@@keyframes change {
+        0%, 10%, 100% {
+            transform: translate3d(0, 0, 0); /* Phần tử đầu tiên */
+        }
+
+        20%, 30% {
+            transform: translate3d(0, -25%, 0); /* Phần tử thứ hai */
+        }
+
+        40%, 50% {
+            transform: translate3d(0, -50%, 0); /* Phần tử thứ ba */
+        }
+
+        60%, 70% {
+            transform: translate3d(0, -75%, 0); /* Phần tử thứ tư */
+        }
+
+        80%, 90% {
+            transform: translate3d(0, -100%, 0); /* Phần tử thứ năm */
+        }
+}
+</style>
+
+@* bảng ảnh *@
+<html>
+<div class="footer">
+    <!-- Nội dung footer khác -->
+    
+    <div class="image-slider">
+        <div class="slider-container">
+            <img src="https://scontent.fhan5-3.fna.fbcdn.net/v/t39.30808-6/464523866_947532940738403_3726356587614785412_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFz9lMlV3vcEvuLXXPIQOyxE4o341IJQqYTijfjUglCphphEVhc1IobNbUy_a_CZ1XXgGSCIZgkZo2-BDmjE7kw&_nc_ohc=D_OLXp7ywyAQ7kNvgF9fmrt&_nc_zt=23&_nc_ht=scontent.fhan5-3.fna&_nc_gid=AIZ_vLQQAnoPQEV1ULaWrcy&oh=00_AYA9Du1fDxUHvV7JHZYuOmt9hZdV8Fef4c8vUHBWldr26Q&oe=676C582A" alt="Image 1">
+            <img src="https://media.kenhtuyensinh.vn/images/cms/2018/06/hc-vin-an-ninh-nhan-dan.jpg" alt="Image 2">
+            <img src="https://static-images.vnncdn.net/files/publish/2022/9/15/diem-chuan-hoc-vien-an-ninh-nhan-dan-cao-nhat-la-2999-b6b1f819416e45fd857c4a4845dfb6b1.jpg" alt="Image 3">
+            <img src="https://scontent.fhan5-5.fna.fbcdn.net/v/t39.30808-6/453067113_883448197146878_2120718610995388281_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=101&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeFdtEWbSQXJ-aSVewSHtWB13zKFjvvKOIvfMoWO-8o4i5CgUiRGqtNWt0LRDGOamzOWPeQzmAn6Ne9a9u_ruTwK&_nc_ohc=p3kBWoSj_PMQ7kNvgG_hvO2&_nc_zt=23&_nc_ht=scontent.fhan5-5.fna&_nc_gid=A4hY8F2QG3HRh42TR38Ebmk&oh=00_AYAAhVX5l8less4M0TRz-Shh7ClwNvpWA-9PNIm4aUYEzQ&oe=676C4A96" alt="Image 4">
+            <img src="https://scontent.fhan5-3.fna.fbcdn.net/v/t39.30808-6/458670771_910010064490691_2109638662122911446_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHgUpDKonJ51ZSq_vQpIklicgFzXNHBFZpyAXNc0cEVmsNjWzkkodM9NM4iLPkLWFJ7jsUsb1Gnzuk7iEm61hj2&_nc_ohc=izCSac7X4XwQ7kNvgFX-GhY&_nc_zt=23&_nc_ht=scontent.fhan5-3.fna&_nc_gid=AUhH2_vIHm3xYey0YvuxXFH&oh=00_AYDYaBixX0iVEoKSR-B1AMEC1owQQL_7TKeAXTOL3aQXvA&oe=676C2FCD" alt="Image 5">
+            <img src="https://reviewedu.net/wp-content/uploads/2021/09/19488957_105133433410208_3051211268562336604_o.jpg" alt="Image 6">
+        </div>
+    </div>
+</div>
+
+</html>
+<style>
+     .footer { */
+         
+       background-color: #222;
+       color: white; 
+         text-align: center; 
+        padding: 20px; 
+    } 
+    .image-slider {
+        position: fixed;
+        bottom: 20px;
+        width: 500px; /* Đảm bảo thanh slider bao trùm toàn màn hình */
+        height: 120px; /* Tăng chiều cao nếu cần */
+        overflow: hidden;
+        background-color: #FFF;
+    }
+
+    .slider-container {
+        display: flex;
+        animation: slide 10s linear infinite;
+    
+    }
+
+
+        .slider-container img {
+            width: 125px; /* Tăng kích thước mỗi ảnh */
+            height: auto;
+            margin: 5px;
+        }
+
+    @@keyframes slide {
+        0%
+
+    {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+
+    }
+</style>
+<script>
+        let isPaused = false;
+
+    slider.addEventListener('mouseover', () => {
+        isPaused = true;
+        slider.style.animationPlayState = 'paused';
+    });
+
+    slider.addEventListener('mouseout', () => {
+        isPaused = false;
+        slider.style.animationPlayState = 'running';
+    });
+</script>

@@ -1,51 +1,92 @@
 ﻿@model BaiTapLon.Models.TbPhongThucHanh
 
 @{
-    ViewData["Title"] = "Tạo mới";
+    ViewData["Title"] = "Thêm Mới";
 }
 
-<h1>Tạo mới</h1>
+@section Heads
+{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+}
 
-<h4>Phòng Thực Hành</h4>
+<h1 style="text-align:center;margin-bottom:20px;color:#adefd1ff;font-size:60px"><b>Tạo Mới</b></h1>
+<h2 class="text-center my-4" style="color:burlywood;font-size:50px"><b>Phòng Thực Hành</b></h2>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<body>
+    <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-md-6 col-lg-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IdPhongThucHanh" class="control-label"></label>
-                <input asp-for="IdPhongThucHanh" class="form-control" />
-                <span asp-validation-for="IdPhongThucHanh" class="text-danger"></span>
+            <hr />
+            <div class="row">
+                <div class="form-group">
+                    <form asp-action="Create" method="post" style="margin-top:20px; padding: 20px; border: 2px solid black; border-radius: 8px; box-shadow: 10px 10px 15px 5px rgba(0, 0, 0, 0.5); background-color:white; color:black">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="IdPhongThucHanh" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="IdPhongThucHanh" class="form-control" />
+                            <span asp-validation-for="IdPhongThucHanh" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="IdCongTrinhCsvcNavigation" class="control-label"></label>
+                            <select style="border: 2px solid black;border-radius: 8px;" asp-for="IdCongTrinhCsvc" class="form-control" asp-items="ViewBag.IdCongTrinhCsvc"></select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="IdLinhVucNavigation" class="control-label"></label>
+                            <select style="border: 2px solid black;border-radius: 8px;" asp-for="IdLinhVuc" class="form-control" asp-items="ViewBag.IdLinhVuc"></select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="MucDoDapUngNhuCauNckh" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="MucDoDapUngNhuCauNckh" class="form-control" />
+                            <span asp-validation-for="MucDoDapUngNhuCauNckh" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NamDuaVaoSuDung" class="control-label"></label>
+                            <input style="border: 2px solid black;border-radius: 8px;" asp-for="NamDuaVaoSuDung" class="form-control" />
+                            <span asp-validation-for="NamDuaVaoSuDung" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Lưu Lại
+                                </button>
+                            </div>
+                            <div>
+                                <a class="btn btn-primary" asp-action="Index">
+                                    <i class="fa-solid fas fa-chevron-left" style="margin-right:5px"></i>Quay lại
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="IdCongTrinhCsvc" class="control-label"></label>
-                <select asp-for="IdCongTrinhCsvc" class ="form-control" asp-items="ViewBag.IdCongTrinhCsvc"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdLinhVuc" class="control-label"></label>
-                <select asp-for="IdLinhVuc" class ="form-control" asp-items="ViewBag.IdLinhVuc"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="MucDoDapUngNhuCauNckh" class="control-label"></label>
-                <input asp-for="MucDoDapUngNhuCauNckh" class="form-control" />
-                <span asp-validation-for="MucDoDapUngNhuCauNckh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NamDuaVaoSuDung" class="control-label"></label>
-                <input asp-for="NamDuaVaoSuDung" class="form-control" />
-                <span asp-validation-for="NamDuaVaoSuDung" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Tạo mới" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Trở lại</a>
-</div>
+</body>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .btn:hover {
+        transform: translateY(-5px); /* Nổi lên khi hover */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Tạo bóng đổ */
+    }
+
+    .btn {
+        border-radius: 20px; /* Bo góc nút */
+        transition: all 0.3s ease;
+        font-size: 18px; /* Tăng kích thước chữ */
+        padding: 15px 30px; /* Tăng khoảng cách giữa các cạnh của nút */
+    }
+
+    body {
+        background: #34495e; /* Màu nền */
+        margin: 0;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+</style>
 }

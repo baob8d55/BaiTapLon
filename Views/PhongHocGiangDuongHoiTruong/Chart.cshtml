@@ -1,0 +1,334 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbPhongHocGiangDuongHoiTruong>
+
+@{
+    ViewData["Title"] = "Chart";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<head>
+    <meta charset="utf-8">
+    <title>Visualize Data Beautifully Using JS Charts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        /* Phong cách cho nhãn */
+        label {
+            font-family: 'Arial', sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Phong cách cho dropdown */
+        #chartDropdown {
+            width: 90%;
+            max-width: 700px; /* Tăng kích thước tối đa */
+            padding: 12px 16px;
+            font-size: 15px;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+            transition: all 0.25s ease;
+            /* Căn giữa theo chiều ngang */
+            display: block; /* Đảm bảo là khối */
+            margin: 0 auto; /* Căn giữa ngang */
+        }
+
+            /* Hiệu ứng hover */
+            #chartDropdown:hover {
+                background-color: #fff;
+                border-color: green;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Hiệu ứng khi focus */
+            #chartDropdown:focus {
+                border-color: darkgreen;
+                box-shadow: lightgreen;
+            }
+            /* Tùy chỉnh các tùy chọn trong dropdown */
+            #chartDropdown option {
+                padding: 10px;
+                font-size: 15px;
+                color: #333;
+                background-color: #fff; /* Màu nền mặc định */
+                transition: background-color 0.3s ease;
+            }
+        /* Hiệu ứng cho tiêu đề */
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 40px;
+            color: #444;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<label for="customDropdown">HÃY CHỌN BIỂU ĐỒ MÀ BẠN MUỐN XEM</label>
+<div class="custom-dropdown" id="customDropdown">
+    <select id="chartDropdown" style="margin-bottom:100px" class="dropdown-btn">
+        <option value="">LỰA CHỌN BIỂU ĐỒ</option>
+        <option value="chart1">Biểu đồ 1: Hình thức sở hữu</option>
+        <option value="chart2">Biểu đồ 2: Loại đề án</option>
+        <option value="chart3">Biểu đồ 3: Loại phòng học </option>
+        <option value="chart4">Biểu đồ 4: Phân loại CSVC</option>
+        <option value="chart5">Biểu đồ 5: Tình trạng CSVC</option>
+        <option value="chart6">Biểu đồ 6: Quy mô chỗ ngồi</option>
+
+
+    </select>
+</div>
+<br></br>
+
+<div id="chart1" class="chart-container" style="width: 700px; height: 900px; margin: 0 auto;">
+<h1 style="text-align:center;">Hình Thức Sở Hữu</h1>
+<canvas id="pieChartHinhThucSoHuu"></canvas>
+</div>
+
+<script>
+    var hinhThucLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Distinct().ToList()));
+    var hinhThucData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdHinhThucSoHuuNavigation.HinhThucSoHuu).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartHinhThucSoHuu'), {
+        type: 'pie',
+        data: {
+            labels: hinhThucLabels,
+            datasets: [{
+                data: hinhThucData,
+                backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+<div id="chart2" class="chart-container" style="width: 700px; height: 900px; margin: 0 auto;">
+<h1 style="text-align:center;">Loại Đề Án</h1>
+<canvas id="pieChartLoaiDeAn"></canvas>
+</div>
+
+<script>
+    var loaiDeAnLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLoaiDeAnNavigation.LoaiDeAnChuongTrinh).Distinct().ToList()));
+    var loaiDeAnData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdLoaiDeAnNavigation.LoaiDeAnChuongTrinh).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartLoaiDeAn'), {
+        type: 'pie',
+        data: {
+            labels: loaiDeAnLabels,
+            datasets: [{
+                data: loaiDeAnData,
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+
+<div id="chart3" class="chart-container" style="width: 700px; height: 900px; margin: 0 auto;">
+<h1 style="text-align:center;">Loại Phòng Học</h1>
+<canvas id="pieChartLoaiPhongHoc"></canvas>
+</div>
+
+<script>
+    var loaiPhongLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdLoaiPhongHocNavigation.LoaiPhongHoc).Distinct().ToList()));
+    var loaiPhongData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdLoaiPhongHocNavigation.LoaiPhongHoc).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartLoaiPhongHoc'), {
+        type: 'pie',
+        data: {
+            labels: loaiPhongLabels,
+            datasets: [{
+                data: loaiPhongData,
+                backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(153, 102, 255, 0.8)', 'rgba(255, 159, 64, 0.5)'],
+                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+
+<div id="chart4" class="chart-container" style="width: 700px; height: 900px; margin: 0 auto;">
+<h1 style="text-align:center;">Phân Loại CSVC</h1>
+<canvas id="pieChartPhanLoaiCsvc"></canvas>
+</div>
+
+<script>
+    var phanLoaiLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdPhanLoaiCsvcNavigation.PhanLoaiCsvc).Distinct().ToList()));
+    var phanLoaiData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdPhanLoaiCsvcNavigation.PhanLoaiCsvc).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartPhanLoaiCsvc'), {
+        type: 'pie',
+        data: {
+            labels: phanLoaiLabels,
+            datasets: [{
+                data: phanLoaiData,
+                backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(255, 99, 132, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+
+<div id="chart5" class="chart-container" style="width: 700px; height: 900px; margin: 0 auto;">
+<h1 style="text-align:center;">Tình Trạng CSVC</h1>
+<canvas id="pieChartTinhTrangCsvc"></canvas>
+</div>
+
+<script>
+    var tinhTrangLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdTinhTrangCoSoVatChatNavigation.TinhTrangCoSoVatChat).Distinct().ToList()));
+    var tinhTrangData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.GroupBy(x => x.IdTinhTrangCoSoVatChatNavigation.TinhTrangCoSoVatChat).Select(g => g.Count()).ToList()
+    ));
+
+    new Chart(document.getElementById('pieChartTinhTrangCsvc'), {
+        type: 'pie',
+        data: {
+            labels: tinhTrangLabels,
+            datasets: [{
+                data: tinhTrangData,
+                backgroundColor: ['rgba(255, 159, 64, 0.2)', 'rgba(153, 102, 255, 0.5)', 'rgba(54, 162, 235, 0.5)'],
+                borderColor: ['rgba(255, 159, 64, 1)', 'rgba(153, 102, 255, 1)', 'rgba(54, 162, 235, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+</script>
+
+<div id="chart6" class="chart-container" style="width: 1500px; height: 900px; margin: 0 auto;">
+<h1 style="text-align:center;">Quy mô chỗ ngồi</h1>
+<canvas id="barChartQuyMoChoNgoi"></canvas>
+</div>
+
+<script>
+    var tenPhongLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.TenPhongHocGiangDuongHoiTruong).ToList()));
+    var quyMoChoNgoiData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.QuyMoChoNgoi).ToList()));
+
+    new Chart(document.getElementById('barChartQuyMoChoNgoi'), {
+        type: 'bar',
+        data: {
+            labels: tenPhongLabels,
+            datasets: [{
+                label: 'Quy mô chỗ ngồi',
+                data: quyMoChoNgoiData,
+                backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+
+<script>
+    // Lấy dropdown và các container biểu đồ
+    const chartDropdown = document.getElementById('chartDropdown');
+    const chartContainers = document.querySelectorAll('.chart-container');
+
+    // Ẩn tất cả các biểu đồ khi tải lại trang
+    window.addEventListener('DOMContentLoaded', function () {
+        chartContainers.forEach(container => container.style.display = 'none');
+    });
+
+    // Lắng nghe sự kiện thay đổi trên dropdown
+    chartDropdown.addEventListener('change', function () {
+        // Ẩn tất cả các biểu đồ
+        chartContainers.forEach(container => container.style.display = 'none');
+
+        // Hiển thị biểu đồ được chọn
+        const selectedChartId = chartDropdown.value;
+        if (selectedChartId) {
+            const selectedChart = document.getElementById(selectedChartId);
+            if (selectedChart) {
+                selectedChart.style.display = 'block';
+            }
+        }
+    });
+</script>
+@* thay đổi nền cho option *@
+<script>
+    // Lấy các thành phần dropdown
+    const dropdown = document.querySelector('.custom-dropdown');
+    const dropdownBtn = dropdown.querySelector('.dropdown-btn');
+    const dropdownOptions = dropdown.querySelectorAll('.dropdown-options li');
+
+    // Hiển thị hoặc ẩn danh sách khi bấm nút
+    dropdownBtn.addEventListener('click', () => {
+        dropdown.classList.toggle('active');
+    });
+
+    // Cập nhật giá trị nút và ẩn danh sách khi chọn một tùy chọn
+    dropdownOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            dropdownBtn.textContent = option.textContent;
+            dropdown.classList.remove('active');
+            console.log('Bạn đã chọn:', option.getAttribute('data-value')); // Giá trị tùy chọn
+        });
+    });
+
+    // Ẩn dropdown khi click bên ngoài
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+</script>

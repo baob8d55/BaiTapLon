@@ -104,6 +104,7 @@ namespace BaiTapLon.API
             }
             else
             {
+                throw new Exception("loi ne");
                 // _notificationService.Notify(NotificationSeverity.Error, $"Có lỗi đã xảy ra", duration: -1);
             }
         }

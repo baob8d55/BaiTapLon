@@ -1,49 +1,319 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BaiTapLon</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BaiTapLon.styles.css" asp-append-version="true" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | Cơ Sở Vật Chất</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="~/assets/compiled/png/Logo_hoc_vien_ANND.png" type="image/x-icon">
+    <link rel="shortcut icon" href="~/assets/compiled/png/Logo_hoc_vien_ANND.png" type="image/png">
+    @await RenderSectionAsync("Heads", required: false)
+    <link rel="stylesheet" href="/assets/compiled/css/app.css">
+    
+    @* <link rel="stylesheet" href="/assets/compiled/css/app-dark.css"> *@
+    <style>
+        * {
+        @* font-family: "Times New Roman", Times, serif; *@
+        }
+
+        * {
+            font-family: "Be Vietnam Pro", sans-serif;
+        }
+
+        .sidebar-wrapper .menu {
+            padding-left: 0;
+            margin-top: 2rem;
+            padding: 0 1rem;
+            font-weight: 600;
+    </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BaiTapLon</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    <script src="/assets/static/js/initTheme.js"></script>
+    <div id="app">
+        <div id="sidebar">
+            <div class="sidebar-wrapper active">
+                    <div   class="sidebar-header position-relative" style="padding: 0.5rem 1rem 0.5rem;">
+                        <div   class="d-flex justify-content-between align-items-center">
+                            <div   class="align-items-center d-flex justify-content-start">
+
+                                <div   style="width:6.5rem !important">
+                                <a href="https://hvannd.edu.vn"><img style="height:6rem; width:6rem;" src="https://upload.wikimedia.org/wikipedia/vi/thumb/8/85/Logo_hoc_vien_ANND.png/330px-Logo_hoc_vien_ANND.png" alt="Logo"></a>
+                                </div>
+
+                                <div   class="text-center p-1 mt-2 ms-2">
+                                    <h6   class="fw-bold">BỘ CÔNG AN</h6>
+                                    <h6   class="fw-bold">HỌC VIỆN ANND</h6>
+                                </div>
+                        </div>
+                        @* <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                        role="img" class="iconify iconify--system-uicons" width="20" height="20"
+                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
+                        <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                        d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2"
+                        opacity=".3"></path>
+                        <g transform="translate(-210 -1)">
+                        <path d="M220.5 2.5v2m6.5.5l-1.5 1.5"></path>
+                        <circle cx="220.5" cy="11.5" r="4"></circle>
+                        <path d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2"></path>
+                        </g>
+                        </g>
+                        </svg>
+                        <div class="form-check form-switch fs-6">
+                        <input class="form-check-input  me-0" type="checkbox" id="toggle-dark" style="cursor: pointer">
+                        <label class="form-check-label"></label>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                        role="img" class="iconify iconify--mdi" width="20" height="20" preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                        d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z">
+                        </path>
+                        </svg>
+                        </div> *@
+
+                        <div class="sidebar-toggler  x">
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                        </div>
+
+                       
+                    </div>
+                    <center><p class="fw-bold text-muted" style="font-size: 25px" >CƠ SỞ VẬT CHẤT</p></center>
+
+
+                    <hr class="----------------------------------------------------------------------------" />
+
+
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+
+                        
+                        <li class="sidebar-title">DANH SÁCH CHỌN</li>
+
+                        <li class="sidebar-item  " action_name="Dashboard_article">
+                            <a href="/" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>GIAO DIỆN CHÍNH</span>
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+                        <li class="sidebar-item  has-sub " action_name="CongTrinhCoSoVatChat_article">
+                            <a href="/CongTrinhCoSoVatChat" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Công trình cơ sở vật chất</span>
+                            </a>
+                            <ul class="submenu submenu-closed" action_name="CongTrinhCoSoVatChat_article">
+
+                                <li class="submenu-item " action_name="CongTrinhCoSoVatChat_Index">
+                                    <a href="/CongTrinhCoSoVatChat/" class="submenu-link">Trang Chủ</a>
+
+                                </li>
+                                <li class="submenu-item  " action_name="CongTrinhCoSoVatChat_Create">
+                                    <a href="/CongTrinhCoSoVatChat/Create" class="submenu-link">Tạo Mới</a>
+                                </li>
+                                <li class="submenu-item  " action_name="CongTrinhCoSoVatChat_chart">
+                                    <a href="/CongTrinhCoSoVatChat/chart" class="submenu-link">Biều Đồ</a>
+                                </li>
+                            </ul>
                         </li>
+
+                        <li class="sidebar-item  has-sub " action_name="DatDai_article">
+                            <a href="/DatDai" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Đất Đai</span>
+                            </a>
+                            <ul class="submenu submenu-closed" action_name="DatDai_article">
+
+                                <li class="submenu-item " action_name="DatDai_Index">
+                                    <a href="/DatDai/" class="submenu-link">Trang Chủ</a>
+
+                                </li>
+                                <li class="submenu-item  " action_name="DatDai_Create">
+                                    <a href="/DatDai/Create" class="submenu-link">Tạo Mới</a>
+                                </li>
+                                <li class="submenu-item  " action_name="DatDai_Chart">
+                                    <a href="/DatDai/Chart" class="submenu-link">Biểu Đồ</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub " action_name="KiTucXa_article">
+                            <a href="/KiTucXa" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Kí Túc Xá</span>
+                            </a>
+                            <ul class="submenu submenu-closed" action_name="KiTucXa_article">
+
+                                <li class="submenu-item " action_name="KiTucXa_Index">
+                                    <a href="/KiTucXa/" class="submenu-link">Trang Chủ</a>
+
+                                </li>
+                                <li class="submenu-item  " action_name="KiTucXa_Create">
+                                    <a href="/KiTucXa/Create" class="submenu-link">Tạo Mới</a>
+                                </li>
+                                <li class="submenu-item  " action_name="KiTucXa_Chart">
+                                    <a href="/KiTucXa/Chart" class="submenu-link">Biểu Đồ</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub " action_name="PhongHocGiangDuongHoiTruong_article">
+                            <a href="/PhongHocGiangDuongHoiTruong" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Phòng Học Giảng Đường Hội Trường</span>
+                            </a>
+                            <ul class="submenu submenu-closed" action_name="PhongHocGiangDuongHoiTruong_article">
+
+                                <li class="submenu-item " action_name="PhongHocGiangDuongHoiTruong_Index">
+                                    <a href="/PhongHocGiangDuongHoiTruong/" class="submenu-link">Trang Chủ</a>
+
+                                </li>
+                                <li class="submenu-item  " action_name="TbHoiThaoHoiNghis_Create">
+                                    <a href="/PhongHocGiangDuongHoiTruong/Create" class="submenu-link">Tạo Mới</a>
+                                </li>
+                                <li class="submenu-item  " action_name="PhongHocGiangDuongHoiTruong_Chart">
+                                    <a href="/PhongHocGiangDuongHoiTruong/Chart" class="submenu-link">Biểu Đồ</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub " action_name="PhongThiNghiem_article">
+                            <a href="/PhongThiNghiem" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Phòng Thí Nghiệm</span>
+                            </a>
+                            <ul class="submenu submenu-closed" action_name="PhongThiNghiem_article">
+
+                                <li class="submenu-item " action_name="PhongThiNghiem_Index">
+                                    <a href="/PhongThiNghiem/" class="submenu-link">Trang Chủ</a>
+
+                                </li>
+                                <li class="submenu-item  " action_name="PhongThiNghiem_Create">
+                                    <a href="/PhongThiNghiem/Create" class="submenu-link">Tạo Mới</a>
+                                </li>
+                                <li class="submenu-item  " action_name="PhongThiNghiem_Chart">
+                                    <a href="/PhongThiNghiem/Chart" class="submenu-link">Biểu Đồ</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub " action_name="PhongThucHanh_article">
+                            <a href="/PhongThucHanh" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Phòng Thực Hành</span>
+                            </a>
+                            <ul class="submenu submenu-closed" action_name="PhongThucHanh_article">
+                                <li class="submenu-item " action_name="PhongThucHanh_Index">
+                                    <a href="/PhongThucHanh/" class="submenu-link">Trang Chủ</a>
+                                </li>
+                                <li class="submenu-item " action_name="PhongThucHanh_Create">
+                                    <a href="/PhongThucHanh/Create" class="submenu-link">Tạo Mới</a>
+                                </li>
+                                <li class="submenu-item  " action_name="PhongThucHanh_Chart">
+                                    <a href="/PhongThucHanh/Chart" class="submenu-link">Biểu Đồ</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub " action_name="ThietBiPTN_THTren500Tr_article">
+                            <a href="/ThietBiPTN_THTren500Tr" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Thiết Bị Phòng Thí Nghiệm Thực Hành</span>
+                            </a>
+                            <ul class="submenu submenu-closed" action_name="ThietBiPTN_THTren500Tr_article">
+                                <li class="submenu-item " action_name="ThietBiPTN_THTren500Tr_Index">
+                                    <a href="/ThietBiPTN_THTren500Tr/" class="submenu-link">Trang Chủ</a>
+                                </li>
+                                <li class="submenu-item " action_name="ThietBiPTN_THTren500Tr_Create">
+                                    <a href="/ThietBiPTN_THTren500Tr/Create" class="submenu-link">Tạo Mới</a>
+                                </li>
+                                <li class="submenu-item  " action_name="ThietBiPTN_THTren500Tr_Chart">
+                                    <a href="/ThietBiPTN_THTren500Tr/Chart" class="submenu-link">Biểu Đồ</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  has-sub " action_name="ThuVienTrungTamHocLieu_article">
+                            <a href="/ThuVienTrungTamHocLieu" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Thư Viện Trung Tâm Học Liệu</span>
+                            </a>
+                            <ul class="submenu submenu-closed" action_name="ThuVienTrungTamHocLieu_article">
+                                <li class="submenu-item " action_name="ThuVienTrungTamHocLieu_Index">
+                                    <a href="/ThuVienTrungTamHocLieu/" class="submenu-link">Trang Chủ</a>
+                                </li>
+                                <li class="submenu-item " action_name="ThuVienTrungTamHocLieu_Create">
+                                    <a href="/ThuVienTrungTamHocLieu/Create" class="submenu-link">Tạo Mới</a>
+                                </li>
+                                <li class="submenu-item  " action_name="ThuVienTrungTamHocLieu_Chart">
+                                    <a href="/ThuVienTrungTamHocLieu/Chart" class="submenu-link">Biểu Đồ</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                
+                     
+
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - BaiTapLon - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+            @RenderBody()
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p></p>
+                    </div>
+                    <div class="float-end">
+                        <p>
+                             <span class="text-danger"></span>
+                            <a href="https://web.facebook.com/do.quoc.bao11/"></a>
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="/assets/static/js/components/dark.js"></script>
+    <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="/assets/compiled/js/app.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @{
+        ViewData["action"] = ViewContext.RouteData.Values["action"];
+        ViewData["control"] = ViewContext.RouteData.Values["controller"];
+    }
+    <script>
+        try {
+            let action = "@ViewBag.action";
+            let control = "@ViewBag.control";
+            let control_ = document.querySelectorAll(`[action_name="${control}_article"]`);
+            control_.forEach((v, k) => {
+                if (v.classList.contains("submenu-closed")) {
+                    v.classList.remove("submenu-closed");
+                    v.classList.remove("submenu-open");
+                } else v.classList.add("active");
+            });
+            let action_ = document.querySelector(`[action_name="${control}_${action}"]`);
+            action_.classList.add("active");
+        } catch (ex) {
+
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
+
 </html>

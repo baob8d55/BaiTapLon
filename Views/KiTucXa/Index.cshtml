@@ -24,6 +24,7 @@
     labelJson = JsonConvert.SerializeObject(label);
     dataJson = JsonConvert.SerializeObject(data);
 }
+
 <head>
     <meta charset="utf-8">
     <title>Visualize Data Beautifully Using JS Charts</title>
@@ -45,7 +46,8 @@
         }
 
             #views th, td {
-                border-bottom: 2px solid #ddd;
+                border-bottom: 2px solid black;
+               color:white;
             }
 
         .dtr-modal table {
@@ -73,10 +75,12 @@
             table.dataTable th, table.dataTable td {
                 padding: 12px;
                 text-align: center;
+
             }
 
         #dt-search-0 {
-            margin-left: 650px;
+            margin-left: 1250px;
+            placeholder:"Tìm Kiếm";
         }
 
         .chart-container {
@@ -104,23 +108,73 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-left: 10px;
-            width: 200px;
+width: 200px;
         }
+
         body {
             padding-bottom: 100px;
+            background-color:#34495e;
         }
+        .dt-info{
+            color:white;
+        }
+
+        .image-box {
+            width: 300px;
+            height: 200px;
+            background-image: url("https://i.imgur.com/TJrzbkm.jpeg");
+            background-size: cover;
+            background-position: center;
+            float:left;
+           
+        }
+
+        .btn {
+            transition: all 0.3s ease; /* Hiệu ứng chuyển động cho nút */
+        }
+
+
+            .btn:hover {
+                transform: translateY(-5px); /* Nổi lên khi hover */
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Tạo bóng đổ */
+            }
+
+        .logo-container {
+            position: absolute;
+            top: 100px;
+            right: 80px;
+        }
+
+        .image-box {
+            
+            background-image: url("https://i.imgur.com/n0ud5PE.jpeg");
+            background-size: cover;
+           float:right;
+            
+        }
+
+       
     </style>
 
 </head>
-<h1 class="text-center my-4">Trang Chủ</h1>
-<h1 class="text-center my-4"><b>Kí Túc Xá</b></h1>
+<<div style="display: flex; justify-content: space-between; align-items: center;">
+    <!-- Thẻ image-box -->
+    <div class="image-box" style="margin-bottom: 10px;"></div>
+    
+    <!-- Thẻ chứa tiêu đề -->
+    <div style="margin-right:620px;">
+        <h1 class="text-center my-4" style="color:#adefd1ff;font-size:60px;"><b>Trang Chủ</b></h1>
+        <h2 class="text-center my-4" style="color:burlywood;font-size:50px"><b>Kí Túc Xá</b></h2>
+    </div>
+    
+    <!-- Thẻ logo-container -->
+    <div class="logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/vi/8/85/Logo_hoc_vien_ANND.png" alt="Logo Học viện An ninh nhân dân" width="170px" />
+    </div>  
+</div>
 <table class="table table-striped table-bordered mt-3" id="views" style=" padding: 20px; border: 2px solid black; border-radius: 8px;  box-shadow: 10px 10px 15px 5px rgba(0, 0, 0, 0.5); margin-bottom:20px">
     <thead>
-        <tr>
-            <th class="_nonorder"></th>
-            <th>
-                STT
-            </th>
+        <tr style="color:white">
             <th>
                 @Html.DisplayNameFor(model => model.MaKyTucxa)
             </th>
@@ -133,7 +187,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.SoPhong)
             </th>
-            
+
             <th>
                 @Html.DisplayNameFor(model => model.IdHinhThucSoHuuNavigation)
             </th>
@@ -144,36 +198,35 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-                <td></td>
-                <td></td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaKyTucxa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TongChoO)
-            </td>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaKyTucxa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TongChoO)
+                </td>
+                <td>
                 @Html.DisplayFor(modelItem => item.TongDienTich)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SoPhong)
-            </td>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat)
-            </td>
-            <td>
-                        <button class="btn btn-primary" onclick="window.location.href = '@Url.Action("Edit", new {id = item.IdKiTucXa})'"><i class="fa-sharp-duotone fa-solid fa-user-pen"></i> Sửa</button>
-                        <button class="btn btn-primary" onclick="window.location.href = '@Url.Action("Details", new {id = item.IdKiTucXa})'"><i class="fa-sharp fa-solid fa-circle-info"></i> Chi tiết</button>
-                        <button class="btn btn-danger" onclick="window.location.href = '@Url.Action("Delete", new {id = item.IdKiTucXa})'"><i class="fa-solid fa-trash"></i> Xóa</button>
-            </td>
-        </tr>
-}
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoPhong)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdTinhTrangCsvcNavigation.TinhTrangCoSoVatChat)
+                </td>
+                <td>
+                <button class=" btn-warning-rgb " onclick="window.location.href = '@Url.Action("Edit", new {id = item.IdKiTucXa})'"><i class="fa-sharp-duotone fa-solid fa-user-pen "></i> Sửa</button>
+                    <button class=" btn-warning-rgb" onclick="window.location.href = '@Url.Action("Details", new {id = item.IdKiTucXa})'"><i class="fa-sharp fa-solid fa-circle-info"></i> Chi tiết</button>
+                    <button class=" btn-warning-rgb" onclick="window.location.href = '@Url.Action("Delete", new {id = item.IdKiTucXa})'"><i class="fa-solid fa-trash"></i> Xóa</button>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 @section Scripts {
@@ -183,7 +236,7 @@
     <script src="https://kit.fontawesome.com/5c202d0407.js" crossorigin="anonymous"></script>
     <script src="~/js/Import_Excel.js"></script>
     <script src="~/js/xlsx.full.min.js"></script>
-    @* <script src="~/lib/"></script> *@
+
     <script>
         // Datatable configuration
         var table = new DataTable("#views", {
@@ -222,16 +275,19 @@
             },
             language: {
                 search: "",
+                searchPlaceholder: "Tìm kiếm...",
                 info: "Tổng cộng _TOTAL_ bản ghi",
                 zeroRecords: "Không tìm thấy bản ghi nào"
             },
-            createdRow: (row, data, index) => { },
+            createdRow: (row, data, index) => { 
+             $('td', row).eq(0).html(index + 1);
+            },
             layout: {
                 topStart: {
                     buttons: [
                         {
                             className: 'btn btn-primary',
-                            text: 'Thêm người',
+                            text: 'Thêm mới',
                             action: function (e, dt, node, config) {
                                 window.location.href = '@Url.Action("Create")';
                             }
@@ -262,6 +318,7 @@
                                         }
                                         raw_data.push(arr);
                                     }
+                                      console.log(sheet);
                                     $.ajax({
                                         method: "post",
                                         url: "/KiTucXa/Receive",
@@ -269,13 +326,13 @@
                                             json: JSON.stringify(raw_data),
                                         },
                                         error: function (xhr, status, error) {
-                                            @* console.log(xhr); *@
+        @* console.log(xhr); *@
                                             alert(xhr.responseJSON.value['msg']);
-                                        },
-                                        success: function (data, status, xhr) {
-                                            alert(xhr.responseJSON.value['msg']);
-                                        }
-                                    });
+                                    },
+                                    success: function (data, status, xhr) {
+                                        alert(xhr.responseJSON.value['msg']);
+                                    }
+                                });
                                 });
                             }
                         }

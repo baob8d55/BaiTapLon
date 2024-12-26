@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using BaiTapLon.Models;
 using BaiTapLon.API;
 using BaiTapLon.Models.DM;
+using Newtonsoft.Json;
+using System.Globalization;
+using System.Security.Policy;
+
 
 namespace BaiTapLon.Controllers.CSVC
 {
@@ -26,10 +30,11 @@ namespace BaiTapLon.Controllers.CSVC
         private async Task<List<TbThietBiPtnThtren500Tr>> TbThietBiPtnThtren500Trs()
         {
             List<TbThietBiPtnThtren500Tr> tbThietBiPtnThtren500Trs = await ApiServices_.GetAll<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr");
-            List<TbCongTrinhCoSoVatChat> tbcongTrinhCsvcs = await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat");
+            List<TbCongTrinhCoSoVatChat> tbCongTrinhCoSoVatChats = await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat");
             List<DmQuocTich> dmquoctiches = await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich");
-            tbThietBiPtnThtren500Trs.ForEach(item => {
-                item.IdCongTrinhCsvcNavigation = tbcongTrinhCsvcs.FirstOrDefault(x => x.IdCongTrinhCoSoVatChat == item.IdCongTrinhCsvc);
+            tbThietBiPtnThtren500Trs.ForEach(item =>
+            {
+                item.IdCongTrinhCsvcNavigation = tbCongTrinhCoSoVatChats.FirstOrDefault(x => x.IdCongTrinhCoSoVatChat == item.IdCongTrinhCsvc);
                 item.IdQuocGiaXuatXuNavigation = dmquoctiches.FirstOrDefault(x => x.IdQuocTich == item.IdQuocGiaXuatXu);
             });
             return tbThietBiPtnThtren500Trs;
@@ -44,7 +49,23 @@ namespace BaiTapLon.Controllers.CSVC
                 return View(getall);
                 // Bắt lỗi các trường hợp ngoại lệ
             }
-            catch (Exception ex)
+               catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
+
+        public async Task<IActionResult> Chart()
+        {
+            try
+            {
+                List<TbThietBiPtnThtren500Tr> getall = await TbThietBiPtnThtren500Trs();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+               catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -86,13 +107,13 @@ namespace BaiTapLon.Controllers.CSVC
         // Truyền data từ các table khác hiển thị tại view Create (khóa ngoài)
         public async Task<IActionResult> Create()
         {
-            try
+             try
             {
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCsvc", "CongTrinhCsvc");
-                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocGiaXuatXu", "QuocGiaXuatXu");
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh");
+                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocTich", "TenNuoc");
                 return View();
             }
-            catch (Exception ex)
+              catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -108,9 +129,9 @@ namespace BaiTapLon.Controllers.CSVC
         // Bắt lỗi ngoại lệ sao cho người nhập BẮT BUỘC phải nhập khác IdThietBiPtnThtren500Tr đã có
         [HttpPost]
         [ValidateAntiForgeryToken] // Một phương thức bảo mật thông qua Token được tạo tự động cho các Form khác nhau
-        public async Task<IActionResult> Create([Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,NamBatDauTuyenSinh,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
+        public async Task<IActionResult> Create([Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
         {
-            try
+             try
             {
                 // Nếu trùng IDThietBiPtnThtren500Tr sẽ báo lỗi
                 if (await TbThietBiPtnThtren500TrExists(tbThietBiPtnThtren500Tr.IdThietBiPtnTh)) ModelState.AddModelError("IdThietBiPtnThtren500Tr", "ID này đã tồn tại!");
@@ -119,11 +140,12 @@ namespace BaiTapLon.Controllers.CSVC
                     await ApiServices_.Create<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr", tbThietBiPtnThtren500Tr);
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCsvc", "CongTrinhCsvc", tbThietBiPtnThtren500Tr.IdCongTrinhCsvc);
-                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocGiaXuatXu", "QuocGiaXuatXu", tbThietBiPtnThtren500Tr.IdQuocGiaXuatXu);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh", tbThietBiPtnThtren500Tr.IdCongTrinhCsvc);
+                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocTich", "TenNuoc", tbThietBiPtnThtren500Tr.IdQuocGiaXuatXu);
+
                 return View(tbThietBiPtnThtren500Tr);
             }
-            catch (Exception ex)
+             catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -136,23 +158,23 @@ namespace BaiTapLon.Controllers.CSVC
         // Phương thức này gần giống Create, nhưng nó nhập dữ liệu vào Id đã có trong database
         public async Task<IActionResult> Edit(int? id)
         {
-            try
+             try
             {
                 if (id == null)
                 {
                     return NotFound();
                 }
 
-                var tbThietBiPtnThtren500Tr = await ApiServices_.GetId<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr", id ?? 0);
+                var tbThietBiPtnThtren500Tr = await ApiServices_.GetId<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr", id ?? 0);
                 if (tbThietBiPtnThtren500Tr == null)
                 {
                     return NotFound();
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCsvc", "CongTrinhCsvc", tbThietBiPtnThtren500Tr.IdCongTrinhCsvc);
-                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocGiaXuatXu", "QuocGiaXuatXu", tbThietBiPtnThtren500Tr.IdQuocGiaXuatXu);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh", tbThietBiPtnThtren500Tr.IdCongTrinhCsvc);
+                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocTich", "TenNuoc", tbThietBiPtnThtren500Tr.IdQuocGiaXuatXu);
                 return View(tbThietBiPtnThtren500Tr);
             }
-            catch (Exception ex)
+             catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -169,9 +191,9 @@ namespace BaiTapLon.Controllers.CSVC
 
         [HttpPost]
         [ValidateAntiForgeryToken] // Một phương thức bảo mật thông qua Token được tạo tự động cho các Form khác nhau
-        public async Task<IActionResult> Edit(int id, [Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,NamBatDauTuyenSinh,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
+        public async Task<IActionResult> Edit(int id, [Bind("IdThietBiPtnTh,MaThietBi,IdCongTrinhCsvc,TenThietBi,NamSanXuat,IdQuocGiaXuatXu,HangSanXuat,SoLuongThietBiCungLoai,NamDuaVaoSuDung")] TbThietBiPtnThtren500Tr tbThietBiPtnThtren500Tr)
         {
-            try
+             try
             {
                 if (id != tbThietBiPtnThtren500Tr.IdThietBiPtnTh)
                 {
@@ -181,7 +203,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     try
                     {
-                        await ApiServices_.Update<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr", id, tbThietBiPtnThtren500Tr);
+                        await ApiServices_.Update<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr", id, tbThietBiPtnThtren500Tr);
                     }
                     catch (DbUpdateConcurrencyException)
                     {
@@ -196,11 +218,11 @@ namespace BaiTapLon.Controllers.CSVC
                     }
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCsvc", "CongTrinhCsvc", tbThietBiPtnThtren500Tr.IdCongTrinhCsvc);
-                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocGiaXuatXu", "QuocGiaXuatXu", tbThietBiPtnThtren500Tr.IdQuocGiaXuatXu);
+                ViewData["IdCongTrinhCsvc"] = new SelectList(await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat"), "IdCongTrinhCoSoVatChat", "TenCongTrinh", tbThietBiPtnThtren500Tr.IdCongTrinhCsvc);
+                ViewData["IdQuocGiaXuatXu"] = new SelectList(await ApiServices_.GetAll<DmQuocTich>("/api/dm/QuocTich"), "IdQuocTich", "TenNuoc", tbThietBiPtnThtren500Tr.IdQuocGiaXuatXu);
                 return View(tbThietBiPtnThtren500Tr);
             }
-            catch (Exception ex)
+             catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -228,7 +250,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbThietBiPtnThtren500Tr);
             }
-            catch (Exception ex)
+               catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -241,12 +263,12 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id) // Lệnh xác nhận xóa hẳn một TBPTN_THT500T
         {
-            try
+             try
             {
-                await ApiServices_.Delete<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr", id);
+                await ApiServices_.Delete<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr", id);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+             catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -255,8 +277,93 @@ namespace BaiTapLon.Controllers.CSVC
 
         private async Task<bool> TbThietBiPtnThtren500TrExists(int id)
         {
-            var tbThietBiPtnThtren500Trs = await ApiServices_.GetAll<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPtnThtren500Tr");
+            var tbThietBiPtnThtren500Trs = await ApiServices_.GetAll<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr");
             return tbThietBiPtnThtren500Trs.Any(e => e.IdThietBiPtnTh == id);
+        }
+
+        public async Task<IActionResult> Receive(string json)
+        {
+            try
+            {
+                // Khai báo thông báo mặc định
+                var message = "No Lỗi";
+
+                // Giải mã dữ liệu JSON từ client
+                List<List<string>> data = JsonConvert.DeserializeObject<List<List<string>>>(json);
+
+                if (data == null || !data.Any())
+                {
+                    return BadRequest(Json(new { msg = "Dữ liệu không hợp lệ." }));
+                }
+
+                // Danh sách lưu các đối tượng TbDatDai
+                List<TbThietBiPtnThtren500Tr> lst = new List<TbThietBiPtnThtren500Tr>();
+
+                // Khởi tạo Random để tạo ID ngẫu nhiên
+                Random rnd = new Random();
+
+                // Duyệt qua từng dòng dữ liệu từ Excel
+                foreach (var item in data)
+                {
+                    if (item.Count < 8) // Kiểm tra nếu dòng dữ liệu không đủ số cột
+                    {
+                        return BadRequest(Json(new { msg = "Dữ liệu không đầy đủ." }));
+                    }
+
+                    TbThietBiPtnThtren500Tr model = new TbThietBiPtnThtren500Tr();
+
+                    // Tạo id ngẫu nhiên và kiểm tra xem id đã tồn tại chưa
+                    int id;
+                    do
+                    {
+                        id = rnd.Next(1, 100000); // Tạo id ngẫu nhiên
+                    } while (await TbThietBiPtnThtren500TrExists(id)); // Kiểm tra id có tồn tại không
+
+                    // Gán dữ liệu cho các thuộc tính của model
+                    model.IdThietBiPtnTh = id; //Gán id
+                    model.MaThietBi = item[0];// Gán mã thiết bị cho cột đầu tiên
+                    model.TenThietBi = item[1];// Gán tên thiest bị (chuyển đổi từ string sang int)
+                    model.NamSanXuat = item[2];// Gán năm sản xuất (chuyển đổi từ string sang int)
+                    model.HangSanXuat = item[3];// Gán loại đề án (chuyển đổi từ string sang int)
+                    model.SoLuongThietBiCungLoai = ParseInt(item[4]);// Gán loại đề án (chuyển đổi từ string sang int)
+                    model.NamDuaVaoSuDung = item[5];//// Gán năm ddauw vào sử dụng (chuyển đổi từ string sang int)
+                    model.IdCongTrinhCsvc = ParseInt(item[6]);// Gán công trình csvc(chuyển đổi từ string sang int)m[6]);
+                    model.IdQuocGiaXuatXu = ParseInt(item[7]);// Gán id quốc gia xuát sử (chuyển đổi từ string sang int)
+
+
+                    // Thêm model vào danh sách
+                    lst.Add(model);
+                }
+
+                // Lưu danh sách vào cơ sở dữ liệu
+                foreach (var item in lst)
+                {
+                    await CreateTbThietBiPtnThtren500Tr(item);
+                }
+
+                return Accepted(Json(new { msg = message }));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(Json(new { msg = ex.Message }));
+            }
+        }
+
+        private async Task CreateTbThietBiPtnThtren500Tr(TbThietBiPtnThtren500Tr item)
+        {
+            await ApiServices_.Create<TbThietBiPtnThtren500Tr>("/api/csvc/ThietBiPTN_THTren500Tr", item);
+        }
+
+        private int? ParseInt(string v)
+        {
+            if (int.TryParse(v, out int result)) // Nếu chuỗi có thể chuyển thành int
+            {
+                return result; // Trả về giá trị int
+            }
+            else
+            {
+                return null; // Nếu không thể chuyển thành int, trả về null
+            }
         }
     }
 }

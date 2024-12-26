@@ -1,0 +1,104 @@
+﻿@model IEnumerable<BaiTapLon.Models.TbThietBiPtnThtren500Tr>
+
+@{
+    ViewData["Title"] = "Chart";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<head>
+    <meta charset="utf-8">
+    <title>Visualize Data Beautifully Using JS Charts</title>
+    <style>
+        label, h1 {
+            text-align: center;
+        }
+
+        #chartDropdown {
+            width: 90%;
+            max-width: 700px;
+            padding: 12px 16px;
+            font-size: 15px;
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: all 0.25s ease;
+        }
+
+            #chartDropdown:hover {
+                background-color: #fff;
+                border-color: green;
+            }
+
+        h1 {
+            font-size: 38px;
+            color: #444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<label for="chartDropdown">HÃY CHỌN BIỂU ĐỒ MÀ BẠN MUỐN XEM</label>
+<select id="chartDropdown" class="dropdown-btn">
+    <option value="">Lựa chọn biểu đồ</option>
+    <option value="chart1">Biểu đồ 1: Tỷ Lệ Công Trình Cơ Sở Vật Chất</option>
+    <option value="chart2">Biểu đồ 2: Tỷ Lệ Tình Trạng Cơ Sở Vật Chất</option>
+</select>
+
+<div id="chart1" class="chart-container" style="display: none;width: 700px; height: 900px; margin: 0 auto;">
+    <h1>Tỷ Lệ Công Trình Cơ Sở Vật Chất</h1>
+    <canvas id="pieChartCongTrinh"></canvas>
+</div>
+
+<div id="chart2" class="chart-container" style="display: none;width: 700px; height: 900px; margin: 0 auto;">
+    <h1>Tỷ Lệ Quốc Gia Xuất Xứ</h1>
+    <canvas id="pieChartQuocGia"></canvas>
+</div>
+
+<script>
+    function getRandomColor() {
+        return `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`;
+    }
+
+    var congTrinhLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdCongTrinhCsvcNavigation.MaCongTrinh).Distinct().ToList()));
+    var congTrinhData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupBy(x => x.IdCongTrinhCsvcNavigation.MaCongTrinh).Select(g => g.Count()).ToList()));
+
+    var quocGiaLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.IdQuocGiaXuatXuNavigation.TenNuoc).Distinct().ToList()));
+    var quocGiaData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupBy(x => x.IdQuocGiaXuatXuNavigation.TenNuoc).Select(g => g.Count()).ToList()));
+
+    function createPieChart(canvasId, labels, data) {
+        new Chart(document.getElementById(canvasId), {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: labels.map(() => getRandomColor()),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: 'Tỷ lệ các phòng thực hành theo năm đưa vào sử dụng', font: { size: 18, weight: 'bold' } },
+                    tooltip: { callbacks: { label: function (tooltipItem) { return `${tooltipItem.label}: ${tooltipItem.raw} phòng`; } } }
+                }
+            }
+        });
+    }
+
+    createPieChart('pieChartCongTrinh', congTrinhLabels, congTrinhData);
+    createPieChart('pieChartQuocGia', quocGiaLabels, quocGiaData);
+
+    document.getElementById('chartDropdown').addEventListener('change', function () {
+        document.querySelectorAll('.chart-container').forEach(container => container.style.display = 'none');
+        const selectedChartId = this.value;
+        if (selectedChartId) document.getElementById(selectedChartId).style.display = 'block';
+    });
+</script>

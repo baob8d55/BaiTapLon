@@ -57,6 +57,21 @@ namespace BaiTapLon.Controllers.CSVC
                 return BadRequest();
             }
         }
+        public async Task<IActionResult> Chart()
+        {
+            try
+            {
+                List<TbKiTucXa> getall = await TbKiTucXas();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
 
         // Lấy chi tiết 1 bản ghi dựa theo ID tương ứng đã truyền vào (IdKiTucXa)
         // Hiển thị bản ghi đó ở view Details
@@ -155,7 +170,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "IdHinhThucSoHuu", tbKiTucXa.IdHinhThucSoHuu);
+                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu", tbKiTucXa.IdHinhThucSoHuu);
                 ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat", tbKiTucXa.IdTinhTrangCsvc);
                 return View(tbKiTucXa);
             }
@@ -203,7 +218,7 @@ namespace BaiTapLon.Controllers.CSVC
                     }
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "IdHinhThucSoHuu", tbKiTucXa.IdHinhThucSoHuu);
+                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu", tbKiTucXa.IdHinhThucSoHuu);
                 ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat", tbKiTucXa.IdTinhTrangCsvc);
                 return View(tbKiTucXa);
             }
@@ -226,7 +241,7 @@ namespace BaiTapLon.Controllers.CSVC
                 {
                     return NotFound();
                 }
-                var tbKiTucXas = await ApiServices_.GetAll<TbKiTucXa>("/api/csvc/KiTucXa");
+                var tbKiTucXas = await TbKiTucXas();
                 var tbKiTucXa = tbKiTucXas.FirstOrDefault(m => m.IdKiTucXa == id);
                 if (tbKiTucXa == null)
                 {

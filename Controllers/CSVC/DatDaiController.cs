@@ -9,6 +9,7 @@ using BaiTapLon.Models;
 using BaiTapLon.API;
 using BaiTapLon.Models.DM;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Newtonsoft.Json;
 
 namespace BaiTapLon.Controllers.CSVC
 {
@@ -23,8 +24,8 @@ namespace BaiTapLon.Controllers.CSVC
             ApiServices_ = services;
         }
 
-        // GET: ChuongTrinhDaoTao
-        // Lấy danh sách CTĐT từ database, trả về view Index.
+        // GET: DATDAI
+        // Lấy danh sách Datdai từ database, trả về view Index.
 
         private async Task<List<TbDatDai>> TbDatDais()
         {
@@ -42,26 +43,43 @@ namespace BaiTapLon.Controllers.CSVC
         //Nếu có lỗi xảy ra trong quá trình lấy dữ liệu, nó sẽ trả về mã trạng thái HTTP 400.
         public async Task<IActionResult> Index()
         {
-            try
+            //try
             {
                 List<TbDatDai> getall = await TbDatDais();
                 // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
                 return View(getall);
                 // Bắt lỗi các trường hợp ngoại lệ
             }
-            catch (Exception ex)
+            //catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
+        public async Task<IActionResult> chart()
+        {
+            //try
+            {
+                List<TbDatDai> getall = await TbDatDais();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+            //catch (Exception ex)
             {
                 return BadRequest();
             }
 
         }
 
+
+
         // GET: DatDai/Details/
         //Kiểm tra nếu id là null, nếu có, trả về NotFound.
         //Tìm một bản ghi cụ thể trong bảng TbDatDais dựa trên id và trả về view chi tiết nếu tìm thấy.
         public async Task<IActionResult> Details(int? id)
         {
-            try
+          //  try
             {
                 if (id == null)
                 {
@@ -80,7 +98,7 @@ namespace BaiTapLon.Controllers.CSVC
                 // Hiển thị thông thi chi tiết CTĐT thành công
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+          //  catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -91,12 +109,12 @@ namespace BaiTapLon.Controllers.CSVC
         //Tạo view để nhập thông tin cho một bản ghi mới, bao gồm danh sách chọn lựa cho trường IdHinhThucSoHuu.
         public async Task<IActionResult> Create()
         {
-            try
+          //  try
             {
                 ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu");
                 return View();
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -112,9 +130,9 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdDatDai,MaGiayChungNhanQuyenSoHuu,DienTichDat,IdHinhThucSoHuu,TenDonViSoHuu,MinhChungQuyenSoHuuDatDai,MucDichSuDungDat,NamBatDauSuDungDat,ThoiGianSuDungDat,DienTichDatDaSuDung")] TbDatDai tbDatDai)
         {
-            try
+            //try
             {
-                // Nếu trùng IDChuongTrinhDaoTao sẽ báo lỗi
+                // Nếu trùng IDdatdai sẽ báo lỗi
                 if (await TbDatDaiExists(tbDatDai.IdDatDai)) ModelState.AddModelError("IdDatDai", "ID này đã tồn tại!");
                 if (ModelState.IsValid)
                 {
@@ -125,7 +143,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -154,7 +172,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+           catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -198,7 +216,7 @@ namespace BaiTapLon.Controllers.CSVC
 
                 return View(tbDatDai);
             }
-            catch (Exception ex)
+           catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -208,7 +226,7 @@ namespace BaiTapLon.Controllers.CSVC
         // GET: DatDai/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            try
+           try
             {
                 if (id == null)
                 {
@@ -235,12 +253,12 @@ namespace BaiTapLon.Controllers.CSVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
+          //  try
             {
                 await ApiServices_.Delete<TbDatDai>("/api/csvc/DatDai", id);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -252,5 +270,93 @@ namespace BaiTapLon.Controllers.CSVC
             var tbDatDais = await ApiServices_.GetAll<TbDatDai>("/api/csvc/DatDai");
             return tbDatDais.Any(e => e.IdDatDai == id);
         }
+        public async Task<IActionResult> Receive(string json)
+        {
+            try
+            {
+                // Khai báo thông báo mặc định
+                var message = "No Lỗi";
+
+                // Giải mã dữ liệu JSON từ client
+                List<List<string>> data = JsonConvert.DeserializeObject<List<List<string>>>(json);
+
+                if (data == null || !data.Any())
+                {
+                    return BadRequest(Json(new { msg = "Dữ liệu không hợp lệ." }));
+                }
+
+                // Danh sách lưu các đối tượng TbDatDai
+                List<TbDatDai> lst = new List<TbDatDai>();
+
+                // Khởi tạo Random để tạo ID ngẫu nhiên
+                Random rnd = new Random();
+
+                // Duyệt qua từng dòng dữ liệu từ Excel
+                foreach (var item in data)
+                {
+                    if (item.Count < 6) // Kiểm tra nếu dòng dữ liệu không đủ số cột
+                    {
+                        return BadRequest(Json(new { msg = "Dữ liệu không đầy đủ." }));
+                    }
+
+                    TbDatDai model = new TbDatDai();
+
+                    // Tạo id ngẫu nhiên và kiểm tra xem id đã tồn tại chưa
+                    int id;
+                    do
+                    {
+                        id = rnd.Next(1, 100000); // Tạo id ngẫu nhiên
+                    } while (await TbDatDaiExists(id)); // Kiểm tra id có tồn tại không
+
+                    // Gán dữ liệu cho các thuộc tính của model
+                    model.IdDatDai = id;// Gán ID
+                    model.MaGiayChungNhanQuyenSoHuu = item[0]; // Gán mã giấy chứng nhận từ cột đầu tiên
+                    model.DienTichDat = ParseInt(item[1]); // Gán diện tích đất (chuyển đổi từ string sang int)
+
+                    model.TenDonViSoHuu = item[2];// Gán tên đơn vị sở hữu (chuyển đổi từ string sang int)
+                    model.MinhChungQuyenSoHuuDatDai = item[3];// Gán minh chứng quyền sở hữu dd (chuyển đổi từ string sang int)
+                    model.NamBatDauSuDungDat = item[4];// Gán năm bắt đầu sử dụng đất (chuyển đổi từ string sang int)
+                    model.ThoiGianSuDungDat = ParseInt(item[5]);// Gán thời gian sử dụng (chuyển đổi từ string sang int)
+                    model.DienTichDatDaSuDung = ParseInt(item[6]);// Gán tổng diện tích đất đã sử dụng (chuyển đổi từ string sang int)
+                    model.MucDichSuDungDat = item[7];// Gán mục đích đã sử dụng (chuyển đổi từ string sang int)
+                    model.IdHinhThucSoHuu = ParseInt(item[8]);// Gán hình thứ sở hữu (chuyển đổi từ string sang int)
+
+                    // Thêm model vào danh sách
+                    lst.Add(model);
+                }
+
+                // Lưu danh sách vào cơ sở dữ liệu
+                foreach (var item in lst)
+                {
+                    await CreateTbDatDai(item);
+                }
+
+                return Accepted(Json(new { msg = message }));
+            }
+            catch (Exception ex)
+            // Nếu có lỗi, trả về thông báo lỗi
+            {
+                return BadRequest(Json(new { msg = ex.Message }));
+            }
+        }
+
+        private async Task CreateTbDatDai(TbDatDai item)
+        {
+            await ApiServices_.Create<TbDatDai>("/api/csvc/DatDai", item);
+        }
+
+        private int? ParseInt(string v)
+        {
+            if (int.TryParse(v, out int result)) // Nếu chuỗi có thể chuyển thành int
+            {
+                return result; // Trả về giá trị int
+            }
+            else
+            {
+                return null; // Nếu không thể chuyển thành int, trả về null
+            }
+        }
+
     }
 }
+        

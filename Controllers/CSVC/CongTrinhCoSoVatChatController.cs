@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BaiTapLon.Models;
 using BaiTapLon.API;
 using BaiTapLon.Models.DM;
+using Newtonsoft.Json;
 
 namespace BaiTapLon.Controllers.CSVC
 {
@@ -20,7 +21,7 @@ namespace BaiTapLon.Controllers.CSVC
             ApiServices_ = services;
         }
         // GET: CongTrinhCoSoVatChat
-        // Lấy danh sách CTĐT từ database, trả về view Index.
+        // Lấy danh sách Congtrinhcosovatchat từ database, trả về view Index.
 
         private async Task<List<TbCongTrinhCoSoVatChat>> TbCongTrinhCoSoVatChats()
         {
@@ -36,7 +37,7 @@ namespace BaiTapLon.Controllers.CSVC
             List<DmTinhTrangCoSoVatChat> dmtinhTrangCoSoVatChats = await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat");
 
             tbCongTrinhCoSoVatChats.ForEach(item => {
-                item.CongTrinhCsvctrongNhaNavigation = dmtuyChons.FirstOrDefault(x => x.IdTuyChon == item.IdCongTrinhCoSoVatChat);
+                item.CongTrinhCsvctrongNhaNavigation = dmtuyChons.FirstOrDefault(x => x.IdTuyChon == item.CongTrinhCsvctrongNha);
 
                 item.IdHinhThucSoHuuNavigation = dmhinhThucSoHuus.FirstOrDefault(x => x.IdHinhThucSoHuu == item.IdHinhThucSoHuu);
 
@@ -53,6 +54,21 @@ namespace BaiTapLon.Controllers.CSVC
 
 
         public async Task<IActionResult> Index()
+        {
+            try
+            {
+                List<TbCongTrinhCoSoVatChat> getall = await TbCongTrinhCoSoVatChats();
+                // Lấy data từ các table khác có liên quan (khóa ngoài) để hiển thị trên Index
+                return View(getall);
+                // Bắt lỗi các trường hợp ngoại lệ
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+        }
+        public async Task<IActionResult> Chart()
         {
             try
             {
@@ -101,8 +117,8 @@ namespace BaiTapLon.Controllers.CSVC
 
         }
         // GET: CongTrinhCoSoVatChat/Create
-        // GET: ChuongTrinhDaoTao/Create
-        // Hiển thị view Create để tạo một bản ghi CTĐT mới
+      
+        // Hiển thị view Create để tạo một bản ghi CTCSVC mới
         // Truyền data từ các table khác hiển thị tại view Create (khóa ngoài)
         public async Task<IActionResult> Create()
         {
@@ -149,15 +165,15 @@ namespace BaiTapLon.Controllers.CSVC
                     await ApiServices_.Create<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat", tbCongTrinhCoSoVatChat);
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["CongTrinhCsvctrongNha"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "IdTuyChon", tbCongTrinhCoSoVatChat.CongTrinhCsvctrongNha);
+                ViewData["CongTrinhCsvctrongNha"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "TuyChon", tbCongTrinhCoSoVatChat.CongTrinhCsvctrongNha);
 
-                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "IdHinhThucSoHuu", tbCongTrinhCoSoVatChat.IdHinhThucSoHuu);
+                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu", tbCongTrinhCoSoVatChat.IdHinhThucSoHuu);
 
-                ViewData["IdLoaiCongTrinh"] = new SelectList(await ApiServices_.GetAll<DmLoaiCongTrinhCoSoVatChat>("/api/dm/LoaiCongTrinhCoSoVatChat"), "IdLoaiCongTrinhCoSoVatChat", "IdLoaiCongTrinhCoSoVatChat", tbCongTrinhCoSoVatChat.IdLoaiCongTrinh);
+                ViewData["IdLoaiCongTrinh"] = new SelectList(await ApiServices_.GetAll<DmLoaiCongTrinhCoSoVatChat>("/api/dm/LoaiCongTrinhCoSoVatChat"), "IdLoaiCongTrinhCoSoVatChat", "LoaiCongTrinhCoSoVatChat", tbCongTrinhCoSoVatChat.IdLoaiCongTrinh);
 
-                ViewData["IdMucDichSuDung"] = new SelectList(await ApiServices_.GetAll<DmMucDichSuDungCsvc>("/api/dm/MucDichSuDungCsvc"), "IdMucDichSuDungCsvc", "IdMucDichSuDungCsvc", tbCongTrinhCoSoVatChat.IdMucDichSuDung);
+                ViewData["IdMucDichSuDung"] = new SelectList(await ApiServices_.GetAll<DmMucDichSuDungCsvc>("/api/dm/MucDichSuDungCsvc"), "IdMucDichSuDungCsvc", "MucDichSuDungCsvc", tbCongTrinhCoSoVatChat.IdMucDichSuDung);
 
-                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "IdTinhTrangCoSoVatChat", tbCongTrinhCoSoVatChat.IdTinhTrangCsvc);
+                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat", tbCongTrinhCoSoVatChat.IdTinhTrangCsvc);
                 return View(tbCongTrinhCoSoVatChat);
                 // 3:07 đã làm tới đây (chiều)
             }
@@ -185,15 +201,15 @@ namespace BaiTapLon.Controllers.CSVC
                 {   
                     return NotFound();
                 }
-                ViewData["CongTrinhCsvctrongNha"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "IdTuyChon", tbCongTrinhCoSoVatChat.CongTrinhCsvctrongNha);
+                ViewData["CongTrinhCsvctrongNha"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "TuyChon", tbCongTrinhCoSoVatChat.CongTrinhCsvctrongNha);
 
-                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "IdHinhThucSoHuu", tbCongTrinhCoSoVatChat.IdHinhThucSoHuu);
+                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu", tbCongTrinhCoSoVatChat.IdHinhThucSoHuu);
 
-                ViewData["IdLoaiCongTrinh"] = new SelectList(await ApiServices_.GetAll<DmLoaiCongTrinhCoSoVatChat>("/api/dm/LoaiCongTrinhCoSoVatChat"), "IdLoaiCongTrinhCoSoVatChat", "IdLoaiCongTrinhCoSoVatChat", tbCongTrinhCoSoVatChat.IdLoaiCongTrinh);
+                ViewData["IdLoaiCongTrinh"] = new SelectList(await ApiServices_.GetAll<DmLoaiCongTrinhCoSoVatChat>("/api/dm/LoaiCongTrinhCoSoVatChat"), "IdLoaiCongTrinhCoSoVatChat", "LoaiCongTrinhCoSoVatChat", tbCongTrinhCoSoVatChat.IdLoaiCongTrinh);
 
-                ViewData["IdMucDichSuDung"] = new SelectList(await ApiServices_.GetAll<DmMucDichSuDungCsvc>("/api/dm/MucDichSuDungCsvc"), "IdMucDichSuDungCsvc", "IdMucDichSuDungCsvc", tbCongTrinhCoSoVatChat.IdMucDichSuDung);
+                ViewData["IdMucDichSuDung"] = new SelectList(await ApiServices_.GetAll<DmMucDichSuDungCsvc>("/api/dm/MucDichSuDungCsvc"), "IdMucDichSuDungCsvc", "MucDichSuDungCsvc", tbCongTrinhCoSoVatChat.IdMucDichSuDung);
 
-                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "IdTinhTrangCoSoVatChat", tbCongTrinhCoSoVatChat.IdTinhTrangCsvc);
+                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat", tbCongTrinhCoSoVatChat.IdTinhTrangCsvc);
                 return View(tbCongTrinhCoSoVatChat);
             }
             catch (Exception ex)
@@ -238,15 +254,15 @@ namespace BaiTapLon.Controllers.CSVC
                     }
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["CongTrinhCsvctrongNha"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "IdTuyChon", tbCongTrinhCoSoVatChat.CongTrinhCsvctrongNha);
+                ViewData["CongTrinhCsvctrongNha"] = new SelectList(await ApiServices_.GetAll<DmTuyChon>("/api/dm/TuyChon"), "IdTuyChon", "TuyChon", tbCongTrinhCoSoVatChat.CongTrinhCsvctrongNha);
 
-                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "IdHinhThucSoHuu", tbCongTrinhCoSoVatChat.IdHinhThucSoHuu);
+                ViewData["IdHinhThucSoHuu"] = new SelectList(await ApiServices_.GetAll<DmHinhThucSoHuu>("/api/dm/HinhThucSoHuu"), "IdHinhThucSoHuu", "HinhThucSoHuu", tbCongTrinhCoSoVatChat.IdHinhThucSoHuu);
 
-                ViewData["IdLoaiCongTrinh"] = new SelectList(await ApiServices_.GetAll<DmLoaiCongTrinhCoSoVatChat>("/api/dm/LoaiCongTrinhCoSoVatChat"), "IdLoaiCongTrinhCoSoVatChat", "IdLoaiCongTrinhCoSoVatChat", tbCongTrinhCoSoVatChat.IdLoaiCongTrinh);
+                ViewData["IdLoaiCongTrinh"] = new SelectList(await ApiServices_.GetAll<DmLoaiCongTrinhCoSoVatChat>("/api/dm/LoaiCongTrinhCoSoVatChat"), "IdLoaiCongTrinhCoSoVatChat", "LoaiCongTrinhCoSoVatChat", tbCongTrinhCoSoVatChat.IdLoaiCongTrinh);
 
-                ViewData["IdMucDichSuDung"] = new SelectList(await ApiServices_.GetAll<DmMucDichSuDungCsvc>("/api/dm/MucDichSuDungCsvc"), "IdMucDichSuDungCsvc", "IdMucDichSuDungCsvc", tbCongTrinhCoSoVatChat.IdMucDichSuDung);
+                ViewData["IdMucDichSuDung"] = new SelectList(await ApiServices_.GetAll<DmMucDichSuDungCsvc>("/api/dm/MucDichSuDungCsvc"), "IdMucDichSuDungCsvc", "MucDichSuDungCsvc", tbCongTrinhCoSoVatChat.IdMucDichSuDung);
 
-                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "IdTinhTrangCoSoVatChat", tbCongTrinhCoSoVatChat.IdTinhTrangCsvc);
+                ViewData["IdTinhTrangCsvc"] = new SelectList(await ApiServices_.GetAll<DmTinhTrangCoSoVatChat>("/api/dm/TinhTrangCoSoVatChat"), "IdTinhTrangCoSoVatChat", "TinhTrangCoSoVatChat", tbCongTrinhCoSoVatChat.IdTinhTrangCsvc);
                 return View(tbCongTrinhCoSoVatChat);
             }
             catch (Exception ex)
@@ -257,8 +273,8 @@ namespace BaiTapLon.Controllers.CSVC
         }
 
         // GET: CongTrinhCoSoVatChat/Delete/5
-        // Xóa một CTĐT khỏi Database
-        // Lấy data CTĐT từ Database, hiển thị Data tại view Delete
+        // Xóa một CTCSVC khỏi Database
+        // Lấy data CTCSVC từ Database, hiển thị Data tại view Delete
         // Hàm này để hiển thị thông tin cho người dùng trước khi xóa
         public async Task<IActionResult> Delete(int? id)
         {
@@ -284,10 +300,10 @@ namespace BaiTapLon.Controllers.CSVC
         }
 
         // POST: CongTrinhCoSoVatChat/Delete/5
-        // Xóa CTĐT khỏi Database sau khi nhấn xác nhận 
+        // Xóa CTCSVC khỏi Database sau khi nhấn xác nhận 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id) // Lệnh xác nhận xóa hẳn một CTĐT
+        public async Task<IActionResult> DeleteConfirmed(int id) // Lệnh xác nhận xóa hẳn một CTCSVC
         {
             try
             {
@@ -306,5 +322,95 @@ namespace BaiTapLon.Controllers.CSVC
             var tbCongTrinhCoSoVatChats = await ApiServices_.GetAll<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat");
             return tbCongTrinhCoSoVatChats.Any(e => e.IdCongTrinhCoSoVatChat == id);
         }
+        public async Task<IActionResult> Receive(string json)
+        {
+            try
+            {
+                // Khai báo thông báo mặc định
+                var message = "No Lỗi";
+
+                // Giải mã dữ liệu JSON từ client
+                List<List<string>> data = JsonConvert.DeserializeObject<List<List<string>>>(json);
+
+                if (data == null || !data.Any())
+                {
+                    return BadRequest(Json(new { msg = "Dữ liệu không hợp lệ." }));
+                }
+
+                // Danh sách lưu các đối tượng TbCongTrinhCoSoVatChat
+                List<TbCongTrinhCoSoVatChat> lst = new List<TbCongTrinhCoSoVatChat>();
+
+                // Khởi tạo Random để tạo ID ngẫu nhiên
+                Random rnd = new Random();
+
+                // Duyệt qua từng dòng dữ liệu từ Excel
+                foreach (var item in data)
+                {
+                    if (item.Count < 8) // Kiểm tra nếu dòng dữ liệu không đủ số cột
+                    {
+                        return BadRequest(Json(new { msg = "Dữ liệu không đầy đủ." }));
+                    }
+
+                    TbCongTrinhCoSoVatChat model = new TbCongTrinhCoSoVatChat();
+
+                    // Tạo id ngẫu nhiên và kiểm tra xem id đã tồn tại chưa
+                    int id;
+                    do
+                    {
+                        id = rnd.Next(1, 100000); // Tạo id ngẫu nhiên
+                    } while (await TbCongTrinhCoSoVatChatExists(id)); // Kiểm tra id có tồn tại không
+
+                    // Gán dữ liệu cho các thuộc tính của model
+                    model.IdCongTrinhCoSoVatChat = id;// Gán ID
+                    model.MaCongTrinh = item[0];// Gán mã công trình từ cột đầu tiên
+                    model.TenCongTrinh = item[1];// Gán tên công trình (chuyển đổi từ string sang int)
+                    model.DoiTuongSuDung = item[2];// Gán đói tượng sử dụng (chuyển đổi từ string sang int)
+                    model.DienTichSanXayDung = ParseInt(item[3]);// Gán diện tích sàn xây dựng (chuyển đổi từ string sang int)
+                    model.VonBanDau = ParseInt(item[4]);// Gán vốn ban đầu (chuyển đổi từ string sang int)
+                    model.VonDauTu = ParseInt(item[5]);// Gán vốn đầu tư (chuyển đổi từ string sang int)
+                    model.SoPhongOcongVu = ParseInt(item[6]);// Gán số phòng ở công vụ (chuyển đổi từ string sang int)
+                    model.SoChoOchoCanBoGiangDay = ParseInt(item[7]);// Gán số chỗ ở cho cán bộ giảng dạy (chuyển đổi từ string sang int)
+                    model.NamDuaVaoSuDung = item[8];// Gán năm đưa vào sử dụng(chuyển đổi từ string sang int)
+                    model.CongTrinhCsvctrongNha = ParseInt(item[9]);// Gán công trình nhà nước csvc (chuyển đổi từ string sang int)
+                    model.IdHinhThucSoHuu = ParseInt(item[10]);// Gán hình thức sở hữu (chuyển đổi từ string sang int)
+                    model.IdLoaiCongTrinh = ParseInt(item[11]);// Gán loại công trinh (chuyển đổi từ string sang int)
+                    model.IdMucDichSuDung = ParseInt(item[12]);// Gán mục đích sử dụng (chuyển đổi từ string sang int)
+                    model.IdTinhTrangCsvc = ParseInt(item[13]);// Gán tình trạng cơ sở vật chất (chuyển đổi từ string sang int)
+
+                    // Thêm model vào danh sách
+                    lst.Add(model);
+                }
+
+                // Lưu danh sách vào cơ sở dữ liệu
+                foreach (var item in lst)
+                {
+                    await CreateTbCongTrinhCoSoVatChat(item);
+                }
+
+                return Accepted(Json(new { msg = message }));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(Json(new { msg = ex.Message }));
+            }
+        }
+
+        private async Task CreateTbCongTrinhCoSoVatChat(TbCongTrinhCoSoVatChat item)
+        {
+            await ApiServices_.Create<TbCongTrinhCoSoVatChat>("/api/csvc/CongTrinhCoSoVatChat", item);
+        }
+
+        private int? ParseInt(string v)
+        {
+            if (int.TryParse(v, out int result)) // Nếu chuỗi có thể chuyển thành int
+            {
+                return result; // Trả về giá trị int
+            }
+            else
+            {
+                return null; // Nếu không thể chuyển thành int, trả về null
+            }
+        }
     }
 }
+   

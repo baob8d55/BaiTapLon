@@ -1,75 +1,103 @@
 ﻿@model BaiTapLon.Models.TbDatDai
-
 @{
     ViewData["Title"] = "Xóa";
 }
+@section Heads {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+}
 
-<h1>Xóa</h1>
+<h1 style="text-align:center;margin-bottom:20px;color:#adefd1ff;font-size:60px"><b>Xóa</b></h1>
+<h2 class="text-center my-4" style="color:burlywood;font-size:50px"><b>Đất Đai</b></h2>
+<hr />
+<body>
+    <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-md-6 col-lg-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <hr />
+            <form asp-action="Delete" method="post" style="margin-top:20px; padding: 20px; border: 2px solid black; border-radius: 8px; box-shadow: 10px 10px 15px 5px rgba(0, 0, 0, 0.5); background-color:white; color:black">
+                <!-- Hiển thị thông tin chi tiết -->
+                <div class="form-group">
+                    <label asp-for="MaGiayChungNhanQuyenSoHuu" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="MaGiayChungNhanQuyenSoHuu" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="DienTichDat" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="DienTichDat" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="TenDonViSoHuu" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="TenDonViSoHuu" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="MinhChungQuyenSoHuuDatDai" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="MinhChungQuyenSoHuuDatDai" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="MucDichSuDungDat" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="MucDichSuDungDat" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="NamBatDauSuDungDat" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="NamBatDauSuDungDat" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ThoiGianSuDungDat" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="ThoiGianSuDungDat" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="DienTichDatDaSuDung" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="DienTichDatDaSuDung" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="IdHinhThucSoHuuNavigation" class="control-label"></label>
+                    <input style="border: 2px solid black; border-radius: 8px;" asp-for="IdHinhThucSoHuuNavigation.HinhThucSoHuu" class="form-control" readonly />
+                </div>
 
-<h3>Bạn có chắc muốn xóa?</h3>
-<div>
-    <h4>Đất Đai</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaGiayChungNhanQuyenSoHuu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaGiayChungNhanQuyenSoHuu)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DienTichDat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DienTichDat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenDonViSoHuu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenDonViSoHuu)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MinhChungQuyenSoHuuDatDai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MinhChungQuyenSoHuuDatDai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MucDichSuDungDat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MucDichSuDungDat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NamBatDauSuDungDat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NamBatDauSuDungDat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ThoiGianSuDungDat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ThoiGianSuDungDat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DienTichDatDaSuDung)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DienTichDatDaSuDung)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdHinhThucSoHuuNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdHinhThucSoHuuNavigation.HinhThucSoHuu)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="IdDatDai" />
-        <input type="submit" value="Xóa" class="btn btn-danger" /> |
-        <a asp-action="Index">Trở lại</a>
-    </form>
-</div>
+                <!-- Xác nhận xóa -->
+                <div class="form-group">
+                    <label style="color: red; font-weight: bold;">Bạn có chắc chắn muốn xóa ký túc xá này không?</label>
+                </div>
+
+                <!-- Nút hành động -->
+                <div class="d-flex justify-content-between mt-4">
+                    <div>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Xóa
+                        </button>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary" asp-action="Index">
+                            <i class="fa-solid fas fa-chevron-left" style="margin-right:5px"></i>Quay lại
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn {
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        font-size: 18px;
+        padding: 15px 30px;
+    }
+
+    body {
+        background: #34495e;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+</style>
